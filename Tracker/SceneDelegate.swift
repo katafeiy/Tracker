@@ -8,11 +8,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        let trackerViewController = UINavigationController(rootViewController: TrackerViewController())
+        
+        let statisticViewController = UINavigationController(rootViewController: StatisticViewController())
+        
+        trackerViewController.tabBarItem = UITabBarItem(title: "Трекеры", image: UIImage.recordCircleFill , selectedImage: nil)
+        
+        statisticViewController.tabBarItem = UITabBarItem(title: "Статистика", image: UIImage.hareFill , selectedImage: nil)
+        
+        let tabBarViewController = TabBarViewController()
+        tabBarViewController.viewControllers = [trackerViewController, statisticViewController]
+        
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = ViewController()
+        window?.rootViewController = tabBarViewController
         window?.makeKeyAndVisible()
         
-        guard let _ = (scene as? UIWindowScene) else { return }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
