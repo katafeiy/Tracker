@@ -1,4 +1,5 @@
 import UIKit
+import SwiftUI
 
 final class TrackerViewController: UIViewController {
     
@@ -6,7 +7,7 @@ final class TrackerViewController: UIViewController {
         let button = UIButton.systemButton(
             with: UIImage.addTracker,
             target: self,
-            action: #selector(handleNewTrack))
+            action: #selector(setNewTracker))
         button.tintColor = .ypBlackDay
         return button
     }()
@@ -20,11 +21,21 @@ final class TrackerViewController: UIViewController {
         return field
     }()
     
-    let dateTracker: UIDatePicker = {
+    private lazy var dateTracker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
-        datePicker.calendar = .current
+        datePicker.tintColor = .ypBlackDay
+        datePicker.addTarget(self, action: #selector(setDateTracker), for: .valueChanged)
         return datePicker
+    }()
+    
+    private lazy var calendarButton: UIButton = {
+        let button = UIButton.systemButton(
+            with: UIImage.calendar,
+            target: self,
+            action: #selector(setCalendarTracker))
+        button.tintColor = .ypBlackDay
+        return button
     }()
     
     let nameTrackers: UILabel = {
@@ -60,17 +71,31 @@ final class TrackerViewController: UIViewController {
     }()
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         configurationView()
+        configurationNavigationBar()
+    }
+    
+    func configurationNavigationBar() {
+        
+        let leftButton = UIBarButtonItem()
+        leftButton.customView = newTrackButton
+        self.navigationItem.leftBarButtonItem = leftButton
+        
+        let rightButton = UIBarButtonItem()
+        rightButton.customView = dateFiled
+        self.navigationItem.rightBarButtonItem = rightButton
     }
     
     func configurationView() {
-        
+         
         view.backgroundColor = .ypWhiteDay
-        
         dateFiled.inputView = dateTracker
-
-        [dateFiled, newTrackButton, nameTrackers, starImage, searchFiled, whatSearch].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; view.addSubview($0)}
+//        calendarButton.inputView = dateTracker
+        dateTracker.center = view.center
+        
+        [dateFiled, newTrackButton, nameTrackers, starImage, searchFiled, whatSearch, calendarButton].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; view.addSubview($0)}
         
         NSLayoutConstraint.activate([
             
@@ -84,33 +109,49 @@ final class TrackerViewController: UIViewController {
             dateFiled.heightAnchor.constraint(equalToConstant: 33),
             dateFiled.widthAnchor.constraint(equalToConstant: 90),
             
-            nameTrackers.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
+            nameTrackers.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 1),
             nameTrackers.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             nameTrackers.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -105),
             nameTrackers.heightAnchor.constraint(equalToConstant: 41),
-            nameTrackers.widthAnchor.constraint(equalToConstant: 254),
+//            nameTrackers.widthAnchor.constraint(equalToConstant: 254),
             
-            starImage.heightAnchor.constraint(equalToConstant: 80),
-            starImage.widthAnchor.constraint(equalToConstant: 80),
-            starImage.topAnchor.constraint(equalTo: searchFiled.bottomAnchor, constant: 196),
-            starImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            calendarButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            calendarButton.centerYAnchor.constraint(equalTo: nameTrackers.centerYAnchor),
+            calendarButton.heightAnchor.constraint(equalToConstant: 42),
+            calendarButton.widthAnchor.constraint(equalToConstant: 42),
             
             searchFiled.heightAnchor.constraint(equalToConstant: 36),
-            searchFiled.widthAnchor.constraint(equalToConstant: 343),
-            searchFiled.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 92),
+//            searchFiled.widthAnchor.constraint(equalToConstant: 343),
+            searchFiled.topAnchor.constraint(equalTo: nameTrackers.bottomAnchor, constant: 7),
             searchFiled.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             searchFiled.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
+            starImage.heightAnchor.constraint(equalToConstant: 80),
+            starImage.widthAnchor.constraint(equalToConstant: 80),
+            starImage.topAnchor.constraint(equalTo: searchFiled.bottomAnchor, constant: 230),
+            starImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
             whatSearch.heightAnchor.constraint(equalToConstant: 18),
-            whatSearch.widthAnchor.constraint(equalToConstant: 343),
+//            whatSearch.widthAnchor.constraint(equalToConstant: 343),
             whatSearch.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
             whatSearch.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             whatSearch.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
             
         ])
+        
+    }
+    
+    @objc func setCalendarTracker() {
+        dateFiled.text = dateString(dateTracker.date)
+        view.endEditing(true)
+    }
+    
+    @objc func setDateTracker() {
+        dateFiled.text = dateString(dateTracker.date)
+        view.endEditing(true)
     }
 
-    @objc func handleNewTrack() {
+    @objc func setNewTracker() {
         
     }
     
