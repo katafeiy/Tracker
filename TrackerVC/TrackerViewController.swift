@@ -1,5 +1,4 @@
 import UIKit
-import SwiftUI
 
 final class TrackerViewController: UIViewController {
     
@@ -49,7 +48,7 @@ final class TrackerViewController: UIViewController {
     
     func configurationNavigationBar() {
         
-        let leftButton = UIBarButtonItem(image: UIImage.addTracker, style: .done, target: self, action: #selector(setNewTracker))
+        let leftButton = UIBarButtonItem(image: UIImage.plusButton, style: .done, target: self, action: #selector(setNewTracker))
         leftButton.tintColor = .ypBlackDay
         self.navigationItem.leftBarButtonItem = leftButton
         
