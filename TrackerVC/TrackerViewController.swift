@@ -6,10 +6,12 @@ final class TrackerViewController: UIViewController {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.tintColor = .ypBlackDay
+        let localeID = Locale.preferredLanguages.first ?? "ru_RU"
+        datePicker.locale = Locale(identifier: localeID)
         datePicker.addTarget(self, action: #selector(setDateTracker), for: .valueChanged)
         return datePicker
     }()
-
+    
     let starImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage.star
@@ -40,7 +42,6 @@ final class TrackerViewController: UIViewController {
     }()
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         configurationView()
         configurationNavigationBar()
@@ -58,19 +59,17 @@ final class TrackerViewController: UIViewController {
         
         navigationItem.title = "Трекеры"
         navigationController?.navigationBar.prefersLargeTitles = true
-        
         navigationItem.searchController = searchViewController
     }
     
     func configurationView() {
-         
+        
         view.backgroundColor = .ypWhiteDay
         dateTracker.center = view.center
         
         [starImage, whatSearch].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; view.addSubview($0)}
         
         NSLayoutConstraint.activate([
-            
             starImage.heightAnchor.constraint(equalToConstant: 80),
             starImage.widthAnchor.constraint(equalToConstant: 80),
             starImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -20),
@@ -80,14 +79,13 @@ final class TrackerViewController: UIViewController {
             whatSearch.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
             whatSearch.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             whatSearch.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
-            
         ])
     }
     
     @objc func setDateTracker() {
         view.endEditing(true)
     }
-
+    
     @objc func setNewTracker() {
         
     }
