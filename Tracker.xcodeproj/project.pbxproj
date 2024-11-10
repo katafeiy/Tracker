@@ -30,6 +30,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		120DEFB42CE10388007B0811 /* Exceptions for "Models" folder in "Tracker" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Tracker.swift,
+				TrackerCategory.swift,
+				TrackerRecord.swift,
+			);
+			target = 129E670D2CD0E421002D5F10 /* Tracker */;
+		};
 		126FB25F2CD1734E00D21700 /* Exceptions for "StatisticVC" folder in "Tracker" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -47,6 +56,14 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		120DEFB02CE10325007B0811 /* Models */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				120DEFB42CE10388007B0811 /* Exceptions for "Models" folder in "Tracker" target */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		126FB2552CD1730500D21700 /* TrackerVC */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrackerVC;
@@ -114,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				129E67102CD0E421002D5F10 /* Tracker */,
+				120DEFB02CE10325007B0811 /* Models */,
 				126FB2602CD1737400D21700 /* TabBarVC */,
 				126FB2552CD1730500D21700 /* TrackerVC */,
 				126FB2592CD1732D00D21700 /* StatisticVC */,
@@ -174,6 +192,7 @@
 				129E67262CD0E423002D5F10 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				120DEFB02CE10325007B0811 /* Models */,
 				126FB2592CD1732D00D21700 /* StatisticVC */,
 				129E67272CD0E423002D5F10 /* TrackerTests */,
 			);

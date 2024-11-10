@@ -2,6 +2,9 @@ import UIKit
 
 final class TrackerViewController: UIViewController {
     
+    var categories: [TrackerCategory]?
+    var completed: [TrackerRecord]?
+    
     private lazy var dateTracker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
