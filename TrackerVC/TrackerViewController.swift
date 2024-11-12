@@ -2,26 +2,42 @@ import UIKit
 
 final class TrackerViewController: UIViewController {
     
-    var categories: [TrackerCategory]?
-    var completed: [TrackerRecord]?
+    var categories: [TrackerCategory] = []
+    var completed: [TrackerRecord] = []
+    var visibleCategories: [TrackerCategory] = []
     
-    private lazy var dateTracker: UIDatePicker = {
+    private lazy var collectionView: UICollectionView = {
+        
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
+        layout.scrollDirection = .vertical
+        collectionView.backgroundColor = .clear
+        collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "trackerCell")
+        layout.minimumInteritemSpacing = 9
+        layout.minimumLineSpacing = 10
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
+        return collectionView
+        
+    }()
+    
+    private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
+        datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
         datePicker.tintColor = .ypBlackDay
         let localeID = Locale.preferredLanguages.first ?? "ru_RU"
         datePicker.locale = Locale(identifier: localeID)
-        datePicker.addTarget(self, action: #selector(setDateTracker), for: .valueChanged)
+        datePicker.addTarget(self, action: #selector(setDatePickerValueChanged(_:)), for: .valueChanged)
         return datePicker
     }()
     
-    let starImage: UIImageView = {
+    private lazy var starImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage.star
         return imageView
     }()
     
-    let whatSearch: UILabel = {
+    private lazy var whatSearch: UILabel = {
         let label = UILabel()
         label.text = "Что будем отслеживать?"
         label.textAlignment = .center
@@ -48,6 +64,8 @@ final class TrackerViewController: UIViewController {
         super.viewDidLoad()
         configurationView()
         configurationNavigationBar()
+        collectionView.dataSource = self
+        collectionView.delegate = self
     }
     
     func configurationNavigationBar() {
@@ -57,7 +75,7 @@ final class TrackerViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = leftButton
         
         let rightButton = UIBarButtonItem()
-        rightButton.customView = dateTracker
+        rightButton.customView = datePicker
         self.navigationItem.rightBarButtonItem = rightButton
         
         navigationItem.title = "Трекеры"
@@ -68,9 +86,9 @@ final class TrackerViewController: UIViewController {
     func configurationView() {
         
         view.backgroundColor = .ypWhiteDay
-        dateTracker.center = view.center
+        datePicker.center = view.center
         
-        [starImage, whatSearch].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; view.addSubview($0)}
+        [starImage, whatSearch, collectionView].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; view.addSubview($0)}
         
         NSLayoutConstraint.activate([
             starImage.heightAnchor.constraint(equalToConstant: 80),
@@ -81,16 +99,48 @@ final class TrackerViewController: UIViewController {
             whatSearch.heightAnchor.constraint(equalToConstant: 18),
             whatSearch.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
             whatSearch.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            whatSearch.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+            whatSearch.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
-    @objc func setDateTracker() {
+    @objc func setDatePickerValueChanged(_ sender: UIDatePicker) {
+        
+        let selectedDate = sender.date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let formattedDate = dateFormatter.string(from: selectedDate)
+        print("Выбранная дата: \(formattedDate)")
+        
+        updateVisibleData()
+        
         view.endEditing(true)
+        
+    }
+    
+    func updateVisibleData() {
+        
+        guard let dayOfWeek = DaysOfWeek(date: datePicker.date) else { return }
+        
+        visibleCategories = []
+        
+        categories.forEach {
+            let trackers = $0.trackerArray.filter({$0.schedule.contains(dayOfWeek)})
+            if !trackers.isEmpty {
+                visibleCategories.append(.init(name: $0.name, trackerArray: trackers))
+            }
+        }
+        collectionView.reloadData()
     }
     
     @objc func setNewTracker() {
         
+        categories.append(TrackerCategory(name: "Новый категория", trackerArray:[.init(id: UUID(), name: "Новый трекер", color: .colorSelection1, emoji: "🤪", schedule: [.mon])]))
+        updateVisibleData()
     }
     
     private lazy var dateFormatter: DateFormatter = {
@@ -102,6 +152,30 @@ final class TrackerViewController: UIViewController {
     
     public func dateString(_ date: Date) -> String {
         dateFormatter.string(from: date)
+    }
+}
+
+extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return visibleCategories.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return visibleCategories[section].trackerArray.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackerCell", for: indexPath) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
+        
+        cell.layer.cornerRadius = 10
+        cell.layer.masksToBounds = true
+        cell.backgroundColor = .clear
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 167, height: 148)
     }
 }
 
