@@ -139,8 +139,13 @@ final class TrackerViewController: UIViewController {
     
     @objc func setNewTracker() {
         
-        categories.append(TrackerCategory(name: "Новый категория", trackerArray:[.init(id: UUID(), name: "Новый трекер", color: .colorSelection1, emoji: "🤪", schedule: [.mon])]))
-        updateVisibleData()
+        let createTracker = CreateTrackerViewController()
+        let navigationController = UINavigationController(rootViewController: createTracker)
+        navigationController.modalPresentationStyle = .formSheet
+        present(navigationController, animated: true)
+        
+//        categories.append(TrackerCategory(name: "Новый категория", trackerArray:[.init(id: UUID(), name: "Новый трекер", color: .colorSelection1, emoji: "🤪", schedule: [.mon])]))
+//        updateVisibleData()
     }
     
     private lazy var dateFormatter: DateFormatter = {
