@@ -11,9 +11,9 @@ struct Tracker {
 
 enum DaysOfWeek: String {
     case mon
-    case thu
+    case tue
     case wen
-    case ths
+    case thu
     case fri
     case sat
     case sun
@@ -25,9 +25,9 @@ enum DaysOfWeek: String {
         
         switch calendar.component(.weekday, from: date) {
         case 2: self = .mon
-        case 3: self = .thu
+        case 3: self = .tue
         case 4: self = .wen
-        case 5: self = .ths
+        case 5: self = .thu
         case 6: self = .fri
         case 7: self = .sat
         case 1: self = .sun

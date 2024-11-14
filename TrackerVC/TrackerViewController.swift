@@ -6,6 +6,14 @@ final class TrackerViewController: UIViewController {
     var completed: [TrackerRecord] = []
     var visibleCategories: [TrackerCategory] = []
     
+    var currentDate: Date? {
+        let selectedDate = datePicker.date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let formattedDate = dateFormatter.string(from: selectedDate)
+        return dateFormatter.date(from: formattedDate) ?? Date()
+    }
+    
     private lazy var collectionView: UICollectionView = {
         
         let layout = UICollectionViewFlowLayout()
@@ -66,6 +74,7 @@ final class TrackerViewController: UIViewController {
         configurationNavigationBar()
         collectionView.dataSource = self
         collectionView.delegate = self
+        updateVisibleData()
     }
     
     func configurationNavigationBar() {
@@ -124,7 +133,7 @@ final class TrackerViewController: UIViewController {
     
     func updateVisibleData() {
         
-        guard let dayOfWeek = DaysOfWeek(date: datePicker.date) else { return }
+        guard let currentDate, let dayOfWeek = DaysOfWeek(date: currentDate) else { return }
         
         visibleCategories = []
         
@@ -134,18 +143,19 @@ final class TrackerViewController: UIViewController {
                 visibleCategories.append(.init(name: $0.name, trackerArray: trackers))
             }
         }
+        starImage.isHidden = !visibleCategories.isEmpty
+        whatSearch.isHidden = !visibleCategories.isEmpty
         collectionView.reloadData()
     }
     
     @objc func setNewTracker() {
         
         let createTracker = CreateTrackerViewController()
+        createTracker.delegate = self
         let navigationController = UINavigationController(rootViewController: createTracker)
         navigationController.modalPresentationStyle = .formSheet
         present(navigationController, animated: true)
         
-//        categories.append(TrackerCategory(name: "Новый категория", trackerArray:[.init(id: UUID(), name: "Новый трекер", color: .colorSelection1, emoji: "🤪", schedule: [.mon])]))
-//        updateVisibleData()
     }
     
     private lazy var dateFormatter: DateFormatter = {
@@ -173,9 +183,25 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackerCell", for: indexPath) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
         
-        cell.layer.cornerRadius = 10
-        cell.layer.masksToBounds = true
-        cell.backgroundColor = .clear
+        let tracker = visibleCategories[indexPath.section].trackerArray[indexPath.row]
+        
+        // через конфиг проверить будущую дату
+        
+        cell.configureCell(tracker: tracker) { [weak self, weak cell] in
+            guard let self else { return }
+            if completed.first(where:{$0.id == tracker.id && $0.date == self.currentDate}) == nil {
+                completed.append(.init(id: tracker.id , date: currentDate ?? Date()))
+                let count = completed.filter({$0.id == tracker.id}).count
+                cell?.configCompletion(counter: count, isCompleted: true)
+            } else {
+                completed.removeAll(where:{$0.id == tracker.id && $0.date == self.currentDate})
+                let count = completed.filter({$0.id == tracker.id}).count
+                cell?.configCompletion(counter: count, isCompleted: false)
+            }
+        }
+        let count = completed.filter({$0.id == tracker.id}).count
+        let comlited = completed.first(where:{$0.id == tracker.id && $0.date == self.currentDate}) != nil
+        cell.configCompletion(counter: count, isCompleted: comlited)
         return cell
     }
     
@@ -193,3 +219,24 @@ extension TrackerViewController: UISearchControllerDelegate, UISearchResultsUpda
         print(searchText)
     }
 }
+
+extension TrackerViewController: ProtocolNewHabitViewControllerOutput{
+    
+    func didCreate(newTracker: Tracker, forCategory: String) {
+        if let index = categories.firstIndex(where: {$0.name == forCategory}) {
+            categories[index] = TrackerCategory(name: forCategory, trackerArray: categories[index].trackerArray + [newTracker])
+        } else {
+            categories.append(TrackerCategory(name: forCategory, trackerArray:[newTracker]))
+        }
+        updateVisibleData()
+    }
+    
+    
+    func didCreate(newTracker: Tracker) {
+        
+        categories.append(TrackerCategory(name: "Новый категория", trackerArray:[newTracker]))
+        updateVisibleData()
+        
+    }
+}
+

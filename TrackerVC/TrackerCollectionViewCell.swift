@@ -2,6 +2,8 @@ import UIKit
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
+    private var didPlusTap: (() -> Void)?
+    
     private let viewCard: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 10
@@ -46,19 +48,38 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         let button = UIButton.systemButton(with: .plusButton,
                                            target: self,
                                            action: #selector(didAddButtonTap))
-        button.backgroundColor = .green
+        button.backgroundColor = .ypBlue
         button.layer.cornerRadius = 17
         button.layer.masksToBounds = true
-        button.tintColor = .ypBlackDay
+        button.tintColor = .ypWhiteDay
         return button
     }()
     
     @objc func didAddButtonTap() {
+        didPlusTap?()
+    }
+    
+    func configureCell(tracker: Tracker, didPlusTap: @escaping () -> Void) {
+        self.didPlusTap = didPlusTap
+        labelEmoji.text = tracker.emoji
+        labelName.text = tracker.name
+        viewCard.backgroundColor = tracker.color
+        labelCountDay.text =  "0 дней"
+        addButtonCompletion.setImage(UIImage.plusButton, for: .normal)
+    }
+    
+    func configCompletion(counter: Int, isCompleted: Bool) {
         
+        labelCountDay.text =  "\(counter) дня"
+        addButtonCompletion.setImage(isCompleted ? UIImage.done : UIImage.plusButton, for: .normal)
     }
     
     override init (frame: CGRect) {
         super.init(frame: frame)
+    
+        layer.cornerRadius = 10
+        layer.masksToBounds = true
+        backgroundColor = .clear
         
         [viewCard, labelCountDay, addButtonCompletion].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; contentView.addSubview($0)}
         [labelName, viewEmoji].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; viewCard.addSubview($0)}
