@@ -48,12 +48,16 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         let button = UIButton.systemButton(with: .plusButton,
                                            target: self,
                                            action: #selector(didAddButtonTap))
-        button.backgroundColor = .ypBlue
+        button.backgroundColor = .clear
         button.layer.cornerRadius = 17
         button.layer.masksToBounds = true
         button.tintColor = .ypWhiteDay
         return button
     }()
+    
+    func blockTap(isEnabled: Bool) {
+        addButtonCompletion.isEnabled = isEnabled
+    }
     
     @objc func didAddButtonTap() {
         didPlusTap?()
@@ -70,8 +74,26 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     func configCompletion(counter: Int, isCompleted: Bool) {
         
-        labelCountDay.text =  "\(counter) дня"
+        labelCountDay.text = correctLabelCountDayText(for: counter)
         addButtonCompletion.setImage(isCompleted ? UIImage.done : UIImage.plusButton, for: .normal)
+    }
+    
+    func correctLabelCountDayText(for number: Int) -> String {
+        
+        let lastDigit = number.remainderReportingOverflow(dividingBy: 10).partialValue
+        let lastTowDigit = number.remainderReportingOverflow(dividingBy: 100).partialValue
+        
+        if lastTowDigit >= 11 && lastTowDigit <= 19 {
+            return "\(number) дней"
+        }
+        switch lastDigit {
+        case 1:
+            return "\(number) день"
+        case 2...4:
+            return "\(number) дня"
+        default:
+            return "\(number) дней"
+        }
     }
     
     override init (frame: CGRect) {

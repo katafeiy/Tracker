@@ -3,7 +3,7 @@ import UIKit
 final class TrackerViewController: UIViewController {
     
     var categories: [TrackerCategory] = []
-    var completed: [TrackerRecord] = []
+    var completedTrackers: [TrackerRecord] = []
     var visibleCategories: [TrackerCategory] = []
     
     var currentDate: Date? {
@@ -185,23 +185,27 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         let tracker = visibleCategories[indexPath.section].trackerArray[indexPath.row]
         
-        // через конфиг проверить будущую дату
-        
+        if (currentDate ?? Date()) <= Date() {
+            cell.blockTap(isEnabled: true)
+        } else {
+            cell.blockTap(isEnabled: false)
+        }
+    
         cell.configureCell(tracker: tracker) { [weak self, weak cell] in
             guard let self else { return }
-            if completed.first(where:{$0.id == tracker.id && $0.date == self.currentDate}) == nil {
-                completed.append(.init(id: tracker.id , date: currentDate ?? Date()))
-                let count = completed.filter({$0.id == tracker.id}).count
+            if completedTrackers.first(where:{$0.id == tracker.id && $0.date == self.currentDate}) == nil {
+                completedTrackers.append(.init(id: tracker.id , date: currentDate ?? Date()))
+                let count = completedTrackers.filter({$0.id == tracker.id}).count
                 cell?.configCompletion(counter: count, isCompleted: true)
             } else {
-                completed.removeAll(where:{$0.id == tracker.id && $0.date == self.currentDate})
-                let count = completed.filter({$0.id == tracker.id}).count
+                completedTrackers.removeAll(where:{$0.id == tracker.id && $0.date == self.currentDate})
+                let count = completedTrackers.filter({$0.id == tracker.id}).count
                 cell?.configCompletion(counter: count, isCompleted: false)
-            }
+            } 
         }
-        let count = completed.filter({$0.id == tracker.id}).count
-        let comlited = completed.first(where:{$0.id == tracker.id && $0.date == self.currentDate}) != nil
-        cell.configCompletion(counter: count, isCompleted: comlited)
+        let count = completedTrackers.filter({$0.id == tracker.id}).count
+        let completed = completedTrackers.first(where:{$0.id == tracker.id && $0.date == self.currentDate}) != nil
+        cell.configCompletion(counter: count, isCompleted: completed)
         return cell
     }
     

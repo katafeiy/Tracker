@@ -9,14 +9,14 @@ struct Tracker {
     
 }
 
-enum DaysOfWeek: String {
-    case mon
-    case tue
-    case wen
-    case thu
-    case fri
-    case sat
-    case sun
+enum DaysOfWeek: String, CaseIterable {
+    case mon = "Пн"
+    case tue = "Вт"
+    case wen = "Ср"
+    case thu = "Чт"
+    case fri = "Пт"
+    case sat = "Сб"
+    case sun = "Вс"
     
     init?(date: Date) {
         
@@ -33,6 +33,17 @@ enum DaysOfWeek: String {
         case 1: self = .sun
         default:
             return nil
+        }
+    }
+    var fullName: String {
+        switch self {
+        case .mon: return "Понедельник"
+        case .tue: return "Вторник"
+        case .wen: return "Среда"
+        case .thu: return "Четверг"
+        case .fri: return "Пятница"
+        case .sat: return "Суббота"
+        case .sun: return "Воскресенье"
         }
     }
 }

@@ -10,19 +10,26 @@ final class NewHabitViewController: UIViewController {
     
     let nameCell = ["Категория", "Расписание"]
     
-    let nameTracker: UITextField = {
-        let nameTracker = UITextField()
+    private var selectedDays: Set<DaysOfWeek> = []
+    
+    private lazy var nameTracker: UITextField = {
+        var nameTracker = UITextField()
         nameTracker.placeholder = "Введите название трекера"
         nameTracker.backgroundColor = .ypBackgroundDay
         nameTracker.font = .systemFont(ofSize: 17, weight: .regular)
         nameTracker.textColor = .ypBlackDay
         nameTracker.layer.masksToBounds = true
         nameTracker.layer.cornerRadius = 16
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+        nameTracker.leftView = paddingView
+        nameTracker.leftViewMode = .always
+        nameTracker.clearButtonMode = .whileEditing
+        nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameTracker
     }()
     
     private lazy var newHabitTableView: UITableView = {
-        let newHabitTableView = UITableView()
+        let newHabitTableView = UITableView(frame: view.bounds, style: .insetGrouped)
         newHabitTableView.isScrollEnabled = false
         newHabitTableView.backgroundColor = .clear
         newHabitTableView.separatorStyle = .singleLine
@@ -37,6 +44,7 @@ final class NewHabitViewController: UIViewController {
     
     private lazy var createNewTrackerButton: UIButton = {
         let createButton = UIButton()
+        createButton.isEnabled = false
         createButton.setTitle("Создать", for: .normal)
         createButton.setTitleColor(.ypWhiteDay, for: .normal)
         createButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .regular)
@@ -72,6 +80,7 @@ final class NewHabitViewController: UIViewController {
         view.backgroundColor = .white
         newHabitTableView.dataSource = self
         newHabitTableView.delegate = self
+        newHabitTableView.contentInset.top = -9
         
         let stackView = UIStackView(arrangedSubviews: [cancelButton, createNewTrackerButton])
         stackView.axis = .horizontal
@@ -87,10 +96,10 @@ final class NewHabitViewController: UIViewController {
             nameTracker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             nameTracker.heightAnchor.constraint(equalToConstant: 75),
             
-            newHabitTableView.topAnchor.constraint(equalTo: nameTracker.bottomAnchor, constant: 24),
-            newHabitTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            newHabitTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            newHabitTableView.heightAnchor.constraint(equalToConstant: 150),
+            newHabitTableView.topAnchor.constraint(equalTo: nameTracker.bottomAnchor),
+            newHabitTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            newHabitTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            newHabitTableView.bottomAnchor.constraint(equalTo: stackView.topAnchor, constant: -16),
             
             stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -104,9 +113,22 @@ final class NewHabitViewController: UIViewController {
         navigationItem.title = "Новая привычка"
     }
     
+    @objc func didChangeName(_ sender: UITextField) {
+        
+        guard let textInput = sender.text else { return }
+        
+        if textInput.isEmpty == true || textInput.count > 38 {
+            createNewTrackerButton.isEnabled = false
+            createNewTrackerButton.backgroundColor = .ypGray
+        } else {
+            createNewTrackerButton.isEnabled = true
+            createNewTrackerButton.backgroundColor = .ypBlackDay
+        }
+    }
+    
     @objc func didCreateNewTrackerButtonTap() {
         
-        delegate?.didCreate(newTracker: .init(id: UUID(),name: nameTracker.text ?? "nil", color: .colorSelection1, emoji: "🤩", schedule: [.thu, .sat]),
+        delegate?.didCreate(newTracker: .init(id: UUID(),name: nameTracker.text ?? "nil", color: .colorSelection1, emoji: "🤩", schedule: selectedDays),
                             forCategory: "Спорт")
         dismiss(animated: true, completion: nil)
     }
@@ -114,6 +136,7 @@ final class NewHabitViewController: UIViewController {
     @objc func didCancelButtonTap() {
         dismiss(animated: true , completion: nil)
     }
+    
 }
 
 extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
@@ -127,8 +150,9 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         cell.textLabel?.text = nameCell[indexPath.row]
-        cell.backgroundColor = .ypLightGray
+        cell.backgroundColor = .ypBackgroundDay
         cell.accessoryType = .disclosureIndicator
+        cell.selectionStyle = .none
         
         return cell
     }
@@ -141,6 +165,11 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
             navigationController?.pushViewController(newCategoryViewController, animated: true)
         case 1:
             let scheduleViewController = ScheduleViewController()
+            scheduleViewController.didSelectSchedule = { [weak self] schedule in
+                guard let self else { return }
+                //TODO: Обновить ячейку
+                self.selectedDays = schedule
+            }
             navigationController?.pushViewController(scheduleViewController, animated: true)
         default:
             return

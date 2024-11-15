@@ -60,7 +60,7 @@ final class CreateTrackerViewController: UIViewController {
     
     func configurationNavigationBar() {        
         navigationItem.title = "Создание трекера"
-        navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.tintColor = .ypBlackDay
     }
     
     @objc func didHabitButtonTap() {
