@@ -8,9 +8,14 @@ final class NewHabitViewController: UIViewController {
     
     weak var delegate: ProtocolNewHabitViewControllerOutput?
     
-    let nameCell = ["Категория", "Расписание"]
     
-    private var selectedDays: Set<DaysOfWeek> = []
+    private var selectedDays: Set<DaysOfWeek> = [] {
+        didSet {
+            blockUpdateButton()
+        }
+    }
+    
+    lazy var nameCell = [("Категория", "Название категории"), ("Расписание", "Дни недели")]
     
     private lazy var nameTracker: UITextField = {
         var nameTracker = UITextField()
@@ -54,7 +59,7 @@ final class NewHabitViewController: UIViewController {
         createButton.addTarget(self, action: #selector(didCreateNewTrackerButtonTap), for: .touchUpInside)
         return createButton
     }()
-
+    
     private lazy var cancelButton: UIButton = {
         let cancelButton = UIButton()
         cancelButton.setTitle("Отменить", for: .normal)
@@ -75,6 +80,8 @@ final class NewHabitViewController: UIViewController {
         setupUI()
     }
     
+    
+    
     func setupUI() {
         
         view.backgroundColor = .white
@@ -88,7 +95,7 @@ final class NewHabitViewController: UIViewController {
         stackView.spacing = 16
         
         [nameTracker, newHabitTableView, stackView].forEach{$0.translatesAutoresizingMaskIntoConstraints = false;  view.addSubview($0)}
-
+        
         NSLayoutConstraint.activate([
             
             nameTracker.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
@@ -115,15 +122,8 @@ final class NewHabitViewController: UIViewController {
     
     @objc func didChangeName(_ sender: UITextField) {
         
-        guard let textInput = sender.text else { return }
+        blockUpdateButton()
         
-        if textInput.isEmpty == true || textInput.count > 38 {
-            createNewTrackerButton.isEnabled = false
-            createNewTrackerButton.backgroundColor = .ypGray
-        } else {
-            createNewTrackerButton.isEnabled = true
-            createNewTrackerButton.backgroundColor = .ypBlackDay
-        }
     }
     
     @objc func didCreateNewTrackerButtonTap() {
@@ -137,6 +137,19 @@ final class NewHabitViewController: UIViewController {
         dismiss(animated: true , completion: nil)
     }
     
+    private func blockUpdateButton() {
+        
+        guard let textInput = nameTracker.text else { return }
+        
+        if textInput.isEmpty == true || textInput.count > 38 || selectedDays.isEmpty {
+            
+            createNewTrackerButton.isEnabled = false
+            createNewTrackerButton.backgroundColor = .ypGray
+        } else {
+            createNewTrackerButton.isEnabled = true
+            createNewTrackerButton.backgroundColor = .ypBlackDay
+        }
+    }
 }
 
 extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
@@ -147,12 +160,17 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        
-        cell.textLabel?.text = nameCell[indexPath.row]
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+          
         cell.backgroundColor = .ypBackgroundDay
-        cell.accessoryType = .disclosureIndicator
+        cell.layer.masksToBounds = true
+        cell.layer.cornerRadius = 16
         cell.selectionStyle = .none
+        
+        cell.textLabel?.text = nameCell[indexPath.row].0
+        cell.detailTextLabel?.text = nameCell[indexPath.row].1
+        cell.detailTextLabel?.textColor = .ypGray
+        cell.accessoryType = .disclosureIndicator
         
         return cell
     }
@@ -162,12 +180,16 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
         switch indexPath.row {
         case 0:
             let newCategoryViewController = CreateNewCategoryViewController()
+            
             navigationController?.pushViewController(newCategoryViewController, animated: true)
         case 1:
             let scheduleViewController = ScheduleViewController()
             scheduleViewController.didSelectSchedule = { [weak self] schedule in
                 guard let self else { return }
-                //TODO: Обновить ячейку
+                
+                if let cell = tableView.cellForRow(at: indexPath) {
+                    cell.detailTextLabel?.text = schedule.reduce("") { $0 + $1.rawValue + ", "}
+                }
                 self.selectedDays = schedule
             }
             navigationController?.pushViewController(scheduleViewController, animated: true)

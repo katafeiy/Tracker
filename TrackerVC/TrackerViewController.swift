@@ -21,6 +21,7 @@ final class TrackerViewController: UIViewController {
         layout.scrollDirection = .vertical
         collectionView.backgroundColor = .clear
         collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "trackerCell")
+        collectionView.register(CategoryNameCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader , withReuseIdentifier: "header")
         layout.minimumInteritemSpacing = 9
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
@@ -178,6 +179,19 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return visibleCategories[section].trackerArray.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
+                                                                               withReuseIdentifier: "header", for: indexPath) as?  CategoryNameCell else { return UICollectionReusableView()}
+        let title = visibleCategories[indexPath.section].name
+        headerView.configure(with: title)
+        
+        return headerView
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return .init(width: collectionView.frame.width, height: 30)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

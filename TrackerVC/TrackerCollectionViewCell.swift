@@ -23,8 +23,9 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private let labelName: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
-        label.textColor = .ypBlackDay
+        label.textColor = .ypWhiteDay
         label.text = "Здесь будет ваше описание"
+        label.numberOfLines = 2
         return label
     }()
     
@@ -48,7 +49,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         let button = UIButton.systemButton(with: .plusButton,
                                            target: self,
                                            action: #selector(didAddButtonTap))
-        button.backgroundColor = .clear
+        button.backgroundColor = .colorSelection1
         button.layer.cornerRadius = 17
         button.layer.masksToBounds = true
         button.tintColor = .ypWhiteDay
@@ -70,6 +71,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         viewCard.backgroundColor = tracker.color
         labelCountDay.text =  "0 дней"
         addButtonCompletion.setImage(UIImage.plusButton, for: .normal)
+
     }
     
     func configCompletion(counter: Int, isCompleted: Bool) {
@@ -126,7 +128,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             
             labelName.leadingAnchor.constraint(equalTo: viewCard.leadingAnchor, constant: 12),
             labelName.trailingAnchor.constraint(equalTo: viewCard.trailingAnchor, constant: -12),
-            labelName.bottomAnchor.constraint(equalTo: viewCard.bottomAnchor, constant: 12),
+            labelName.bottomAnchor.constraint(equalTo: viewCard.bottomAnchor, constant: -12),
             
             viewEmoji.leadingAnchor.constraint(equalTo: viewCard.leadingAnchor, constant: 12),
             viewEmoji.topAnchor.constraint(equalTo: viewCard.topAnchor, constant: 12),
