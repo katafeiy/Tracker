@@ -129,7 +129,7 @@ final class NewHabitViewController: UIViewController {
     @objc func didCreateNewTrackerButtonTap() {
         
         delegate?.didCreate(newTracker: .init(id: UUID(),name: nameTracker.text ?? "nil", color: .colorSelection1, emoji: "🤩", schedule: selectedDays),
-                            forCategory: "Спорт")
+                            forCategory: "Новая категория")
         dismiss(animated: true, completion: nil)
     }
     
