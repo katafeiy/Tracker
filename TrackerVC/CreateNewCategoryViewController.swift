@@ -38,7 +38,7 @@ final class CreateNewCategoryViewController: UIViewController {
     }
     
     func setupUI() {
-    
+        
         [starImage, habitLabel, addNewCategory].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; view.addSubview($0)}
         
         NSLayoutConstraint.activate([
@@ -66,7 +66,7 @@ final class CreateNewCategoryViewController: UIViewController {
     }
     
     @objc func didAddNewCategoryTap() {
-     
+        // TODO: - Добавить логику при нажатии на ячейку
     }
 }
 

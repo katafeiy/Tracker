@@ -6,7 +6,6 @@ struct Tracker {
     let color: UIColor
     let emoji: String
     let schedule: Set<DaysOfWeek>
-    
 }
 
 enum DaysOfWeek: String, CaseIterable {
@@ -31,10 +30,10 @@ enum DaysOfWeek: String, CaseIterable {
         case 6: self = .fri
         case 7: self = .sat
         case 1: self = .sun
-        default:
-            return nil
+        default: return nil
         }
     }
+    
     var fullName: String {
         switch self {
         case .mon: return "Понедельник"

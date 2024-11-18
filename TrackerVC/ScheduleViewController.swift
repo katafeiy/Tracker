@@ -41,7 +41,7 @@ final class ScheduleViewController: UIViewController {
         scheduleTableView.delegate = self
         scheduleTableView.dataSource = self
         scheduleTableView.contentInset.top = -19
-    
+        
     }
     
     func setupUI() {

@@ -204,7 +204,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         } else {
             cell.blockTap(isEnabled: false)
         }
-    
+        
         cell.configureCell(tracker: tracker) { [weak self, weak cell] in
             guard let self else { return }
             if completedTrackers.first(where:{$0.id == tracker.id && $0.date == self.currentDate}) == nil {

@@ -9,17 +9,15 @@ final class CategoryNameCell: UICollectionViewCell {
         label.textColor = .ypBlackDay
         return label
     }()
-
+    
     override init (frame: CGRect) {
         super.init(frame: frame)
         
-        [nameLabel].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; contentView.addSubview($0)}
+        [nameLabel].forEach{ $0.translatesAutoresizingMaskIntoConstraints = false; contentView.addSubview($0) }
         
         NSLayoutConstraint.activate([
-        
-        nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-        nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
-        
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
+            nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
     

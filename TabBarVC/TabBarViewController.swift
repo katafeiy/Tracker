@@ -9,20 +9,16 @@ final class TabBarViewController: UITabBarController {
         
         var title: String? {
             
-            switch self {
-            case .tracker:
-                return "Трекеры"
-            case .statistics:
-                return "Статистика"
+            return switch self {
+            case .tracker: "Трекеры"
+            case .statistics: "Статистика"
             }
         }
-        var iconName: UIImage? {
+        var image: UIImage? {
             
-            switch self {
-            case .tracker:
-                return UIImage.recordCircleFill
-            case .statistics:
-                return UIImage.hareFill
+            return switch self {
+            case .tracker: UIImage.recordCircleFill
+            case .statistics: UIImage.hareFill
             }
         }
     }
@@ -40,12 +36,12 @@ final class TabBarViewController: UITabBarController {
             switch $0 {
             case .tracker:
                 let trackerViewController = UINavigationController(rootViewController: TrackerViewController())
-                trackerViewController.tabBarItem = UITabBarItem(title: $0.title, image: $0.iconName, selectedImage: nil)
+                trackerViewController.tabBarItem = UITabBarItem(title: $0.title, image: $0.image, selectedImage: nil)
                 return trackerViewController
                 
             case .statistics:
                 let statisticsViewController = UINavigationController(rootViewController: StatisticsViewController())
-                statisticsViewController.tabBarItem = UITabBarItem(title: $0.title, image: $0.iconName, selectedImage: nil)
+                statisticsViewController.tabBarItem = UITabBarItem(title: $0.title, image: $0.image, selectedImage: nil)
                 return statisticsViewController
             }
         }

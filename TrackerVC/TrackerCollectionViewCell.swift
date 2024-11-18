@@ -71,7 +71,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         viewCard.backgroundColor = tracker.color
         labelCountDay.text =  "0 дней"
         addButtonCompletion.setImage(UIImage.plusButton, for: .normal)
-
+        
     }
     
     func configCompletion(counter: Int, isCompleted: Bool) {
@@ -100,7 +100,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     override init (frame: CGRect) {
         super.init(frame: frame)
-    
+        
         layer.cornerRadius = 10
         layer.masksToBounds = true
         backgroundColor = .clear
@@ -116,7 +116,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             viewCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             viewCard.heightAnchor.constraint(equalToConstant: 90),
             viewCard.widthAnchor.constraint(equalToConstant: 167),
-    
+            
             addButtonCompletion.topAnchor.constraint(equalTo: viewCard.bottomAnchor, constant: 8),
             addButtonCompletion.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             addButtonCompletion.widthAnchor.constraint(equalToConstant: 34),
@@ -138,7 +138,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             labelEmoji.centerXAnchor.constraint(equalTo: viewEmoji.centerXAnchor),
             labelEmoji.centerYAnchor.constraint(equalTo: viewEmoji.centerYAnchor)
             
-         ])
+        ])
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
