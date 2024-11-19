@@ -2,11 +2,11 @@ import UIKit
 
 final class TrackerViewController: UIViewController {
     
-    var categories: [TrackerCategory] = []
-    var completedTrackers: [TrackerRecord] = []
-    var visibleCategories: [TrackerCategory] = []
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
+    private var visibleCategories: [TrackerCategory] = []
     
-    var currentDate: Date? {
+    private var currentDate: Date? {
         let selectedDate = datePicker.date
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
@@ -62,10 +62,8 @@ final class TrackerViewController: UIViewController {
         searchViewController.obscuresBackgroundDuringPresentation = false
         searchViewController.hidesNavigationBarDuringPresentation = false
         searchViewController.searchBar.tintColor = .ypBlackDay
-        
         searchViewController.searchBar.delegate = self
         searchViewController.delegate = self
-        
         return searchViewController
     }()
     
@@ -78,7 +76,7 @@ final class TrackerViewController: UIViewController {
         updateVisibleData()
     }
     
-    func configurationNavigationBar() {
+    private func configurationNavigationBar() {
         
         let leftButton = UIBarButtonItem(image: UIImage.plusButton, style: .done, target: self, action: #selector(setNewTracker))
         leftButton.tintColor = .ypBlackDay
@@ -93,7 +91,7 @@ final class TrackerViewController: UIViewController {
         navigationItem.searchController = searchViewController
     }
     
-    func configurationView() {
+    private func configurationView() {
         
         view.backgroundColor = .ypWhiteDay
         datePicker.center = view.center
@@ -118,7 +116,7 @@ final class TrackerViewController: UIViewController {
         ])
     }
     
-    @objc func setDatePickerValueChanged(_ sender: UIDatePicker) {
+    @objc private func setDatePickerValueChanged(_ sender: UIDatePicker) {
         
         let selectedDate = sender.date
         let dateFormatter = DateFormatter()
@@ -132,7 +130,7 @@ final class TrackerViewController: UIViewController {
         
     }
     
-    func updateVisibleData() {
+    private func updateVisibleData() {
         
         guard let currentDate, let dayOfWeek = DaysOfWeek(date: currentDate) else { return }
         
@@ -149,7 +147,7 @@ final class TrackerViewController: UIViewController {
         collectionView.reloadData()
     }
     
-    @objc func setNewTracker() {
+    @objc private func setNewTracker() {
         
         let createTracker = CreateTrackerViewController()
         createTracker.delegate = self
@@ -166,7 +164,7 @@ final class TrackerViewController: UIViewController {
         return formatter
     }()
     
-    public func dateString(_ date: Date) -> String {
+    private func dateString(_ date: Date) -> String {
         dateFormatter.string(from: date)
     }
 }
@@ -181,12 +179,18 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         return visibleCategories[section].trackerArray.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
-                                                                               withReuseIdentifier: "header", for: indexPath) as?  CategoryNameCell else { return UICollectionReusableView()}
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+        
+        guard let headerView = collectionView.dequeueReusableSupplementaryView(
+            ofKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: "header", for: indexPath
+        ) as?  CategoryNameCell else { return UICollectionReusableView() }
+
         let title = visibleCategories[indexPath.section].name
         headerView.configure(with: title)
-        
         return headerView
     }
     
@@ -199,11 +203,8 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         let tracker = visibleCategories[indexPath.section].trackerArray[indexPath.row]
         
-        if (currentDate ?? Date()) <= Date() {
-            cell.blockTap(isEnabled: true)
-        } else {
-            cell.blockTap(isEnabled: false)
-        }
+        let isEnabledDate = (currentDate ?? Date()) <= Date()
+        cell.blockTap(isEnabled: isEnabledDate)
         
         cell.configureCell(tracker: tracker) { [weak self, weak cell] in
             guard let self else { return }
@@ -230,7 +231,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
 
 extension TrackerViewController: UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
-        
+        // TODO: Функционал данного метода будет добавлен в 15 спринте)))
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -249,12 +250,9 @@ extension TrackerViewController: ProtocolNewHabitViewControllerOutput{
         updateVisibleData()
     }
     
-    
     func didCreate(newTracker: Tracker) {
-        
         categories.append(TrackerCategory(name: "Новый категория", trackerArray:[newTracker]))
         updateVisibleData()
-        
     }
 }
 

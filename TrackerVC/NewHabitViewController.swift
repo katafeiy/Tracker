@@ -8,7 +8,6 @@ final class NewHabitViewController: UIViewController {
     
     weak var delegate: ProtocolNewHabitViewControllerOutput?
     
-    
     private var selectedDays: Set<DaysOfWeek> = [] {
         didSet {
             blockUpdateButton()
@@ -30,8 +29,10 @@ final class NewHabitViewController: UIViewController {
         nameTracker.leftViewMode = .always
         nameTracker.clearButtonMode = .whileEditing
         nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
+        nameTracker.delegate = self
         return nameTracker
     }()
+    
     
     private lazy var newHabitTableView: UITableView = {
         let newHabitTableView = UITableView(frame: view.bounds, style: .insetGrouped)
@@ -79,9 +80,7 @@ final class NewHabitViewController: UIViewController {
         setupNavigationBar()
         setupUI()
     }
-    
-    
-    
+
     func setupUI() {
         
         view.backgroundColor = .white
@@ -121,9 +120,7 @@ final class NewHabitViewController: UIViewController {
     }
     
     @objc func didChangeName(_ sender: UITextField) {
-        
         blockUpdateButton()
-        
     }
     
     @objc func didCreateNewTrackerButtonTap() {
@@ -152,7 +149,7 @@ final class NewHabitViewController: UIViewController {
     }
 }
 
-extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
+extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return nameCell.count
@@ -180,7 +177,6 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
         switch indexPath.row {
         case 0:
             let newCategoryViewController = CreateNewCategoryViewController()
-            
             navigationController?.pushViewController(newCategoryViewController, animated: true)
         case 1:
             let scheduleViewController = ScheduleViewController()
@@ -201,5 +197,19 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
         return 75
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let textFieldText = textField.text else { return true }
+        let newText = (textFieldText as NSString).replacingCharacters(in: range, with: string)
+        
+        let remainingCharacters = 38 - newText.count
+        print("Осталось \(remainingCharacters) символов")
+        
+        return newText.count <= 38
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        nameTracker.resignFirstResponder()
+        return true
+    }
 }
 

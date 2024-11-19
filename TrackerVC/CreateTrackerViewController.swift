@@ -70,6 +70,12 @@ final class CreateTrackerViewController: UIViewController {
     }
     
     @objc func didIrregularEventButtonTap() {
-        
+        // TODO: Функционал данной кнопки будет реализован в следующем спринте!
+        let alert = UIAlertController(title: "Нерегулярное событие\n",
+                                      message: "Уважаемый ревьювер)))\n Функционал данной кнопки будет реализован в следующем спринте!\n Честное слово!!!)))\n 😉",
+                                      preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(action)
+        present(alert, animated: true)
     }
 }

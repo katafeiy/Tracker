@@ -46,7 +46,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var addButtonCompletion: UIButton = {
-        let button = UIButton.systemButton(with: .plusButton,
+        let button = UIButton.systemButton(with: .plusTracker,
                                            target: self,
                                            action: #selector(didAddButtonTap))
         button.backgroundColor = .colorSelection1
@@ -88,13 +88,10 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         if lastTowDigit >= 11 && lastTowDigit <= 19 {
             return "\(number) дней"
         }
-        switch lastDigit {
-        case 1:
-            return "\(number) день"
-        case 2...4:
-            return "\(number) дня"
-        default:
-            return "\(number) дней"
+        return switch lastDigit {
+        case 1: "\(number) день"
+        case 2...4: "\(number) дня"
+        default: "\(number) дней"
         }
     }
     

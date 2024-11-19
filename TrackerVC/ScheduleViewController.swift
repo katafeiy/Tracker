@@ -44,7 +44,7 @@ final class ScheduleViewController: UIViewController {
         
     }
     
-    func setupUI() {
+    private func setupUI() {
         
         view.backgroundColor = .white
         
@@ -65,7 +65,7 @@ final class ScheduleViewController: UIViewController {
         ])
     }
     
-    func setupNavigationBar() {
+    private  func setupNavigationBar() {
         navigationItem.title = "Расписание"
     }
     
