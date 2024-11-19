@@ -197,7 +197,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackerCell", for: indexPath) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
-        
+    
         let tracker = visibleCategories[indexPath.section].trackerArray[indexPath.row]
         
         let isEnabledDate = (currentDate ?? Date()) <= Date()

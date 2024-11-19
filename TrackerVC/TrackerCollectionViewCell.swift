@@ -71,7 +71,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         viewCard.backgroundColor = tracker.color
         labelCountDay.text =  "0 дней"
         addButtonCompletion.setImage(UIImage.plusButton, for: .normal)
-        
     }
     
     func configCompletion(counter: Int, isCompleted: Bool) {

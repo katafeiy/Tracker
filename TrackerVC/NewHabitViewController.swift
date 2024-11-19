@@ -41,7 +41,6 @@ final class NewHabitViewController: UIViewController {
         return subtitle
     }()
     
-    
     private lazy var newHabitTableView: UITableView = {
         let newHabitTableView = UITableView(frame: view.bounds, style: .insetGrouped)
         newHabitTableView.isScrollEnabled = false
@@ -200,8 +199,14 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate, UI
             scheduleViewController.didSelectSchedule = { [weak self] schedule in
                 guard let self else { return }
                 
-                if let cell = tableView.cellForRow(at: indexPath) {
-                    cell.detailTextLabel?.text = schedule.reduce("") { $0 + $1.rawValue + ", "}
+                if schedule == Set(DaysOfWeek.allCases) {
+                    if let cell = tableView.cellForRow(at: indexPath) {
+                        cell.detailTextLabel?.text = "Каждый день"
+                    }
+                } else {
+                    if let cell = tableView.cellForRow(at: indexPath) {
+                        cell.detailTextLabel?.text = schedule.reduce("") { $0 + $1.rawValue + ", "}
+                    }
                 }
                 self.selectedDays = schedule
             }
@@ -210,6 +215,7 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate, UI
             return
         }
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }

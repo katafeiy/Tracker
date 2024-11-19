@@ -1,6 +1,7 @@
 import UIKit
 
 struct Tracker {
+    
     let id: UUID
     let name: String
     let color: UIColor
@@ -9,6 +10,7 @@ struct Tracker {
 }
 
 enum DaysOfWeek: String, CaseIterable {
+    
     case mon = "Пн"
     case tue = "Вт"
     case wen = "Ср"
@@ -35,6 +37,7 @@ enum DaysOfWeek: String, CaseIterable {
     }
     
     var fullName: String {
+        
         switch self {
         case .mon: return "Понедельник"
         case .tue: return "Вторник"
