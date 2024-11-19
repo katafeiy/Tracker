@@ -185,7 +185,7 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate, UI
         cell.detailTextLabel?.text = nameCell[indexPath.row].1
         cell.detailTextLabel?.textColor = .ypGray
         cell.accessoryType = .disclosureIndicator
-        
+
         return cell
     }
     
