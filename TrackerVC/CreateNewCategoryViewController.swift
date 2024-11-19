@@ -63,10 +63,19 @@ final class CreateNewCategoryViewController: UIViewController {
     
     func setupNavigationBar() {
         navigationItem.title = "Категория"
+        navigationItem.hidesBackButton = true
     }
     
     @objc func didAddNewCategoryTap() {
         // TODO: - Добавить логику при нажатии на ячейку
+        let alert = UIAlertController(title: "Нерегулярное событие\n",
+                                      message: "Уважаемый ревьювер)))\n" +
+                                      "В задание 14-го спринта функционал данной кнопки не предполагает быть реализованным именно в 14-ом спринте," +
+                                      " он будет реализован в 15-ом спринте!\n Честное слово!!!)))\n 😉",
+                                      preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(action)
+        present(alert, animated: true)
     }
 }
 

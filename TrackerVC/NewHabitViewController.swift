@@ -33,6 +33,14 @@ final class NewHabitViewController: UIViewController {
         return nameTracker
     }()
     
+    private lazy var subtitleNameTracker: UILabel = {
+        let subtitle = UILabel()
+        subtitle.font = .systemFont(ofSize: 17, weight: .regular)
+        subtitle.textColor = .ypLightGray
+        subtitle.textAlignment = .center
+        return subtitle
+    }()
+    
     
     private lazy var newHabitTableView: UITableView = {
         let newHabitTableView = UITableView(frame: view.bounds, style: .insetGrouped)
@@ -93,7 +101,7 @@ final class NewHabitViewController: UIViewController {
         stackView.distribution = .fillEqually
         stackView.spacing = 16
         
-        [nameTracker, newHabitTableView, stackView].forEach{$0.translatesAutoresizingMaskIntoConstraints = false;  view.addSubview($0)}
+        [nameTracker, newHabitTableView, subtitleNameTracker, stackView].forEach{$0.translatesAutoresizingMaskIntoConstraints = false;  view.addSubview($0)}
         
         NSLayoutConstraint.activate([
             
@@ -101,6 +109,11 @@ final class NewHabitViewController: UIViewController {
             nameTracker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             nameTracker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             nameTracker.heightAnchor.constraint(equalToConstant: 75),
+            
+            subtitleNameTracker.topAnchor.constraint(equalTo: nameTracker.bottomAnchor),
+            subtitleNameTracker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            subtitleNameTracker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            subtitleNameTracker.heightAnchor.constraint(equalToConstant: 22),
             
             newHabitTableView.topAnchor.constraint(equalTo: nameTracker.bottomAnchor),
             newHabitTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -117,6 +130,9 @@ final class NewHabitViewController: UIViewController {
     
     func setupNavigationBar() {
         navigationItem.title = "Новая привычка"
+        navigationItem.hidesBackButton = true
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     @objc func didChangeName(_ sender: UITextField) {
@@ -131,7 +147,8 @@ final class NewHabitViewController: UIViewController {
     }
     
     @objc func didCancelButtonTap() {
-        dismiss(animated: true , completion: nil)
+        navigationController?.popViewController(animated: true)
+//        dismiss(animated: true , completion: nil)
     }
     
     private func blockUpdateButton() {
@@ -149,7 +166,7 @@ final class NewHabitViewController: UIViewController {
     }
 }
 
-extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return nameCell.count
@@ -201,9 +218,10 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate, UI
         guard let textFieldText = textField.text else { return true }
         let newText = (textFieldText as NSString).replacingCharacters(in: range, with: string)
         
-        let remainingCharacters = 38 - newText.count
-        print("Осталось \(remainingCharacters) символов")
-        
+        let count = newText.count < 38 ? newText.count : 38
+        let remainingCharacters = 38 - count
+        subtitleNameTracker.text = count < 38 ? ("Осталось \(remainingCharacters) символов") : ("Ограничение \(count) символов")
+        subtitleNameTracker.textColor = count < 38 ? .ypLightGray : .ypRed
         return newText.count <= 38
     }
 

@@ -67,6 +67,7 @@ final class ScheduleViewController: UIViewController {
     
     private  func setupNavigationBar() {
         navigationItem.title = "Расписание"
+        navigationItem.hidesBackButton = true
     }
     
     @objc func didReadyToUseTap() {

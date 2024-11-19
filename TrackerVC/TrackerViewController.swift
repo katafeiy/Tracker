@@ -125,9 +125,7 @@ final class TrackerViewController: UIViewController {
         print("Выбранная дата: \(formattedDate)")
         
         updateVisibleData()
-        
         view.endEditing(true)
-        
     }
     
     private func updateVisibleData() {
@@ -154,7 +152,6 @@ final class TrackerViewController: UIViewController {
         let navigationController = UINavigationController(rootViewController: createTracker)
         navigationController.modalPresentationStyle = .formSheet
         present(navigationController, animated: true)
-        
     }
     
     private lazy var dateFormatter: DateFormatter = {
@@ -200,6 +197,9 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackerCell", for: indexPath) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
+        
+        let section = indexPath.section
+        let row = indexPath.row
         
         let tracker = visibleCategories[indexPath.section].trackerArray[indexPath.row]
         

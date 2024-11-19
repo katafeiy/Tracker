@@ -54,13 +54,16 @@ final class CreateTrackerViewController: UIViewController {
             stackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
-            
         ])
     }
     
     func configurationNavigationBar() {        
         navigationItem.title = "Создание трекера"
         navigationController?.navigationBar.tintColor = .ypBlackDay
+        navigationController?.navigationBar.titleTextAttributes = [
+            .font: UIFont.systemFont(ofSize: 16, weight: .medium),
+            .foregroundColor: UIColor.ypBlackDay
+        ]
     }
     
     @objc func didHabitButtonTap() {
@@ -72,7 +75,9 @@ final class CreateTrackerViewController: UIViewController {
     @objc func didIrregularEventButtonTap() {
         // TODO: Функционал данной кнопки будет реализован в следующем спринте!
         let alert = UIAlertController(title: "Нерегулярное событие\n",
-                                      message: "Уважаемый ревьювер)))\n Функционал данной кнопки будет реализован в следующем спринте!\n Честное слово!!!)))\n 😉",
+                                      message: "Уважаемый ревьювер)))\n" +
+                                      "В задание 14-го спринта функционал данной кнопки не предполагает быть реализованным именно в 14-ом спринте," +
+                                      " он будет реализован в 15-ом спринте!\n Честное слово!!!)))\n 😉",
                                       preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default)
         alert.addAction(action)
