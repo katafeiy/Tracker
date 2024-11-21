@@ -205,6 +205,9 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate, UI
                     }
                 } else {
                     if let cell = tableView.cellForRow(at: indexPath) {
+//                        var array = Array(schedule)
+//                        array.sorted(by: schedule.firstIndex(of: .mon))
+//                        cell.detailTextLabel?.text = array.reduce("") { $0 + $1.rawValue + ", "}
                         cell.detailTextLabel?.text = schedule.reduce("") { $0 + $1.rawValue + ", "}
                     }
                 }
