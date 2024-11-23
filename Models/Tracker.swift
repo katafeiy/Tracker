@@ -9,15 +9,15 @@ struct Tracker {
     let schedule: Set<DaysOfWeek>
 }
 
-enum DaysOfWeek: String, CaseIterable {
+enum DaysOfWeek: Int, CaseIterable {
     
-    case mon = "Пн"
-    case tue = "Вт"
-    case wen = "Ср"
-    case thu = "Чт"
-    case fri = "Пт"
-    case sat = "Сб"
-    case sun = "Вс"
+    case mon
+    case tue
+    case wen
+    case thu
+    case fri
+    case sat
+    case sun
     
     init?(date: Date) {
         
@@ -48,4 +48,18 @@ enum DaysOfWeek: String, CaseIterable {
         case .sun: return "Воскресенье"
         }
     }
+    
+    var shortName: String {
+        
+        switch self {
+        case .mon: return "Пн"
+        case .tue: return "Вт"
+        case .wen: return "Ср"
+        case .thu: return "Чт"
+        case .fri: return "Пт"
+        case .sat: return "Сб"
+        case .sun: return "Вс"
+        }
+    }
 }
+
