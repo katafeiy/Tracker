@@ -383,8 +383,8 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch indexPath.row {
         case 0:
-            let newCategoryViewController = CreateNewCategoryViewController()
-            navigationController?.pushViewController(newCategoryViewController, animated: true)
+            let categoryViewController = CategoryViewController()
+            navigationController?.pushViewController(categoryViewController, animated: true)
         case 1:
             let scheduleViewController = ScheduleViewController()
             scheduleViewController.didSelectSchedule = { [weak self] schedule in

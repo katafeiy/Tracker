@@ -1,6 +1,8 @@
 import UIKit
 
-final class CreateNewCategoryViewController: UIViewController {
+final class CategoryViewController: UIViewController {
+    
+    var categories: [String] = []
     
     private lazy var starImage: UIImageView = {
         let imageView = UIImageView()
