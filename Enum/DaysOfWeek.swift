@@ -42,7 +42,7 @@ enum DaysOfWeek: Int, CaseIterable {
     
     var shortName: String {
         
-        switch self {
+        return switch self {
         case .mon: "Пн"
         case .tue: "Вт"
         case .wen: "Ср"
