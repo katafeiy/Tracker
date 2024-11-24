@@ -29,27 +29,27 @@ enum DaysOfWeek: Int, CaseIterable {
     
     var fullName: String {
         
-        switch self {
-        case .mon: return "Понедельник"
-        case .tue: return "Вторник"
-        case .wen: return "Среда"
-        case .thu: return "Четверг"
-        case .fri: return "Пятница"
-        case .sat: return "Суббота"
-        case .sun: return "Воскресенье"
+        return switch self {
+        case .mon: "Понедельник"
+        case .tue: "Вторник"
+        case .wen: "Среда"
+        case .thu: "Четверг"
+        case .fri: "Пятница"
+        case .sat: "Суббота"
+        case .sun: "Воскресенье"
         }
     }
     
     var shortName: String {
         
         switch self {
-        case .mon: return "Пн"
-        case .tue: return "Вт"
-        case .wen: return "Ср"
-        case .thu: return "Чт"
-        case .fri: return "Пт"
-        case .sat: return "Сб"
-        case .sun: return "Вс"
+        case .mon: "Пн"
+        case .tue: "Вт"
+        case .wen: "Ср"
+        case .thu: "Чт"
+        case .fri: "Пт"
+        case .sat: "Сб"
+        case .sun: "Вс"
         }
     }
 }
