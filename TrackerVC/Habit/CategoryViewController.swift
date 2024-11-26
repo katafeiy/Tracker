@@ -20,7 +20,7 @@ final class CategoryViewController: UIViewController {
         return label
     }()
     
-    private lazy var addNewCategory: UIButton = {
+    private lazy var addNewCategoryButton: UIButton = {
         let button = UIButton()
         button.setTitle("Добавить категорию", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
@@ -41,7 +41,10 @@ final class CategoryViewController: UIViewController {
     
     func setupUI() {
         
-        [starImage, habitLabel, addNewCategory].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; view.addSubview($0)}
+        [starImage, habitLabel, addNewCategoryButton].forEach{
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
         
         NSLayoutConstraint.activate([
             
@@ -55,11 +58,10 @@ final class CategoryViewController: UIViewController {
             habitLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             habitLabel.heightAnchor.constraint(equalToConstant: 36),
             
-            addNewCategory.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            addNewCategory.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            addNewCategory.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            addNewCategory.heightAnchor.constraint(equalToConstant: 60)
-            
+            addNewCategoryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            addNewCategoryButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            addNewCategoryButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            addNewCategoryButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
@@ -69,15 +71,8 @@ final class CategoryViewController: UIViewController {
     }
     
     @objc func didAddNewCategoryTap() {
-        // TODO: - Добавить логику при нажатии на ячейку
-        let alert = UIAlertController(title: "Нерегулярное событие\n",
-                                      message: "Уважаемый ревьювер)))\n" +
-                                      "В задание 14-го спринта функционал данной кнопки не предполагает быть реализованным именно в 14-ом спринте," +
-                                      " он будет реализован в 15-ом спринте!\n Честное слово!!!)))\n 😉",
-                                      preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default)
-        alert.addAction(action)
-        present(alert, animated: true)
+        let createNewCategoryViewController = CreateNewCategoryViewController()
+        navigationController?.pushViewController(createNewCategoryViewController, animated: true)
     }
 }
 

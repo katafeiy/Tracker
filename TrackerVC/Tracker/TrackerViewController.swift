@@ -228,7 +228,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
 
 extension TrackerViewController: UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
-        // TODO: Функционал данного метода будет добавлен в 15 спринте)))
+        // TODO: Функционал данного метода будет добавлен в 16 спринте)))
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

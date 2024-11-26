@@ -120,7 +120,15 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
         collectionView.isScrollEnabled = false
         return collectionView
     }()
-
+    
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [cancelButton, createNewTrackerButton])
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 16
+        return stackView
+    }()
+    
     private lazy var createNewTrackerButton: UIButton = {
         let createButton = UIButton()
         createButton.isEnabled = false
@@ -153,7 +161,7 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
         setupNavigationBar()
         setupUI()
     }
-
+    
     func setupUI() {
         
         view.backgroundColor = .white
@@ -164,11 +172,6 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
         tableView.dataSource = self
         tableView.delegate = self
         tableView.contentInset.top = -9
-        
-        let stackView = UIStackView(arrangedSubviews: [cancelButton, createNewTrackerButton])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 16
         
         [scrollView, stackView].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -226,7 +229,6 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             stackView.heightAnchor.constraint(equalToConstant: 60)
-            
         ])
     }
     
@@ -265,10 +267,10 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
         
         if
             textInput.isEmpty == true ||
-            textInput.count > 38 ||
-            selectedDays.isEmpty ||
-            emojiCollectionView.indexPathsForSelectedItems?.first == nil ||
-            colorCollectionView.indexPathsForSelectedItems?.first == nil
+                textInput.count > 38 ||
+                selectedDays.isEmpty ||
+                emojiCollectionView.indexPathsForSelectedItems?.first == nil ||
+                colorCollectionView.indexPathsForSelectedItems?.first == nil
         {
             createNewTrackerButton.isEnabled = false
             createNewTrackerButton.backgroundColor = .ypGray
@@ -333,21 +335,20 @@ extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDe
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        if collectionView == emojiCollectionView {
-            
+        switch collectionView {
+        case emojiCollectionView:
             guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                                    withReuseIdentifier: "emojiHeader",
                                                                                    for: indexPath) as? EmojiHeaderCollectionViewCell else { return UICollectionReusableView() }
             headerView.emojiHeaderLabel.text = "Emoji"
             return headerView
-            
-        } else {
-            
+        case colorCollectionView:
             guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                                    withReuseIdentifier: "colorHeader",
                                                                                    for: indexPath) as? ColorHeaderCollectionViewCell else { return UICollectionReusableView() }
             headerView.colorHeaderLabel.text = "Цвет"
             return headerView
+        default: return UICollectionReusableView()
         }
     }
     
@@ -375,7 +376,7 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
         cell.detailTextLabel?.text = nameCell[indexPath.row].1
         cell.detailTextLabel?.textColor = .ypGray
         cell.accessoryType = .disclosureIndicator
-
+        
         return cell
     }
     
@@ -436,3 +437,4 @@ extension NewHabitViewController: UITextFieldDelegate {
         return true
     }
 }
+
