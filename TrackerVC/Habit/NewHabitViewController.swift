@@ -52,7 +52,6 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
         nameTracker.leftViewMode = .always
         nameTracker.clearButtonMode = .whileEditing
         nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
-        nameTracker.delegate = self
         return nameTracker
     }()
     
@@ -165,6 +164,7 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
     func setupUI() {
         
         view.backgroundColor = .white
+        nameTracker.delegate = self
         emojiCollectionView.dataSource = self
         emojiCollectionView.delegate = self
         colorCollectionView.dataSource = self

@@ -21,11 +21,12 @@ final class CreateNewCategoryViewController: UIViewController {
     
     private lazy var createNewCategory: UIButton = {
         let button = UIButton()
+        button.isEnabled = false
         button.setTitle("Готово", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.backgroundColor = .ypBlackDay
+        button.backgroundColor = .ypGray
         button.titleLabel?.textColor = .ypWhiteDay
         button.addTarget(self, action: #selector(didCreateNewCategoryTap), for: .touchUpInside)
         return button
@@ -121,5 +122,4 @@ extension CreateNewCategoryViewController: UITextFieldDelegate {
         nameCategory.resignFirstResponder()
         return true
     }
-    
-}
+ }

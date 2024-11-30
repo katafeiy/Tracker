@@ -1,6 +1,6 @@
 import UIKit
 
-enum DaysOfWeek: Int, CaseIterable {
+enum DaysOfWeek: Int, CaseIterable, Codable {
     
     case mon
     case tue
@@ -53,3 +53,5 @@ enum DaysOfWeek: Int, CaseIterable {
         }
     }
 }
+
+

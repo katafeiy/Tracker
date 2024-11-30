@@ -5,6 +5,7 @@ final class TrackerViewController: UIViewController {
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private var visibleCategories: [TrackerCategory] = []
+    private let trackerStore = TrackerStore()
     
     private var currentDate: Date? {
         let selectedDate = datePicker.date
@@ -239,12 +240,21 @@ extension TrackerViewController: UISearchControllerDelegate, UISearchResultsUpda
 extension TrackerViewController: ProtocolNewHabitViewControllerOutput{
     
     func didCreate(newTracker: Tracker, forCategory: String) {
+        let categoryIndex: Int
         if let index = categories.firstIndex(where: {$0.name == forCategory}) {
+            categoryIndex = index
             categories[index] = TrackerCategory(name: forCategory, trackerArray: categories[index].trackerArray + [newTracker])
         } else {
+            categoryIndex = categories.count
             categories.append(TrackerCategory(name: forCategory, trackerArray:[newTracker]))
         }
         updateVisibleData()
+        
+        do {
+            try trackerStore.newTracker(tracker: newTracker, category: categories[categoryIndex])
+        } catch {
+            print("Save error: \(error)")
+        }
     }
     
     func didCreate(newTracker: Tracker) {
