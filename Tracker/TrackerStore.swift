@@ -67,21 +67,21 @@ final class TrackerCategorysStore: NSObject {
         super.init()
     }
     
-    func getCategorys() throws -> [TrackerCategory] {
+    func getCategories() throws -> [TrackerCategory] {
         let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-        let categorys = try context.fetch(request)
+        let categories = try context.fetch(request)
         
         var result = [TrackerCategory]()
         
-        for category in categorys {
-            category
+        for category in categories {
+           
         }
         
         return result
-        
     }
     
-    private func getTrackersForCategoris(_ categorys: [TrackerCategory]) -> [Tracker] {
+    private func getTrackersForCategories(_ categories: [TrackerCategory]) -> [Tracker] {
         
+        return []
     }
 }
