@@ -16,6 +16,17 @@ final class NewIrregularEventViewController: UIViewController {
         return label
     }()
     
+    private lazy var buttonOK: UIButton = {
+        let button = UIButton()
+        button.setTitle("OK", for: .normal)
+        button.setTitleColor(.ypWhiteDay, for: .normal)
+        button.backgroundColor = .ypBlackDay
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(didTapOK), for: .touchUpInside)
+        return button
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,12 +45,24 @@ final class NewIrregularEventViewController: UIViewController {
     func setupUI() {
         
         labelAlert.translatesAutoresizingMaskIntoConstraints = false
+        buttonOK.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(labelAlert)
+        view.addSubview(buttonOK)
         
         NSLayoutConstraint.activate([
+            
             labelAlert.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            labelAlert.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            labelAlert.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            buttonOK.centerXAnchor.constraint(equalTo: labelAlert.centerXAnchor),
+            buttonOK.topAnchor.constraint(equalTo: labelAlert.bottomAnchor, constant: 16),
+            buttonOK.heightAnchor.constraint(equalToConstant: 60),
+            buttonOK.widthAnchor.constraint(equalToConstant: 100)
         ])
+    }
+    
+    @objc func didTapOK() {
+        navigationController?.popViewController(animated: true)
     }
 }
 
