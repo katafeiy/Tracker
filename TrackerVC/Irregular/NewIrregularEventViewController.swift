@@ -27,7 +27,6 @@ final class NewIrregularEventViewController: UIViewController {
         return button
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -44,10 +43,10 @@ final class NewIrregularEventViewController: UIViewController {
     
     func setupUI() {
         
-        labelAlert.translatesAutoresizingMaskIntoConstraints = false
-        buttonOK.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(labelAlert)
-        view.addSubview(buttonOK)
+        [labelAlert, buttonOK].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
         
         NSLayoutConstraint.activate([
             
