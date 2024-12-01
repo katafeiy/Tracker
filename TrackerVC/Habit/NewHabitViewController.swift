@@ -8,6 +8,8 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
     
     weak var delegate: ProtocolNewHabitViewControllerOutput?
     
+    private var nameCategory: String?
+    
     private var selectedDays: Set<DaysOfWeek> = [] {
         didSet {
             blockUpdateButton()
@@ -247,13 +249,14 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
         
         guard let emojiIndexPath  = emojiCollectionView.indexPathsForSelectedItems?.first else { return }
         guard let colorIndexPath  = colorCollectionView.indexPathsForSelectedItems?.first else { return }
+        guard let nameCategory = nameCategory else { return }
         
         delegate?.didCreate(newTracker: .init(id: UUID(),
                                               name: nameTracker.text ?? "nil",
                                               color: colorCell[colorIndexPath.row],
                                               emoji: "\(emojiCell[emojiIndexPath.row])",
                                               schedule: selectedDays),
-                            forCategory: "Новая категория")
+                            forCategory: nameCategory)
         dismiss(animated: true, completion: nil)
     }
     
@@ -270,7 +273,8 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
                 textInput.count > 38 ||
                 selectedDays.isEmpty ||
                 emojiCollectionView.indexPathsForSelectedItems?.first == nil ||
-                colorCollectionView.indexPathsForSelectedItems?.first == nil
+                colorCollectionView.indexPathsForSelectedItems?.first == nil ||
+                nameCategory == nil
         {
             createNewTrackerButton.isEnabled = false
             createNewTrackerButton.backgroundColor = .ypGray
@@ -384,7 +388,16 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch indexPath.row {
         case 0:
-            let categoryViewController = CategoryViewController()
+            let categoryViewController = CategoryViewController(selectedCategory: nameCategory)
+            
+            categoryViewController.didSelectCategory = { [weak self] category in
+                guard let self else { return }
+                self.nameCategory = category
+                if let cell = tableView.cellForRow(at: indexPath) {
+                    cell.detailTextLabel?.text = category
+                }
+            }
+            
             navigationController?.pushViewController(categoryViewController, animated: true)
         case 1:
             let scheduleViewController = ScheduleViewController()

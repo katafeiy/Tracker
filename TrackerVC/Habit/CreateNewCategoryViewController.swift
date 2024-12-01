@@ -2,6 +2,8 @@ import UIKit
 
 final class CreateNewCategoryViewController: UIViewController {
     
+    var didSelectNewCategory: ((String) -> Void)?
+    
     private lazy var nameCategory: UITextField = {
         var nameTracker = UITextField()
         nameTracker.placeholder = "Введите название категории"
@@ -19,7 +21,7 @@ final class CreateNewCategoryViewController: UIViewController {
         return nameTracker
     }()
     
-    private lazy var createNewCategory: UIButton = {
+    private lazy var createNewCategoryButton: UIButton = {
         let button = UIButton()
         button.isEnabled = false
         button.setTitle("Готово", for: .normal)
@@ -54,7 +56,7 @@ final class CreateNewCategoryViewController: UIViewController {
     
     func setupUI() {
         
-        [nameCategory, createNewCategory, subtitleNameCategory].forEach{
+        [nameCategory, createNewCategoryButton, subtitleNameCategory].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -71,10 +73,10 @@ final class CreateNewCategoryViewController: UIViewController {
             subtitleNameCategory.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             subtitleNameCategory.heightAnchor.constraint(equalToConstant: 22),
             
-            createNewCategory.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            createNewCategory.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            createNewCategory.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            createNewCategory.heightAnchor.constraint(equalToConstant: 60)
+            createNewCategoryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            createNewCategoryButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            createNewCategoryButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            createNewCategoryButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
@@ -83,7 +85,9 @@ final class CreateNewCategoryViewController: UIViewController {
     }
     
     @objc func didCreateNewCategoryTap() {
-        
+        guard let categoryName = nameCategory.text else {return}
+        didSelectNewCategory?(categoryName)
+        navigationController?.popViewController(animated: true)
     }
     
     private func blockUpdateButton() {
@@ -93,11 +97,11 @@ final class CreateNewCategoryViewController: UIViewController {
         if
             textInput.isEmpty == true || textInput.count > 38 {
             
-            createNewCategory.isEnabled = false
-            createNewCategory.backgroundColor = .ypGray
+            createNewCategoryButton.isEnabled = false
+            createNewCategoryButton.backgroundColor = .ypGray
         } else {
-            createNewCategory.isEnabled = true
-            createNewCategory.backgroundColor = .ypBlackDay
+            createNewCategoryButton.isEnabled = true
+            createNewCategoryButton.backgroundColor = .ypBlackDay
         }
     }
 }

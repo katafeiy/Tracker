@@ -1,22 +1,39 @@
 import UIKit
 import CoreData
 
+protocol TrackerStoreDelegate: AnyObject {
+    func didUpdateData()
+}
+
 final class TrackerStore: NSObject {
     
+    weak var delegate: TrackerStoreDelegate?
+    
     private let context: NSManagedObjectContext
+    private let fetchResultController: NSFetchedResultsController<TrackerCoreData>
     
     override init() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             fatalError("Could not find AppDelegate")
         }
         self.context = appDelegate.persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TrackerCoreData.name, ascending: true)]
+        self.fetchResultController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                managedObjectContext: context,
+                                                                sectionNameKeyPath: nil,
+                                                                cacheName: nil )
+
         super.init()
+        
+        fetchResultController.delegate = self
+        try? fetchResultController.performFetch()
     }
     
     
-    func newTracker(tracker: Tracker, category: TrackerCategory) throws {
+    func newTracker(tracker: Tracker, categoryName: String) throws {
         
-        let trackerCategoryCoreData = try getOrCreateCategory(category: category)
+        let trackerCategoryCoreData = try getOrCreateCategory(categoryName: categoryName)
         
         let trackerCoreData = TrackerCoreData(context: context)
     
@@ -33,15 +50,15 @@ final class TrackerStore: NSObject {
         
     }
     
-    private func getOrCreateCategory(category: TrackerCategory) throws -> TrackerCategoryCoreData  {
+    private func getOrCreateCategory(categoryName: String) throws -> TrackerCategoryCoreData  {
         
         let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-        request.predicate = NSPredicate(format: "name == %@", category.name)
+        request.predicate = NSPredicate(format: "name == %@", categoryName)
         
         guard let trackerCategoryCoreData = try? context.fetch(request).first else {
-            let categoryCoreData = TrackerCategoryCoreData(context: context)
-            categoryCoreData.name = category.name
-            return categoryCoreData
+            let trackerCategoryCoreData = TrackerCategoryCoreData(context: context)
+            trackerCategoryCoreData.name = categoryName
+            return trackerCategoryCoreData
         }
         
         return trackerCategoryCoreData
@@ -49,9 +66,13 @@ final class TrackerStore: NSObject {
     
     func getAllTrackers() -> [Tracker] {
         
-        
-        
         return []
     }
 }
 
+extension TrackerStore: NSFetchedResultsControllerDelegate {
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        delegate?.didUpdateData()
+    }
+}

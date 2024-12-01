@@ -42,19 +42,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - Core Data Saving support
     
-//    func saveContext() {
-//        let context = persistentContainer.viewContext
-//        if context.hasChanges {
-//            do {
-//                try context.save()
-//            } catch {
-//                
-//                
-//                
-//                let nsError = error as NSError
-//                fatalError("Unable to save managed object context: \(nsError.description), \(nsError.userInfo)")
-//            }
-//        }
-//    }
 }
 
