@@ -33,10 +33,8 @@ final class TrackerCategoriesStore: NSObject {
                 else { return nil }
                 return Tracker(id: id, name: name, color: color, emoji: emoji, schedule: schedule)
             })
-            
             result.append(TrackerCategory(name: name, trackerArray: trackers))
         }
-        
         return result
     }
     
@@ -50,8 +48,6 @@ final class TrackerCategoriesStore: NSObject {
     func getCategoryNames() throws -> [String] {
         let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         let categories = try context.fetch(request)
-        return categories.compactMap({
-            $0.name
-        })
+        return categories.compactMap({ $0.name })
     }
 }

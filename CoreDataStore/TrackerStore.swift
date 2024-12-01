@@ -46,8 +46,7 @@ final class TrackerStore: NSObject {
         trackerCoreData.category = trackerCategoryCoreData
         trackerCategoryCoreData.addToTrackers(trackerCoreData)
         
-        try context.save()
-        
+        try context.save()        
     }
     
     private func getOrCreateCategory(categoryName: String) throws -> TrackerCategoryCoreData  {
