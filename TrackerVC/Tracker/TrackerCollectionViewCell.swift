@@ -41,7 +41,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         let view = UIView()
         view.layer.cornerRadius = 12
         view.layer.masksToBounds = true
-        view.backgroundColor = .yellow
+        view.backgroundColor = UIColor.ypWhiteDay.withAlphaComponent(0.3)
         return view
     }()
     
@@ -71,6 +71,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         viewCard.backgroundColor = tracker.color
         labelCountDay.text =  "0 дней"
         addButtonCompletion.setImage(UIImage.plusButton, for: .normal)
+        addButtonCompletion.backgroundColor = tracker.color
     }
     
     func configCompletion(counter: Int, isCompleted: Bool) {
@@ -101,9 +102,18 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         layer.masksToBounds = true
         backgroundColor = .clear
         
-        [viewCard, labelCountDay, addButtonCompletion].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; contentView.addSubview($0)}
-        [labelName, viewEmoji].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; viewCard.addSubview($0)}
-        [labelEmoji].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; viewEmoji.addSubview($0)}
+        [viewCard, labelCountDay, addButtonCompletion].forEach{
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview($0)
+        }
+        [labelName, viewEmoji].forEach{
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            viewCard.addSubview($0)
+        }
+        [labelEmoji].forEach{
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            viewEmoji.addSubview($0)
+        }
         
         NSLayoutConstraint.activate([
             
