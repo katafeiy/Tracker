@@ -25,7 +25,7 @@ final class TrackerStore: NSObject {
                                                                 cacheName: nil )
 
         super.init()
-        
+
         fetchResultController.delegate = self
         try? fetchResultController.performFetch()
     }
@@ -60,12 +60,10 @@ final class TrackerStore: NSObject {
             trackerCategoryCoreData.name = categoryName
             return trackerCategoryCoreData
         }
-        
         return trackerCategoryCoreData
     }
     
     func getAllTrackers() -> [Tracker] {
-        
         return []
     }
 }
