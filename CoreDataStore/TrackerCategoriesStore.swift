@@ -6,10 +6,7 @@ final class TrackerCategoriesStore: NSObject {
     private let context: NSManagedObjectContext
     
     override init() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            fatalError("Could not find AppDelegate")
-        }
-        self.context = appDelegate.persistentContainer.viewContext
+        self.context = CoreDataManager.shared.context
         super.init()
     }
     

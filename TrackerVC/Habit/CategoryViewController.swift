@@ -166,6 +166,33 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        guard indexPath.row != 0 else { return nil }
+        
+        let configContextMenu = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { action in
+            
+            return UIMenu(children: [
+                UIAction(title: "Редактировать") { action in
+                    let category = self.categories[indexPath.row]
+                },
+                UIAction(title: "Удалить") { action in
+                    self.categories.remove(at: indexPath.row)
+                }
+            ])
+        }
+        return configContextMenu
+    }
+    
+    private func editCategory(indexPath: IndexPath) {
+        let category = categories[indexPath.row]
+    }
+    
+    private func deleteCategory(indexPath: IndexPath) {
+        let category = categories[indexPath.row]
+        categories.remove(at: indexPath.row)
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }

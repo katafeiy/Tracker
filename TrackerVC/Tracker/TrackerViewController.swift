@@ -88,7 +88,7 @@ final class TrackerViewController: UIViewController {
     
     func updateArrayCompletedTrackers() {
         do {
-            completedTrackers = (try trackerRecordStore.getRecords())
+            completedTrackers = try trackerRecordStore.getRecords()
         } catch {
             print(error)
         }
@@ -223,7 +223,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         cell.configureCell(tracker: tracker) { [weak self, weak cell] in
             guard let self else { return }
-            if  let record = completedTrackers.first(where:{$0.id == tracker.id && $0.date == self.currentDate}) {
+            if let record = completedTrackers.first(where:{$0.id == tracker.id && $0.date == self.currentDate}) {
                 completedTrackers.removeAll(where:{$0.id == tracker.id && $0.date == self.currentDate})
                 let count = completedTrackers.filter({$0.id == tracker.id}).count
                 try? self.trackerRecordStore.deleteRecord(record)

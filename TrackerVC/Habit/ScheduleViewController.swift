@@ -1,6 +1,5 @@
 import UIKit
 
-
 final class ScheduleViewController: UIViewController {
     
     var didSelectSchedule: ((Set<DaysOfWeek>) -> Void)?

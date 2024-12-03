@@ -13,16 +13,17 @@ final class TrackerStore: NSObject {
     private let fetchResultController: NSFetchedResultsController<TrackerCoreData>
     
     override init() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            fatalError("Could not find AppDelegate")
-        }
-        self.context = appDelegate.persistentContainer.viewContext
+        
+        self.context = CoreDataManager.shared.context
+        
         let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TrackerCoreData.name, ascending: true)]
-        self.fetchResultController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                managedObjectContext: context,
-                                                                sectionNameKeyPath: nil,
-                                                                cacheName: nil )
+        self.fetchResultController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
 
         super.init()
 
