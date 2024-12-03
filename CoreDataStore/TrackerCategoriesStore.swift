@@ -47,4 +47,12 @@ final class TrackerCategoriesStore: NSObject {
         let categories = try context.fetch(request)
         return categories.compactMap({ $0.name })
     }
+    
+    func deleteCategory(_ name: String) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "name == %@", name)
+        let categories = try context.fetch(request)
+        categories.forEach({ context.delete($0) })
+        try context.save()
+    }
 }

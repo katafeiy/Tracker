@@ -44,7 +44,6 @@ final class CategoryViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds, style: .insetGrouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.isScrollEnabled = false
         tableView.separatorStyle = .singleLine
         tableView.separatorInset.left = 15.95
         tableView.separatorInset.right = 15.95
@@ -174,10 +173,10 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
             
             return UIMenu(children: [
                 UIAction(title: "Редактировать") { action in
-                    let category = self.categories[indexPath.row]
+//                    let category = self.categories[indexPath.row]
                 },
-                UIAction(title: "Удалить") { action in
-                    self.categories.remove(at: indexPath.row)
+                UIAction(title: "Удалить", attributes: .destructive) { action in
+                    self.deleteCategory(indexPath: indexPath)
                 }
             ])
         }
@@ -185,12 +184,34 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     private func editCategory(indexPath: IndexPath) {
-        let category = categories[indexPath.row]
+//        let category = categories[indexPath.row]
     }
     
     private func deleteCategory(indexPath: IndexPath) {
-        let category = categories[indexPath.row]
-        categories.remove(at: indexPath.row)
+        
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Удалить категорию?", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Да",
+                                          style: .destructive,
+                                          handler: {_ in
+                
+                let category = self.categories[indexPath.row]
+                self.categories.remove(at: indexPath.row)
+                
+                do {
+                    try self.categoryStore.deleteCategory(category)
+                } catch {
+                    print("Error deleting category: \(error.localizedDescription)")
+                    return
+                }
+                self.tableView.performBatchUpdates({
+                    self.tableView.deleteRows(at: [indexPath], with: .left)
+                }, completion: nil)
+                
+            }))
+            alert.addAction(UIAlertAction(title: "Нет", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
