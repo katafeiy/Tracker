@@ -1,6 +1,5 @@
 import UIKit
 
-
 final class ScheduleViewController: UIViewController {
     
     var didSelectSchedule: ((Set<DaysOfWeek>) -> Void)?
@@ -48,7 +47,10 @@ final class ScheduleViewController: UIViewController {
         
         view.backgroundColor = .white
         
-        [readyToUse, scheduleTableView].forEach{$0.translatesAutoresizingMaskIntoConstraints = false;  view.addSubview($0)}
+        [readyToUse, scheduleTableView].forEach{
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
         
         NSLayoutConstraint.activate([
             

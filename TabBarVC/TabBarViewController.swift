@@ -45,5 +45,10 @@ final class TabBarViewController: UITabBarController {
                 return statisticsViewController
             }
         }
+        
+        let lineLayer = CALayer()
+        lineLayer.backgroundColor = UIColor.ypGray.cgColor
+        lineLayer.frame = CGRect(x: 0, y: 0, width: self.tabBar.bounds.width, height: 1)
+        self.tabBar.layer.addSublayer(lineLayer)
     }
 }

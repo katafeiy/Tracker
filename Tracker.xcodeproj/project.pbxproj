@@ -64,6 +64,11 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		12195FB92CFF66BE00E8FA59 /* CoreDataStore */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CoreDataStore;
+			sourceTree = "<group>";
+		};
 		126FB2552CD1730500D21700 /* TrackerVC */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrackerVC;
@@ -100,6 +105,11 @@
 			path = TrackerUITests;
 			sourceTree = "<group>";
 		};
+		12F1D03A2CF3A0A200DD16F2 /* Enum */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Enum;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +141,8 @@
 			isa = PBXGroup;
 			children = (
 				129E67102CD0E421002D5F10 /* Tracker */,
+				12195FB92CFF66BE00E8FA59 /* CoreDataStore */,
+				12F1D03A2CF3A0A200DD16F2 /* Enum */,
 				120DEFB02CE10325007B0811 /* Models */,
 				126FB2602CD1737400D21700 /* TabBarVC */,
 				126FB2552CD1730500D21700 /* TrackerVC */,
@@ -167,9 +179,11 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				12195FB92CFF66BE00E8FA59 /* CoreDataStore */,
 				126FB2552CD1730500D21700 /* TrackerVC */,
 				126FB2602CD1737400D21700 /* TabBarVC */,
 				129E67102CD0E421002D5F10 /* Tracker */,
+				12F1D03A2CF3A0A200DD16F2 /* Enum */,
 			);
 			name = Tracker;
 			packageProductDependencies = (
