@@ -89,14 +89,9 @@ final class EditCategoryViewController: UIViewController {
     }
     
     @objc func didChangeNameCategoryTap() {
-        let newName = nameCategory.text!
+        guard let newName = nameCategory.text else { return }
         didEditCategoryNameTap?(newName)
         navigationController?.popViewController(animated: true)
-    }
-    
-    func changeNameCategory(_ newName: String) {
-        nameCategory.text = newName
-        blockUpdateButton()
     }
     
     private func blockUpdateButton() {
