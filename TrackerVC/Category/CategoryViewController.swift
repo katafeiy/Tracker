@@ -173,7 +173,7 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
             
             return UIMenu(children: [
                 UIAction(title: "Редактировать") { action in
-//                    let category = self.categories[indexPath.row]
+                    self.editCategory(indexPath: indexPath)
                 },
                 UIAction(title: "Удалить", attributes: .destructive) { action in
                     self.deleteCategory(indexPath: indexPath)
@@ -184,7 +184,29 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     private func editCategory(indexPath: IndexPath) {
-//        let category = categories[indexPath.row]
+        
+        let editCategoryViewController = EditCategoryViewController()
+        let category = self.categories[indexPath.row]
+        
+        editCategoryViewController.currentCategoryName = category
+        
+        editCategoryViewController.didEditCategoryNameTap = { [weak self] newName in
+            guard let self else { return }
+            
+            do {
+                try self.categoryStore.editCategoryName(category, newName: newName)
+                self.categories[indexPath.row] = newName
+            } catch {
+                print("Error editing category: \(error.localizedDescription)")
+                return
+            }
+            DispatchQueue.main.async {
+                self.tableView.performBatchUpdates({
+                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                }, completion: nil)
+            }
+        }
+        navigationController?.pushViewController(editCategoryViewController, animated: true)
     }
     
     private func deleteCategory(indexPath: IndexPath) {
@@ -207,7 +229,6 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
                 self.tableView.performBatchUpdates({
                     self.tableView.deleteRows(at: [indexPath], with: .left)
                 }, completion: nil)
-                
             }))
             alert.addAction(UIAlertAction(title: "Нет", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)

@@ -55,4 +55,12 @@ final class TrackerCategoriesStore: NSObject {
         categories.forEach({ context.delete($0) })
         try context.save()
     }
+    
+    func editCategoryName(_ oldName: String, newName: String) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "name == %@", oldName)
+        let categories = try context.fetch(request)
+        categories.forEach({ $0.name = newName })
+        try context.save()
+    }
 }
