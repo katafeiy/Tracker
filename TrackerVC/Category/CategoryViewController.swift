@@ -212,8 +212,8 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
     private func deleteCategory(indexPath: IndexPath) {
         
         DispatchQueue.main.async {
-            let alert = UIAlertController(title: "Удалить категорию?", message: nil, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Да",
+            let alert = UIAlertController(title: "Эта категория точне не нужна?", message: nil, preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "Удалить",
                                           style: .destructive,
                                           handler: {_ in
                 
@@ -230,7 +230,7 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
                     self.tableView.deleteRows(at: [indexPath], with: .left)
                 }, completion: nil)
             }))
-            alert.addAction(UIAlertAction(title: "Нет", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Отменить", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }

@@ -10,7 +10,6 @@ final class EditCategoryViewController: UIViewController {
     
     private lazy var nameCategory: UITextField = {
         var nameTracker = UITextField()
-        nameTracker.placeholder = "Введите название категории"
         nameTracker.backgroundColor = .ypBackgroundDay
         nameTracker.font = .systemFont(ofSize: 17, weight: .regular)
         nameTracker.textColor = .ypBlackDay
@@ -25,7 +24,7 @@ final class EditCategoryViewController: UIViewController {
         return nameTracker
     }()
     
-    private lazy var createNewCategoryButton: UIButton = {
+    private lazy var editedCategoryButton: UIButton = {
         let button = UIButton()
         button.isEnabled = false
         button.setTitle("Готово", for: .normal)
@@ -54,13 +53,13 @@ final class EditCategoryViewController: UIViewController {
     }
     
     func setupNavigationBar() {
-        navigationItem.title = "Редактррование категории"
+        navigationItem.title = "Редактирование категории"
         navigationItem.hidesBackButton = true
     }
     
     func setupUI() {
         
-        [nameCategory, createNewCategoryButton, subtitleNameCategory].forEach{
+        [nameCategory, editedCategoryButton, subtitleNameCategory].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -77,10 +76,10 @@ final class EditCategoryViewController: UIViewController {
             subtitleNameCategory.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             subtitleNameCategory.heightAnchor.constraint(equalToConstant: 22),
             
-            createNewCategoryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            createNewCategoryButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            createNewCategoryButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            createNewCategoryButton.heightAnchor.constraint(equalToConstant: 60)
+            editedCategoryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            editedCategoryButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            editedCategoryButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            editedCategoryButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
@@ -101,11 +100,11 @@ final class EditCategoryViewController: UIViewController {
         if
             textInput.isEmpty == true || textInput.count > 38 {
             
-            createNewCategoryButton.isEnabled = false
-            createNewCategoryButton.backgroundColor = .ypGray
+            editedCategoryButton.isEnabled = false
+            editedCategoryButton.backgroundColor = .ypGray
         } else {
-            createNewCategoryButton.isEnabled = true
-            createNewCategoryButton.backgroundColor = .ypBlackDay
+            editedCategoryButton.isEnabled = true
+            editedCategoryButton.backgroundColor = .ypBlackDay
         }
     }
 }
