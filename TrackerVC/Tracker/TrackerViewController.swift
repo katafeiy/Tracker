@@ -261,7 +261,7 @@ extension TrackerViewController: UISearchControllerDelegate, UISearchResultsUpda
     }
 }
 
-extension TrackerViewController: ProtocolNewHabitViewControllerOutput {
+extension TrackerViewController: ProtocolNewHabitViewControllerOutput & ProtocolNewIrregularEventViewControllerOutput {
     
     func didCreate(newTracker: Tracker, forCategory: String) {
         

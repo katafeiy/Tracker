@@ -144,6 +144,8 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
         cell.backgroundColor = .ypBackgroundDay
         if categories[indexPath.row] == selectedCategory {
             cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
         }
         return cell
     }
@@ -154,11 +156,8 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
         
         tableView.visibleCells.forEach { $0.accessoryType = .none }
         
-        if cell?.accessoryType == .checkmark {
-            cell?.accessoryType = .none
-        } else {
-            cell?.accessoryType = .checkmark
-        }
+        cell?.accessoryType = .checkmark
+        
         DispatchQueue.main.async {
             self.didSelectCategory?(self.categories[indexPath.row])
             self.navigationController?.popViewController(animated: true)
@@ -200,39 +199,36 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
                 print("Error editing category: \(error.localizedDescription)")
                 return
             }
-            DispatchQueue.main.async {
-                self.tableView.performBatchUpdates({
-                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                }, completion: nil)
-            }
+            
+            self.tableView.performBatchUpdates({
+                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            }, completion: nil)
         }
         navigationController?.pushViewController(editCategoryViewController, animated: true)
     }
     
     private func deleteCategory(indexPath: IndexPath) {
         
-        DispatchQueue.main.async {
-            let alert = UIAlertController(title: "Эта категория точне не нужна?", message: nil, preferredStyle: .actionSheet)
-            alert.addAction(UIAlertAction(title: "Удалить",
-                                          style: .destructive,
-                                          handler: {_ in
-                
-                let category = self.categories[indexPath.row]
-                self.categories.remove(at: indexPath.row)
-                
-                do {
-                    try self.categoryStore.deleteCategory(category)
-                } catch {
-                    print("Error deleting category: \(error.localizedDescription)")
-                    return
-                }
-                self.tableView.performBatchUpdates({
-                    self.tableView.deleteRows(at: [indexPath], with: .left)
-                }, completion: nil)
-            }))
-            alert.addAction(UIAlertAction(title: "Отменить", style: .cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
+        let alert = UIAlertController(title: "Эта категория точне не нужна?", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Удалить",
+                                      style: .destructive,
+                                      handler: {_ in
+            
+            let category = self.categories[indexPath.row]
+            self.categories.remove(at: indexPath.row)
+            
+            do {
+                try self.categoryStore.deleteCategory(category)
+            } catch {
+                print("Error deleting category: \(error.localizedDescription)")
+                return
+            }
+            self.tableView.performBatchUpdates({
+                self.tableView.deleteRows(at: [indexPath], with: .left)
+            }, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Отменить", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

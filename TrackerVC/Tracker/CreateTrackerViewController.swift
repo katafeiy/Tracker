@@ -2,7 +2,7 @@ import UIKit
 
 final class CreateTrackerViewController: UIViewController {
     
-    weak var delegate: ProtocolNewHabitViewControllerOutput?
+    weak var delegate: (ProtocolNewHabitViewControllerOutput & ProtocolNewIrregularEventViewControllerOutput)?
     
     private lazy var habitButton: UIButton = {
         let button = UIButton()
@@ -74,6 +74,7 @@ final class CreateTrackerViewController: UIViewController {
     
     @objc func didIrregularEventButtonTap() {
         let irregularEventViewController = NewIrregularEventViewController()
+        irregularEventViewController.delegate = delegate
         navigationController?.pushViewController(irregularEventViewController, animated: true)
     }
 }
