@@ -201,7 +201,8 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         guard let headerView = collectionView.dequeueReusableSupplementaryView(
             ofKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: "header", for: indexPath
+            withReuseIdentifier: "header",
+            for: indexPath
         ) as?  CategoryNameCell else { return UICollectionReusableView() }
 
         let title = visibleCategories[indexPath.section].name
@@ -252,8 +253,9 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
 }
 
 extension TrackerViewController: UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
+    
     func updateSearchResults(for searchController: UISearchController) {
-        // TODO: Функционал данного метода будет добавлен в 16 спринте)))
+        // TODO: Функционал данного метода будет добавлен в 17 спринте)))
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

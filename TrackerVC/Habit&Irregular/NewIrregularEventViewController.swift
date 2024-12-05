@@ -334,15 +334,19 @@ extension NewIrregularEventViewController: UICollectionViewDataSource, UICollect
         
         switch collectionView {
         case emojiCollectionView:
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                                   withReuseIdentifier: "emojiHeader",
-                                                                                   for: indexPath) as? EmojiHeaderCollectionViewCell else { return UICollectionReusableView() }
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: "emojiHeader",
+                for: indexPath
+            ) as? EmojiHeaderCollectionViewCell else { return UICollectionReusableView()}
             headerView.emojiHeaderLabel.text = "Emoji"
             return headerView
         case colorCollectionView:
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                                   withReuseIdentifier: "colorHeader",
-                                                                                   for: indexPath) as? ColorHeaderCollectionViewCell else { return UICollectionReusableView() }
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: "colorHeader",
+                for: indexPath
+            ) as? ColorHeaderCollectionViewCell else { return UICollectionReusableView() }
             headerView.colorHeaderLabel.text = "Цвет"
             return headerView
         default: return UICollectionReusableView()
