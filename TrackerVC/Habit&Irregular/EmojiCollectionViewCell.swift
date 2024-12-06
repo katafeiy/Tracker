@@ -2,6 +2,8 @@ import UIKit
 
 final class EmojiCollectionViewCell: UICollectionViewCell {
     
+    static let emojiCell: [String] = ["🙂", "😻", "🌺", "🐶", "❤️", "😱" , "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🏅", "🎸", "🏝️", "😪"]
+    
     let emojiLabel: UILabel = {
         let label = UILabel()
         label.textColor = .ypWhiteDay

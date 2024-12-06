@@ -17,30 +17,7 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
     }
     
     lazy var nameCell = [("Категория", "Название категории"), ("Расписание", "Дни недели")]
-    
-    let emojiCell: [String] = ["🙂", "😻", "🌺", "🐶", "❤️", "😱" , "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🏅", "🎸", "🏝️", "😪"]
-    
-    let colorCell: [UIColor] = [
-        .colorSelection1,
-        .colorSelection2,
-        .colorSelection3,
-        .colorSelection4,
-        .colorSelection5,
-        .colorSelection6,
-        .colorSelection7,
-        .colorSelection8,
-        .colorSelection9,
-        .colorSelection10,
-        .colorSelection11,
-        .colorSelection12,
-        .colorSelection13,
-        .colorSelection14,
-        .colorSelection15,
-        .colorSelection16,
-        .colorSelection17,
-        .colorSelection18
-    ]
-    
+
     private lazy var nameTracker: UITextField = {
         var nameTracker = UITextField()
         nameTracker.placeholder = "Введите название трекера"
@@ -253,8 +230,8 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
         
         delegate?.didCreate(newTracker: .init(id: UUID(),
                                               name: nameTracker.text ?? "nil",
-                                              color: colorCell[colorIndexPath.row],
-                                              emoji: "\(emojiCell[emojiIndexPath.row])",
+                                              color: ColorCollectionViewCell.colorCell[colorIndexPath.row],
+                                              emoji: "\(EmojiCollectionViewCell.emojiCell[emojiIndexPath.row])",
                                               schedule: selectedDays),
                             forCategory: nameCategory)
         dismiss(animated: true, completion: nil)
@@ -288,7 +265,7 @@ final class NewHabitViewController: UIViewController, UIGestureRecognizerDelegat
 extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionView == emojiCollectionView ? emojiCell.count : colorCell.count
+        return collectionView == emojiCollectionView ? EmojiCollectionViewCell.emojiCell.count : ColorCollectionViewCell.colorCell.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -296,13 +273,13 @@ extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDe
         switch collectionView {
         case emojiCollectionView:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCollectionViewCell else { return UICollectionViewCell() }
-            cell.emojiLabel.text = "\(emojiCell[indexPath.row])"
+            cell.emojiLabel.text = "\(EmojiCollectionViewCell.emojiCell[indexPath.row])"
             return cell
         case colorCollectionView:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCollectionViewCell else { return UICollectionViewCell() }
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 8
-            cell.colorLabel.backgroundColor = colorCell[indexPath.row]
+            cell.colorLabel.backgroundColor = ColorCollectionViewCell.colorCell[indexPath.row]
             return cell
         default: return UICollectionViewCell()
         }
@@ -317,7 +294,7 @@ extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDe
         case colorCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
             cell?.layer.borderWidth = 3
-            cell?.layer.borderColor = colorCell[indexPath.row].withAlphaComponent(0.3).cgColor
+            cell?.layer.borderColor = ColorCollectionViewCell.colorCell[indexPath.row].withAlphaComponent(0.3).cgColor
         default: break
         }
         blockUpdateButton()
