@@ -43,7 +43,10 @@ final class CreateTrackerViewController: UIViewController {
         stackView.distribution = .fillEqually
         stackView.spacing = 16
         
-        [stackView].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; view.addSubview($0)}
+        [stackView].forEach{
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
         
         NSLayoutConstraint.activate([
             
