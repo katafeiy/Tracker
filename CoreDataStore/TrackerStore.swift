@@ -31,11 +31,9 @@ final class TrackerStore: NSObject {
         try? fetchResultController.performFetch()
     }
     
-    
     func newTracker(tracker: Tracker, categoryName: String) throws {
         
         let trackerCategoryCoreData = try getOrCreateCategory(categoryName: categoryName)
-        
         let trackerCoreData = TrackerCoreData(context: context)
     
         trackerCoreData.id = tracker.id
