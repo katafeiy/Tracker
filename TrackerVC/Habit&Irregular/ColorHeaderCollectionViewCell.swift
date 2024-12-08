@@ -2,6 +2,8 @@ import UIKit
 
 final class ColorHeaderCollectionViewCell: UICollectionViewCell {
     
+    static let headerIdentifier: String = "colorHeader"
+    
     let colorHeaderLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 19, weight: .bold)

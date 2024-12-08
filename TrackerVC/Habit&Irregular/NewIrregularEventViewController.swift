@@ -4,7 +4,7 @@ protocol ProtocolNewIrregularEventViewControllerOutput: AnyObject {
     func didCreate(newTracker: Tracker, forCategory: String)
 }
 
-final class NewIrregularEventViewController: UIViewController, UIGestureRecognizerDelegate {
+final class NewIrregularEventViewController: BaseModelViewController, UIGestureRecognizerDelegate {
     
     weak var delegate: ProtocolNewIrregularEventViewControllerOutput?
     
@@ -13,83 +13,52 @@ final class NewIrregularEventViewController: UIViewController, UIGestureRecogniz
     lazy var nameCell = [("Категория", "Название категории")]
     
     private lazy var nameTracker: UITextField = {
-        var nameTracker = UITextField()
-        nameTracker.placeholder = "Введите название трекера"
-        nameTracker.backgroundColor = .ypBackgroundDay
-        nameTracker.font = .systemFont(ofSize: 17, weight: .regular)
-        nameTracker.textColor = .ypBlackDay
-        nameTracker.layer.masksToBounds = true
-        nameTracker.layer.cornerRadius = 16
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        nameTracker.leftView = paddingView
-        nameTracker.leftViewMode = .always
-        nameTracker.clearButtonMode = .whileEditing
+        var nameTracker = madeTextField()
         nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameTracker
     }()
     
     private lazy var subtitleNameTracker: UILabel = {
-        let subtitle = UILabel()
-        subtitle.font = .systemFont(ofSize: 17, weight: .regular)
-        subtitle.textColor = .ypLightGray
-        subtitle.textAlignment = .center
-        return subtitle
+        let subtitleNameTracker = madeSubtitleLabel()
+        return subtitleNameTracker
     }()
     
     private lazy var tableView: UITableView = {
-        let newHabitTableView = UITableView(frame: view.bounds, style: .insetGrouped)
-        newHabitTableView.isScrollEnabled = false
-        newHabitTableView.backgroundColor = .clear
-        newHabitTableView.separatorStyle = .singleLine
-        newHabitTableView.separatorColor = .ypBlackDay
-        newHabitTableView.separatorInset.left = 15.95
-        newHabitTableView.separatorInset.right = 15.95
-        newHabitTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        newHabitTableView.layer.masksToBounds = true
-        newHabitTableView.layer.cornerRadius = 16
-        return newHabitTableView
+        let newIrregularEventTableView = madeTableView()
+        return newIrregularEventTableView
     }()
     
-    let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.backgroundColor = .clear
-        scrollView.alwaysBounceVertical = true
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = madeScrollView()
         return scrollView
     }()
     
-    let contentView: UIView = {
-        let contentView = UIView()
-        contentView.backgroundColor = .clear
+    private lazy var contentView: UIView = {
+        let contentView = madeContentView()
         return contentView
     }()
     
     private lazy var emojiCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: 52, height: 52)
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 5
-        layout.sectionInset = UIEdgeInsets(top: 24, left: 18, bottom: 24, right: 18)
-        let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
-        collectionView.register(EmojiCollectionViewCell.self, forCellWithReuseIdentifier: "emojiCell")
-        collectionView.register(EmojiHeaderCollectionViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "emojiHeader")
-        collectionView.backgroundColor = .clear
-        collectionView.isScrollEnabled = false
+        let collectionView = madeCollectionView()
+        collectionView.register(
+            EmojiCollectionViewCell.self,
+            forCellWithReuseIdentifier: EmojiCollectionViewCell.cellIdentifier)
+        collectionView.register(
+            EmojiHeaderCollectionViewCell.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: EmojiHeaderCollectionViewCell.headerIdentifier)
         return collectionView
     }()
     
     private lazy var colorCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: 52, height: 52)
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 5
-        layout.sectionInset = UIEdgeInsets(top: 24, left: 18, bottom: 24, right: 18)
-        let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
-        collectionView.register(ColorCollectionViewCell.self, forCellWithReuseIdentifier: "colorCell")
-        collectionView.register(ColorHeaderCollectionViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "colorHeader")
-        collectionView.backgroundColor = .clear
-        collectionView.isScrollEnabled = false
+        let collectionView = madeCollectionView()
+        collectionView.register(
+            ColorCollectionViewCell.self,
+            forCellWithReuseIdentifier: ColorCollectionViewCell.cellIdentifier)
+        collectionView.register(
+            ColorHeaderCollectionViewCell.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: ColorHeaderCollectionViewCell.headerIdentifier)
         return collectionView
     }()
     

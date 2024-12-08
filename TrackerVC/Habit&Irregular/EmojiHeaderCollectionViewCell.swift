@@ -2,6 +2,8 @@ import UIKit
 
 final class EmojiHeaderCollectionViewCell: UICollectionViewCell {
     
+    static let headerIdentifier: String = "emojiHeader"
+    
     let emojiHeaderLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 19, weight: .bold)

@@ -2,6 +2,8 @@ import UIKit
 
 final class ColorCollectionViewCell: UICollectionViewCell {
     
+    static let cellIdentifier: String = "colorCell"
+    
     static let colorCell: [UIColor] = [
         .colorSelection1,
         .colorSelection2,
