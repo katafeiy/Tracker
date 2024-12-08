@@ -1,16 +1,9 @@
 import UIKit
 
-final class CategoryViewController: UIViewController {
+final class CategoryListViewController: UIViewController {
     
-    private let categoryStore = TrackerCategoriesStore()
-    private let selectedCategory: String?
     var didSelectCategory: ((String) -> Void)?
-    var categories: [String] = [] {
-        didSet {
-            starImage.isHidden = !categories.isEmpty
-            habitLabel.isHidden = !categories.isEmpty
-        }
-    }
+    private let viewModel: CategoryListViewModel
     
     private lazy var starImage: UIImageView = {
         let imageView = UIImageView()
@@ -42,7 +35,7 @@ final class CategoryViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds, style: .insetGrouped)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(CategoryListCell.self, forCellReuseIdentifier: CategoryListCell.identifier)
         tableView.separatorStyle = .singleLine
         tableView.separatorInset.left = 15.95
         tableView.separatorInset.right = 15.95
@@ -53,8 +46,8 @@ final class CategoryViewController: UIViewController {
         return tableView
     }()
     
-    init(selectedCategory: String?) {
-        self.selectedCategory = selectedCategory
+    init(viewModel: CategoryListViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -68,7 +61,8 @@ final class CategoryViewController: UIViewController {
         
         tableView.dataSource = self
         tableView.delegate = self
-        updateArrayCategories()
+        setupBinding()
+        viewModel.loadCategories()
         setupNavigationBar()
         setupUI()
         
@@ -105,6 +99,30 @@ final class CategoryViewController: UIViewController {
         ])
     }
     
+    func setupBinding() {
+        viewModel.didUpdatesCategories = { [weak self] in
+            guard let self else { return }
+            starImage.isHidden = !viewModel.categories.isEmpty
+            habitLabel.isHidden = !viewModel.categories.isEmpty
+            tableView.reloadData()
+        }
+        
+        viewModel.didUpdateSelectedCategory = { [weak self] selectedCategory in
+            guard let self else { return }
+            tableView.visibleCells.enumerated().forEach { index, cell in
+                if self.viewModel.isSelectedCategory(self.viewModel.categories[index]) {
+                    cell.accessoryType = .checkmark
+                } else {
+                    cell.accessoryType = .none
+                }
+            }
+            DispatchQueue.main.async {
+                self.didSelectCategory?(selectedCategory)
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
+    
     func setupNavigationBar() {
         navigationItem.title = "Категория"
         navigationItem.hidesBackButton = true
@@ -116,32 +134,26 @@ final class CategoryViewController: UIViewController {
         
         createNewCategoryViewController.didSelectNewCategory = { [weak self] category in
             guard let self else  { return }
-            self.categories.append(category)
-            try? self.categoryStore.addCategoryName(category)
-            self.tableView.reloadData()
+            self.viewModel.addNewCategory(category)
         }
         navigationController?.pushViewController(createNewCategoryViewController, animated: true)
     }
-    
-    func updateArrayCategories() {
-        categories = (try? categoryStore.getCategoryNames()) ?? []
-    }
 }
 
-extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
+extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        categories.count
+        viewModel.categories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoryListCell.identifier, for: indexPath) as? CategoryListCell else { fatalError() }
         
-        cell.textLabel?.text = categories[indexPath.row]
+        cell.textLabel?.text = viewModel.categories[indexPath.row]
         
         cell.backgroundColor = .ypBackgroundDay
-        if categories[indexPath.row] == selectedCategory {
+        if viewModel.isSelectedCategory(viewModel.categories[indexPath.row]) {
             cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none
@@ -151,16 +163,7 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let cell = tableView.cellForRow(at: indexPath)
-        
-        tableView.visibleCells.forEach { $0.accessoryType = .none }
-        
-        cell?.accessoryType = .checkmark
-        
-        DispatchQueue.main.async {
-            self.didSelectCategory?(self.categories[indexPath.row])
-            self.navigationController?.popViewController(animated: true)
-        }
+            viewModel.didSelectCategory(viewModel.categories[indexPath.row])
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -184,47 +187,29 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
     private func editCategory(indexPath: IndexPath) {
         
         let editCategoryViewController = EditCategoryViewController()
-        let category = self.categories[indexPath.row]
+        let category = self.viewModel.categories[indexPath.row]
         
         editCategoryViewController.currentCategoryName = category
         
         editCategoryViewController.didEditCategoryNameTap = { [weak self] newName in
             guard let self else { return }
             
-            do {
-                try self.categoryStore.editCategoryName(category, newName: newName)
-                self.categories[indexPath.row] = newName
-            } catch {
-                print("Error editing category: \(error.localizedDescription)")
-                return
-            }
-            
-            self.tableView.performBatchUpdates({
-                self.tableView.reloadRows(at: [indexPath], with: .automatic)
-            }, completion: nil)
+            viewModel.editCategory(oldNameCategory: category, newNameCategory: newName)
         }
         navigationController?.pushViewController(editCategoryViewController, animated: true)
     }
     
     private func deleteCategory(indexPath: IndexPath) {
         
+        let category = self.viewModel.categories[indexPath.row]
         let alert = UIAlertController(title: "Эта категория точне не нужна?", message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Удалить",
                                       style: .destructive,
-                                      handler: {_ in
+                                      handler: { [weak self] _ in
             
-            let category = self.categories[indexPath.row]
-            self.categories.remove(at: indexPath.row)
+            guard let self else { return }
+            self.viewModel.deleteCategory(category)
             
-            do {
-                try self.categoryStore.deleteCategory(category)
-            } catch {
-                print("Error deleting category: \(error.localizedDescription)")
-                return
-            }
-            self.tableView.performBatchUpdates({
-                self.tableView.deleteRows(at: [indexPath], with: .left)
-            }, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "Отменить", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)

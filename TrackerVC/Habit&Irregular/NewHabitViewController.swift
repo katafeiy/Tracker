@@ -368,9 +368,11 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch indexPath.row {
         case 0:
-            let categoryViewController = CategoryViewController(selectedCategory: nameCategory)
             
-            categoryViewController.didSelectCategory = { [weak self] category in
+            let viewModel = CategoryListViewModel(selectedCategory: nameCategory)
+            let categoryListViewController = CategoryListViewController(viewModel: viewModel)
+            
+            categoryListViewController.didSelectCategory = { [weak self] category in
                 guard let self else { return }
                 self.nameCategory = category
                 if let cell = tableView.cellForRow(at: indexPath) {
@@ -378,7 +380,7 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
                 }
             }
             
-            navigationController?.pushViewController(categoryViewController, animated: true)
+            navigationController?.pushViewController(categoryListViewController, animated: true)
         case 1:
             let scheduleViewController = ScheduleViewController()
             scheduleViewController.didSelectSchedule = { [weak self] schedule in

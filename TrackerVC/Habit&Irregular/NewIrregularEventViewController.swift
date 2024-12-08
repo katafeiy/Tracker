@@ -362,16 +362,17 @@ extension NewIrregularEventViewController: UITableViewDataSource, UITableViewDel
         
         switch indexPath.row {
         case 0:
-            let categoryViewController = CategoryViewController(selectedCategory: nameCategory)
+            let viewModel = CategoryListViewModel(selectedCategory: nameCategory)
+            let categoryListViewController = CategoryListViewController(viewModel: viewModel)
             
-            categoryViewController.didSelectCategory = { [weak self] category in
+            categoryListViewController.didSelectCategory = { [weak self] category in
                 guard let self else { return }
                 self.nameCategory = category
                 if let cell = tableView.cellForRow(at: indexPath) {
                     cell.detailTextLabel?.text = category
                 }
             }
-            navigationController?.pushViewController(categoryViewController, animated: true)
+            navigationController?.pushViewController(categoryListViewController, animated: true)
         default:
             return
         }
