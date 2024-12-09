@@ -22,13 +22,6 @@ class BaseModelViewController: UIViewController {
         case cancel
         case add
         
-//        init?(isEnabled: Bool) {
-//            switch isEnabled {
-//            case false: self = .ready
-//            case true: self = .cancel
-//            }
-//        }
-        
         var text: String {
             return switch self {
             case .habit: "Привычка"

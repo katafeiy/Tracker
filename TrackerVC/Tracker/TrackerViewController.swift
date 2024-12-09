@@ -1,6 +1,6 @@
 import UIKit
 
-final class TrackerViewController: UIViewController {
+final class TrackerViewController: BaseModelViewController {
     
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
@@ -23,8 +23,15 @@ final class TrackerViewController: UIViewController {
         let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
         layout.scrollDirection = .vertical
         collectionView.backgroundColor = .clear
-        collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "trackerCell")
-        collectionView.register(CategoryNameCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader , withReuseIdentifier: "header")
+        collectionView.register(
+            TrackerCollectionViewCell.self,
+            forCellWithReuseIdentifier: TrackerCollectionViewCell.cellIdentifier
+        )
+        collectionView.register(
+            CategoryNameCell.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader ,
+            withReuseIdentifier: CategoryNameCell.headerIdentifier
+        )
         layout.minimumInteritemSpacing = 9
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
@@ -114,7 +121,7 @@ final class TrackerViewController: UIViewController {
         view.backgroundColor = .ypWhiteDay
         datePicker.center = view.center
         
-        [starImage, whatSearch, collectionView].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; view.addSubview($0)}
+        addViewToSubView(view: [starImage, whatSearch, collectionView], subView: view)
         
         NSLayoutConstraint.activate([
             starImage.heightAnchor.constraint(equalToConstant: 80),
