@@ -201,7 +201,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         guard let headerView = collectionView.dequeueReusableSupplementaryView(
             ofKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: "header",
+            withReuseIdentifier: CategoryNameCell.headerIdentifier,
             for: indexPath
         ) as?  CategoryNameCell else { return UICollectionReusableView() }
 
@@ -215,7 +215,10 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackerCell", for: indexPath) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: TrackerCollectionViewCell.cellIdentifier,
+            for: indexPath
+        ) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
     
         let tracker = visibleCategories[indexPath.section].trackerArray[indexPath.row]
         

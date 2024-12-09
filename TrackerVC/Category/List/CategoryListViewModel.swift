@@ -19,6 +19,7 @@ final class CategoryListViewModel {
     
     init(selectedCategory: String?) {
         self.selectedCategory = selectedCategory
+    
     }
     
     func addNewCategory(_ category: String) {

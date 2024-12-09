@@ -1,50 +1,32 @@
 import UIKit
 
-final class CreateNewCategoryViewController: UIViewController {
+final class CreateNewCategoryViewController: BaseModelViewController {
     
     var didSelectNewCategory: ((String) -> Void)?
     
     private lazy var nameCategory: UITextField = {
-        var nameTracker = UITextField()
-        nameTracker.placeholder = "Введите название категории"
-        nameTracker.backgroundColor = .ypBackgroundDay
-        nameTracker.font = .systemFont(ofSize: 17, weight: .regular)
-        nameTracker.textColor = .ypBlackDay
-        nameTracker.layer.masksToBounds = true
-        nameTracker.layer.cornerRadius = 16
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        nameTracker.leftView = paddingView
-        nameTracker.leftViewMode = .always
-        nameTracker.clearButtonMode = .whileEditing
-        nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
-        nameTracker.delegate = self
-        return nameTracker
+        var nameCategory = madeTextField(placeholder: .category)
+        nameCategory.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
+        return nameCategory
     }()
     
     private lazy var createNewCategoryButton: UIButton = {
-        let button = UIButton()
-        button.isEnabled = false
-        button.setTitle("Готово", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        button.backgroundColor = .ypGray
-        button.titleLabel?.textColor = .ypWhiteDay
+        let button = madeButton(title: .ready,
+                                titleColor: .ypWhiteDay,
+                                backgroundColor: .ypGray)
         button.addTarget(self, action: #selector(didCreateNewCategoryTap), for: .touchUpInside)
         return button
     }()
     
     private lazy var subtitleNameCategory: UILabel = {
-        let subtitle = UILabel()
-        subtitle.font = .systemFont(ofSize: 17, weight: .regular)
-        subtitle.textColor = .ypLightGray
-        subtitle.textAlignment = .center
-        return subtitle
+        let subtitleNameCategory = madeSubtitleLabel()
+        return subtitleNameCategory
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        nameCategory.delegate = self
         setupUI()
         setupNavigationBar()
     }
@@ -56,10 +38,7 @@ final class CreateNewCategoryViewController: UIViewController {
     
     func setupUI() {
         
-        [nameCategory, createNewCategoryButton, subtitleNameCategory].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview($0)
-        }
+        addViewToSubView(view: [nameCategory, createNewCategoryButton, subtitleNameCategory], subView: view)
         
         NSLayoutConstraint.activate([
             

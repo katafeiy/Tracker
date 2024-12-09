@@ -1,6 +1,6 @@
 import UIKit
 
-final class EditCategoryViewController: UIViewController {
+final class EditCategoryViewController: BaseModelViewController {
     
     var currentCategoryName: String? {
         didSet { nameCategory.text = currentCategoryName }
@@ -9,45 +9,29 @@ final class EditCategoryViewController: UIViewController {
     var didEditCategoryNameTap: ((String) -> Void)?
     
     private lazy var nameCategory: UITextField = {
-        var nameTracker = UITextField()
-        nameTracker.backgroundColor = .ypBackgroundDay
-        nameTracker.font = .systemFont(ofSize: 17, weight: .regular)
-        nameTracker.textColor = .ypBlackDay
-        nameTracker.layer.masksToBounds = true
-        nameTracker.layer.cornerRadius = 16
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        nameTracker.leftView = paddingView
-        nameTracker.leftViewMode = .always
-        nameTracker.clearButtonMode = .whileEditing
-        nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
-        nameTracker.delegate = self
-        return nameTracker
-    }()
-    
-    private lazy var editedCategoryButton: UIButton = {
-        let button = UIButton()
-        button.isEnabled = false
-        button.setTitle("Готово", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        button.backgroundColor = .ypGray
-        button.titleLabel?.textColor = .ypWhiteDay
-        button.addTarget(self, action: #selector(didChangeNameCategoryTap), for: .touchUpInside)
-        return button
+        var nameCategory = madeTextField(placeholder: .category)
+        nameCategory.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
+        return nameCategory
     }()
     
     private lazy var subtitleNameCategory: UILabel = {
-        let subtitle = UILabel()
-        subtitle.font = .systemFont(ofSize: 17, weight: .regular)
-        subtitle.textColor = .ypLightGray
-        subtitle.textAlignment = .center
-        return subtitle
+        let subtitleNameCategory = madeSubtitleLabel()
+        return subtitleNameCategory
+    }()
+    
+    private lazy var editedCategoryButton: UIButton = {
+        let editedCategoryButton = madeButton(title: .ready,
+                                titleColor: .ypWhiteDay,
+                                backgroundColor: .ypGray)
+        editedCategoryButton.isEnabled = false
+        editedCategoryButton.addTarget(self, action: #selector(didChangeNameCategoryTap), for: .touchUpInside)
+        return editedCategoryButton
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        nameCategory.delegate = self
         setupUI()
         setupNavigationBar()
     }
@@ -59,10 +43,7 @@ final class EditCategoryViewController: UIViewController {
     
     func setupUI() {
         
-        [nameCategory, editedCategoryButton, subtitleNameCategory].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview($0)
-        }
+        addViewToSubView(view: [nameCategory, editedCategoryButton, subtitleNameCategory], subView: view)
         
         NSLayoutConstraint.activate([
             

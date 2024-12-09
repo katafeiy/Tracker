@@ -19,7 +19,7 @@ final class NewHabitViewController: BaseModelViewController, UIGestureRecognizer
     lazy var nameCell = [("Категория", "Название категории"), ("Расписание", "Дни недели")]
 
     private lazy var nameTracker: UITextField = {
-        var nameTracker = madeTextField()
+        var nameTracker = madeTextField(placeholder: .tracker)
         nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameTracker
     }()
@@ -69,36 +69,25 @@ final class NewHabitViewController: BaseModelViewController, UIGestureRecognizer
     }()
     
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [cancelButton, createNewTrackerButton])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 16
+        let stackView = madeStackView(view: [cancelButton, createNewTrackerButton], axis: .horizontal)
         return stackView
     }()
     
     private lazy var createNewTrackerButton: UIButton = {
-        let createButton = UIButton()
+        let createButton = madeButton(title: .create,
+                                      titleColor: .ypWhiteDay,
+                                      backgroundColor: .ypGray)
         createButton.isEnabled = false
-        createButton.setTitle("Создать", for: .normal)
-        createButton.setTitleColor(.ypWhiteDay, for: .normal)
-        createButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .regular)
-        createButton.backgroundColor = .ypGray
-        createButton.layer.masksToBounds = true
-        createButton.layer.cornerRadius = 16
         createButton.addTarget(self, action: #selector(didCreateNewTrackerButtonTap), for: .touchUpInside)
         return createButton
     }()
     
     private lazy var cancelButton: UIButton = {
-        let cancelButton = UIButton()
-        cancelButton.setTitle("Отменить", for: .normal)
-        cancelButton.setTitleColor(.ypRed, for: .normal)
-        cancelButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .regular)
-        cancelButton.backgroundColor = .ypWhiteDay
+        let cancelButton = madeButton(title: .cancel,
+                                      titleColor: .ypRed,
+                                      backgroundColor: .ypWhiteDay)
         cancelButton.layer.borderWidth = 1
         cancelButton.layer.borderColor = UIColor.ypRed.cgColor
-        cancelButton.layer.masksToBounds = true
-        cancelButton.layer.cornerRadius = 16
         cancelButton.addTarget(self, action: #selector(didCancelButtonTap), for: .touchUpInside)
         return cancelButton
     }()
@@ -121,18 +110,11 @@ final class NewHabitViewController: BaseModelViewController, UIGestureRecognizer
         tableView.delegate = self
         tableView.contentInset.top = -9
         
-        [scrollView, stackView].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview($0)
-        }
+        addViewToSubView(view: [scrollView, stackView], subView: view)
         
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(contentView)
+        addViewToSubView(view: [contentView], subView: scrollView)
         
-        [nameTracker, subtitleNameTracker, tableView, emojiCollectionView, colorCollectionView].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview($0)
-        }
+        addViewToSubView(view: [nameTracker, subtitleNameTracker, tableView, emojiCollectionView, colorCollectionView], subView: contentView)
         
         NSLayoutConstraint.activate([
             

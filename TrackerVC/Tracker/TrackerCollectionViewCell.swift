@@ -2,6 +2,8 @@ import UIKit
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
+    static let cellIdentifier: String = "trackerCell"
+    
     private var didPlusTap: (() -> Void)?
     
     private let viewCard: UIView = {

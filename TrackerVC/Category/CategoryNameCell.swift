@@ -3,6 +3,8 @@ import  UIKit
 
 final class CategoryNameCell: UICollectionViewCell {
     
+    static let headerIdentifier: String = "header"
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 19, weight: .bold)

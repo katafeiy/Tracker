@@ -1,31 +1,28 @@
 import UIKit
 
-final class CreateTrackerViewController: UIViewController {
+final class CreateTrackerViewController: BaseModelViewController {
     
     weak var delegate: (ProtocolNewHabitViewControllerOutput & ProtocolNewIrregularEventViewControllerOutput)?
     
     private lazy var habitButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Привычка", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        button.backgroundColor = .ypBlackDay
-        button.titleLabel?.textColor = .ypWhiteDay
-        button.addTarget(self, action: #selector(didHabitButtonTap), for: .touchUpInside)
-        return button
+        let habitButton = madeButton(title: .habit,
+                                titleColor: .ypWhiteDay,
+                                backgroundColor: .ypBlackDay)
+        habitButton.addTarget(self, action: #selector(didHabitButtonTap), for: .touchUpInside)
+        return habitButton
     }()
     
     private lazy var irregularEventButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Нерегулярное событие", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        button.backgroundColor = .ypBlackDay
-        button.titleLabel?.textColor = .ypWhiteDay
+        let button = madeButton(title: .irregular,
+                                titleColor: .ypWhiteDay,
+                                backgroundColor: .ypBlackDay)
         button.addTarget(self, action: #selector(didIrregularEventButtonTap), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var stackView: UIStackView = {
+        let stackView = madeStackView(view: [habitButton, irregularEventButton], axis: .vertical)
+        return stackView
     }()
     
     
@@ -38,15 +35,7 @@ final class CreateTrackerViewController: UIViewController {
     
     private func setupUI() {
         
-        let stackView = UIStackView(arrangedSubviews: [habitButton, irregularEventButton])
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = 16
-        
-        [stackView].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview($0)
-        }
+        addViewToSubView(view: [stackView], subView: view)
         
         NSLayoutConstraint.activate([
             

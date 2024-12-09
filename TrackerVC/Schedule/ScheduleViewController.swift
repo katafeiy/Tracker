@@ -1,34 +1,21 @@
 import UIKit
 
-final class ScheduleViewController: UIViewController {
+final class ScheduleViewController: BaseModelViewController {
     
     var didSelectSchedule: ((Set<DaysOfWeek>) -> Void)?
     
     private var selectedDays: Set<DaysOfWeek> = []
     
     private lazy var readyToUse: UIButton = {
-        let button = UIButton()
-        button.setTitle("Готово", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        button.backgroundColor = .ypBlackDay
-        button.titleLabel?.textColor = .ypWhiteDay
+        let button = madeButton(title: .ready,
+                                titleColor: .ypWhiteDay,
+                                backgroundColor: .ypBlackDay)
         button.addTarget(self, action: #selector(didReadyToUseTap), for: .touchUpInside)
         return button
     }()
     
     private lazy var scheduleTableView: UITableView = {
-        let scheduleTableView = UITableView(frame: view.bounds, style: .insetGrouped)
-        scheduleTableView.isScrollEnabled = false
-        scheduleTableView.backgroundColor = .clear
-        scheduleTableView.separatorStyle = .singleLine
-        scheduleTableView.separatorColor = .ypBlackDay
-        scheduleTableView.separatorInset.left = 15.95
-        scheduleTableView.separatorInset.right = 15.95
-        scheduleTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        scheduleTableView.layer.masksToBounds = true
-        scheduleTableView.layer.cornerRadius = 16
+        let scheduleTableView = madeTableView()
         return scheduleTableView
     }()
     
