@@ -35,7 +35,7 @@ final class CreateTrackerViewController: BaseModelViewController {
     
     private func setupUI() {
         
-        addViewToSubView(view: [stackView], subView: view)
+        view.addSubviews(stackView)
         
         NSLayoutConstraint.activate([
             

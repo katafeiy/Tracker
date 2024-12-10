@@ -44,7 +44,7 @@ final class CreateNewCategoryViewController: BaseModelViewController {
     
     func setupUI() {
         
-        addViewToSubView(view: [nameCategory, createNewCategoryButton, subtitleNameCategory], subView: view)
+        view.addSubviews(nameCategory, createNewCategoryButton, subtitleNameCategory)
         
         NSLayoutConstraint.activate([
             

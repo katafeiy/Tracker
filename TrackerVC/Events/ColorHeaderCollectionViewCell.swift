@@ -14,10 +14,7 @@ final class ColorHeaderCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
      
-        [colorHeaderLabel].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
-        }
+        contentView.addSubviews(colorHeaderLabel)
         
         NSLayoutConstraint.activate([
             colorHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),

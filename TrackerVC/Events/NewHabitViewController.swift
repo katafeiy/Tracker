@@ -116,11 +116,11 @@ final class NewHabitViewController: BaseModelViewController, UIGestureRecognizer
         tableView.delegate = self
         tableView.contentInset.top = -9
         
-        addViewToSubView(view: [scrollView, stackView], subView: view)
+        view.addSubviews(scrollView, stackView)
         
-        addViewToSubView(view: [contentView], subView: scrollView)
+        scrollView.addSubviews(contentView)
         
-        addViewToSubView(view: [nameTracker, subtitleNameTracker, tableView, emojiCollectionView, colorCollectionView], subView: contentView)
+        contentView.addSubviews(nameTracker, subtitleNameTracker, tableView, emojiCollectionView, colorCollectionView)
         
         NSLayoutConstraint.activate([
             

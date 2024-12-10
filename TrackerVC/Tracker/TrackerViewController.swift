@@ -28,9 +28,9 @@ final class TrackerViewController: BaseModelViewController {
             forCellWithReuseIdentifier: TrackerCollectionViewCell.cellIdentifier
         )
         collectionView.register(
-            CategoryNameCell.self,
+            TrackerCategoryNameCell.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader ,
-            withReuseIdentifier: CategoryNameCell.headerIdentifier
+            withReuseIdentifier: TrackerCategoryNameCell.headerIdentifier
         )
         layout.minimumInteritemSpacing = 9
         layout.minimumLineSpacing = 10
@@ -121,7 +121,7 @@ final class TrackerViewController: BaseModelViewController {
         view.backgroundColor = .ypWhiteDay
         datePicker.center = view.center
         
-        addViewToSubView(view: [starImage, whatSearch, collectionView], subView: view)
+        view.addSubviews(starImage, whatSearch, collectionView)
         
         NSLayoutConstraint.activate([
             starImage.heightAnchor.constraint(equalToConstant: 80),
@@ -208,9 +208,9 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         guard let headerView = collectionView.dequeueReusableSupplementaryView(
             ofKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: CategoryNameCell.headerIdentifier,
+            withReuseIdentifier: TrackerCategoryNameCell.headerIdentifier,
             for: indexPath
-        ) as?  CategoryNameCell else { return UICollectionReusableView() }
+        ) as?  TrackerCategoryNameCell else { return UICollectionReusableView() }
 
         let title = visibleCategories[indexPath.section].name
         headerView.configure(with: title)

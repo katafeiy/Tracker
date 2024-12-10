@@ -14,10 +14,7 @@ final class EmojiHeaderCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
      
-        [emojiHeaderLabel].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
-        }
+        contentView.addSubviews(emojiHeaderLabel)
         
         NSLayoutConstraint.activate([
             emojiHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),

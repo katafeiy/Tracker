@@ -83,12 +83,6 @@ class BaseModelViewController: UIViewController {
         button.layer.cornerRadius = 16
         return button
     }
-    
-    func addViewToSubView(view: [UIView], subView: UIView) {
-        view.forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            subView.addSubview($0)
-        }
-    }
 }
+
 

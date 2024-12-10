@@ -1,7 +1,7 @@
 import  UIKit
 
 
-final class CategoryNameCell: UICollectionViewCell {
+final class TrackerCategoryNameCell: UICollectionViewCell {
     
     static let headerIdentifier: String = "header"
     
@@ -15,10 +15,7 @@ final class CategoryNameCell: UICollectionViewCell {
     override init (frame: CGRect) {
         super.init(frame: frame)
         
-        [nameLabel].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview($0)
-        }
+        contentView.addSubviews(nameLabel)
         
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),

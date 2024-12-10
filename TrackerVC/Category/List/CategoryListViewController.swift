@@ -70,10 +70,7 @@ final class CategoryListViewController: UIViewController {
     
     func setupUI() {
         
-        [starImage, habitLabel, addNewCategoryButton, tableView].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview($0)
-        }
+        view.addSubviews(starImage, habitLabel, addNewCategoryButton, tableView)
         
         NSLayoutConstraint.activate([
             

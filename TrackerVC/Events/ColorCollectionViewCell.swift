@@ -38,8 +38,7 @@ final class ColorCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.addSubview(colorLabel)
-        colorLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubviews(colorLabel)
 
         NSLayoutConstraint.activate([
             colorLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),

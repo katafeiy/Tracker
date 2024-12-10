@@ -49,7 +49,7 @@ final class EditCategoryViewController: BaseModelViewController {
     
     func setupUI() {
         
-        addViewToSubView(view: [nameCategory, editedCategoryButton, subtitleNameCategory], subView: view)
+        view.addSubviews(nameCategory, editedCategoryButton, subtitleNameCategory)
         
         NSLayoutConstraint.activate([
             

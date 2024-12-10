@@ -34,7 +34,7 @@ final class ScheduleViewController: BaseModelViewController {
         
         view.backgroundColor = .white
         
-        addViewToSubView(view: [readyToUse, scheduleTableView], subView: view)
+        view.addSubviews(readyToUse, scheduleTableView)
         
         NSLayoutConstraint.activate([
             

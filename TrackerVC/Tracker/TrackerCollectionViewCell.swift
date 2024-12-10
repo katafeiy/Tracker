@@ -104,18 +104,11 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         layer.masksToBounds = true
         backgroundColor = .clear
         
-        [viewCard, labelCountDay, addButtonCompletion].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview($0)
-        }
-        [labelName, viewEmoji].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            viewCard.addSubview($0)
-        }
-        [labelEmoji].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            viewEmoji.addSubview($0)
-        }
+        contentView.addSubviews(viewCard, labelCountDay, addButtonCompletion)
+        
+        viewCard.addSubviews(labelName, viewEmoji)
+        
+        viewEmoji.addSubviews(labelEmoji)
         
         NSLayoutConstraint.activate([
             
