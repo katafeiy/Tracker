@@ -19,6 +19,12 @@ final class EditCategoryViewController: BaseModelViewController {
         return subtitleNameCategory
     }()
     
+    private lazy var limitedTextField: LimitedTextField = {
+        let limitedTextField = LimitedTextField(characterLimit: 38,
+                                                subtitleLabel: subtitleNameCategory)
+        return limitedTextField
+    }()
+    
     private lazy var editedCategoryButton: UIButton = {
         let editedCategoryButton = madeButton(title: .ready,
                                 titleColor: .ypWhiteDay,
@@ -31,7 +37,7 @@ final class EditCategoryViewController: BaseModelViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        nameCategory.delegate = self
+        nameCategory.delegate = limitedTextField
         setupUI()
         setupNavigationBar()
     }
@@ -89,25 +95,3 @@ final class EditCategoryViewController: BaseModelViewController {
         }
     }
 }
-
-extension EditCategoryViewController: UITextFieldDelegate {
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        guard let textFieldText = textField.text else { return true }
-        
-        let newText = (textFieldText as NSString).replacingCharacters(in: range, with: string)
-        let count = newText.count < 38 ? newText.count : 38
-        let remainingCharacters = 38 - count
-        
-        subtitleNameCategory.text = count < 38 ? ("Осталось \(remainingCharacters) символов") : ("Ограничение \(count) символов")
-        subtitleNameCategory.textColor = count < 38 ? .ypLightGray : .ypRed
-        
-        return newText.count <= 38
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        nameCategory.resignFirstResponder()
-        return true
-    }
- }
