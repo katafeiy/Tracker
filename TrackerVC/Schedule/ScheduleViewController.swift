@@ -34,10 +34,7 @@ final class ScheduleViewController: BaseModelViewController {
         
         view.backgroundColor = .white
         
-        [readyToUse, scheduleTableView].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview($0)
-        }
+        addViewToSubView(view: [readyToUse, scheduleTableView], subView: view)
         
         NSLayoutConstraint.activate([
             

@@ -23,6 +23,12 @@ final class NewIrregularEventViewController: BaseModelViewController, UIGestureR
         return subtitleNameTracker
     }()
     
+    private lazy var limitedTextField: LimitedTextField = {
+        let limitedTextField = LimitedTextField(characterLimit: 38,
+                                                subtitleLabel: subtitleNameTracker)
+        return limitedTextField
+    }()
+    
     private lazy var tableView: UITableView = {
         let newIrregularEventTableView = madeTableView()
         return newIrregularEventTableView
@@ -95,7 +101,7 @@ final class NewIrregularEventViewController: BaseModelViewController, UIGestureR
     func setupUI() {
         
         view.backgroundColor = .white
-        nameTracker.delegate = self
+        nameTracker.delegate = limitedTextField
         emojiCollectionView.dataSource = self
         emojiCollectionView.delegate = self
         colorCollectionView.dataSource = self
@@ -216,11 +222,21 @@ extension NewIrregularEventViewController: UICollectionViewDataSource, UICollect
         
         switch collectionView {
         case emojiCollectionView:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCollectionViewCell else { return UICollectionViewCell() }
+            
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: EmojiCollectionViewCell.cellIdentifier,
+                for: indexPath
+            ) as? EmojiCollectionViewCell else { return UICollectionViewCell() }
+            
             cell.emojiLabel.text = "\(EmojiCollectionViewCell.emojiCell[indexPath.row])"
             return cell
         case colorCollectionView:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCollectionViewCell else { return UICollectionViewCell() }
+            
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ColorCollectionViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ColorCollectionViewCell else { return UICollectionViewCell() }
+            
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 8
             cell.colorLabel.backgroundColor = ColorCollectionViewCell.colorCell[indexPath.row]
@@ -262,19 +278,23 @@ extension NewIrregularEventViewController: UICollectionViewDataSource, UICollect
         
         switch collectionView {
         case emojiCollectionView:
+            
             guard let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
-                withReuseIdentifier: "emojiHeader",
+                withReuseIdentifier: EmojiHeaderCollectionViewCell.headerIdentifier,
                 for: indexPath
             ) as? EmojiHeaderCollectionViewCell else { return UICollectionReusableView()}
+            
             headerView.emojiHeaderLabel.text = "Emoji"
             return headerView
         case colorCollectionView:
+            
             guard let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
-                withReuseIdentifier: "colorHeader",
+                withReuseIdentifier: ColorHeaderCollectionViewCell.headerIdentifier,
                 for: indexPath
             ) as? ColorHeaderCollectionViewCell else { return UICollectionReusableView() }
+            
             headerView.colorHeaderLabel.text = "Цвет"
             return headerView
         default: return UICollectionReusableView()
@@ -331,27 +351,5 @@ extension NewIrregularEventViewController: UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
-    }
-}
-
-extension NewIrregularEventViewController: UITextFieldDelegate {
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        guard let textFieldText = textField.text else { return true }
-        
-        let newText = (textFieldText as NSString).replacingCharacters(in: range, with: string)
-        let count = newText.count < 38 ? newText.count : 38
-        let remainingCharacters = 38 - count
-        
-        subtitleNameTracker.text = count < 38 ? ("Осталось \(remainingCharacters) символов") : ("Ограничение \(count) символов")
-        subtitleNameTracker.textColor = count < 38 ? .ypLightGray : .ypRed
-        
-        return newText.count <= 38
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        nameTracker.resignFirstResponder()
-        return true
     }
 }
