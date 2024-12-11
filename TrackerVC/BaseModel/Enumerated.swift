@@ -17,6 +17,7 @@ enum buttonName {
     case ready
     case cancel
     case add
+    case skip
     
     var text: String {
         return switch self {
@@ -26,6 +27,7 @@ enum buttonName {
         case .ready: "Готово"
         case .cancel: "Отменить"
         case .add: "Добавить категорию"
+        case .skip: "Вот это технологии"
         }
     }
 }

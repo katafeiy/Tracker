@@ -17,7 +17,7 @@ final class NewHabitViewController: BaseModelViewController, UIGestureRecognizer
     }
     
     lazy var nameCell = [("Категория", "Название категории"), ("Расписание", "Дни недели")]
-
+    
     private lazy var nameTracker: UITextField = {
         var nameTracker = madeTextField(placeholder: .tracker)
         nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
@@ -181,12 +181,15 @@ final class NewHabitViewController: BaseModelViewController, UIGestureRecognizer
     
     @objc func didCreateNewTrackerButtonTap() {
         
-        guard let emojiIndexPath  = emojiCollectionView.indexPathsForSelectedItems?.first else { return }
-        guard let colorIndexPath  = colorCollectionView.indexPathsForSelectedItems?.first else { return }
-        guard let nameCategory = nameCategory else { return }
+        guard
+            let nameTracker = nameTracker.text,
+            let colorIndexPath  = colorCollectionView.indexPathsForSelectedItems?.first,
+            let emojiIndexPath  = emojiCollectionView.indexPathsForSelectedItems?.first,
+            let nameCategory = nameCategory
+        else { return }
         
         delegate?.didCreate(newTracker: .init(id: UUID(),
-                                              name: nameTracker.text ?? "nil",
+                                              name: nameTracker,
                                               color: ColorCollectionViewCell.colorCell[colorIndexPath.row],
                                               emoji: "\(EmojiCollectionViewCell.emojiCell[emojiIndexPath.row])",
                                               schedule: selectedDays),
