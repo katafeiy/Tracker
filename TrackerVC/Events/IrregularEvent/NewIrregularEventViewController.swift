@@ -6,14 +6,14 @@ protocol ProtocolNewIrregularEventViewControllerOutput: AnyObject {
 
 final class NewIrregularEventViewController: BaseModelViewController, UIGestureRecognizerDelegate {
     
-    weak var delegate: ProtocolNewIrregularEventViewControllerOutput?
+    private let viewModel: NewIrregularEventViewModel
     
-    private var nameCategory: String?
+    weak var delegate: ProtocolNewIrregularEventViewControllerOutput?
     
     lazy var nameCell = [("Категория", "Название категории")]
     
     private lazy var nameTracker: UITextField = {
-        var nameTracker = madeTextField(placeholder: .tracker)
+        var nameTracker = FabricaOfElements.madeTextField(placeholder: .tracker)
         nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameTracker
     }()
@@ -33,7 +33,7 @@ final class NewIrregularEventViewController: BaseModelViewController, UIGestureR
         let newIrregularEventTableView = madeTableView()
         return newIrregularEventTableView
     }()
-        
+    
     private lazy var scrollView: UIScrollView = {
         let scrollView = madeScrollView()
         return scrollView
@@ -92,10 +92,30 @@ final class NewIrregularEventViewController: BaseModelViewController, UIGestureR
         return cancelButton
     }()
     
+    init(viewModel: NewIrregularEventViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         setupUI()
+        binding()
+    }
+    
+    func binding() {
+        viewModel.updatedCreatedTrackerStatus = { [weak self] status in
+            guard let self else { return }
+            print(status)
+            createNewTrackerButton.isEnabled = status
+            createNewTrackerButton.backgroundColor = status ? .ypBlackDay : .ypGray
+        }
     }
     
     func setupUI() {
@@ -170,52 +190,30 @@ final class NewIrregularEventViewController: BaseModelViewController, UIGestureR
     }
     
     @objc func didChangeName(_ sender: UITextField) {
-        blockUpdateButton()
+        viewModel.updateNameTracker(sender.text)
     }
     
     @objc func didCreateNewTrackerButtonTap() {
-        
-        guard let emojiIndexPath  = emojiCollectionView.indexPathsForSelectedItems?.first else { return }
-        guard let colorIndexPath  = colorCollectionView.indexPathsForSelectedItems?.first else { return }
-        guard let nameCategory = nameCategory else { return }
-        
-        delegate?.didCreate(newTracker: .init(id: UUID(),
-                                              name: nameTracker.text ?? "nil",
-                                              color: ColorCollectionViewCell.colorCell[colorIndexPath.row],
-                                              emoji: "\(EmojiCollectionViewCell.emojiCell[emojiIndexPath.row])",
-                                              schedule: Set(DaysOfWeek.allCases)),
-                            forCategory: nameCategory)
-        dismiss(animated: true, completion: nil)
+        do {
+            delegate?.didCreate(newTracker: try viewModel.createNewIrregularEvent(),
+                                forCategory: try viewModel.getNameCategory())
+            dismiss(animated: true, completion: nil)
+            
+        } catch {
+            return
+        }
     }
     
     @objc func didCancelButtonTap() {
         navigationController?.popViewController(animated: true)
     }
     
-    private func blockUpdateButton() {
-        
-        guard let textInput = nameTracker.text else { return }
-        
-        if
-            textInput.isEmpty == true ||
-                textInput.count > 38 ||
-                emojiCollectionView.indexPathsForSelectedItems?.first == nil ||
-                colorCollectionView.indexPathsForSelectedItems?.first == nil ||
-                nameCategory == nil
-        {
-            createNewTrackerButton.isEnabled = false
-            createNewTrackerButton.backgroundColor = .ypGray
-        } else {
-            createNewTrackerButton.isEnabled = true
-            createNewTrackerButton.backgroundColor = .ypBlackDay
-        }
-    }
 }
 
 extension NewIrregularEventViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionView == emojiCollectionView ? EmojiCollectionViewCell.emojiCell.count : ColorCollectionViewCell.colorCell.count
+        return collectionView == emojiCollectionView ? EmojiCollectionViewCell.emojiCell.count : TrackerColors.allCases.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -239,7 +237,7 @@ extension NewIrregularEventViewController: UICollectionViewDataSource, UICollect
             
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 8
-            cell.colorLabel.backgroundColor = ColorCollectionViewCell.colorCell[indexPath.row]
+            cell.colorLabel.backgroundColor = TrackerColors.allCases[indexPath.row].color
             return cell
         default: return UICollectionViewCell()
         }
@@ -251,13 +249,14 @@ extension NewIrregularEventViewController: UICollectionViewDataSource, UICollect
         case emojiCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionViewCell
             cell?.emojiLabel.backgroundColor = .ypLightGray
+            viewModel.updateTrackerEmoji(EmojiCollectionViewCell.emojiCell[indexPath.row])
         case colorCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
             cell?.layer.borderWidth = 3
-            cell?.layer.borderColor = ColorCollectionViewCell.colorCell[indexPath.row].withAlphaComponent(0.3).cgColor
+            cell?.layer.borderColor = TrackerColors.allCases[indexPath.row].color.withAlphaComponent(0.3).cgColor
+            viewModel.updateTrackerColor(TrackerColors.allCases[indexPath.row])
         default: break
         }
-        blockUpdateButton()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -266,10 +265,12 @@ extension NewIrregularEventViewController: UICollectionViewDataSource, UICollect
         case emojiCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionViewCell
             cell?.emojiLabel.backgroundColor = .ypWhiteDay
+            viewModel.updateTrackerEmoji(nil)
         case colorCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
             cell?.layer.borderWidth = 0
             cell?.layer.borderColor = UIColor.clear.cgColor
+            viewModel.updateTrackerColor(nil)
         default: break
         }
     }
@@ -333,12 +334,12 @@ extension NewIrregularEventViewController: UITableViewDataSource, UITableViewDel
         
         switch indexPath.row {
         case 0:
-            let viewModel = CategoryListViewModel(selectedCategory: nameCategory)
+            let viewModel = CategoryListViewModel(selectedCategory: try? viewModel.getNameCategory())
             let categoryListViewController = CategoryListViewController(viewModel: viewModel)
             
             categoryListViewController.didSelectCategory = { [weak self] category in
                 guard let self else { return }
-                self.nameCategory = category
+                self.viewModel.updateNameCategory(category)
                 if let cell = tableView.cellForRow(at: indexPath) {
                     cell.detailTextLabel?.text = category
                 }

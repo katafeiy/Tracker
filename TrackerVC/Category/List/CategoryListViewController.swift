@@ -1,6 +1,6 @@
 import UIKit
 
-final class CategoryListViewController: UIViewController {
+final class CategoryListViewController: BaseModelViewController {
     
     var didSelectCategory: ((String) -> Void)?
     private let viewModel: CategoryListViewModel
@@ -14,35 +14,22 @@ final class CategoryListViewController: UIViewController {
     private lazy var habitLabel: UILabel = {
         let label = UILabel()
         label.text = "Привычки и события можно\n" + "объединить по смыслу"
-        label.textAlignment = .center
         label.numberOfLines = 2
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.textColor = .ypBlackDay
+        label.textAlignment = .center
         return label
     }()
     
     private lazy var addNewCategoryButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Добавить категорию", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        button.backgroundColor = .ypBlackDay
-        button.titleLabel?.textColor = .ypWhiteDay
+        let button = madeButton(title: .add, titleColor: .ypWhiteDay, backgroundColor: .ypBlackDay)
         button.addTarget(self, action: #selector(didAddNewCategoryTap), for: .touchUpInside)
         return button
     }()
     
     private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: view.bounds, style: .insetGrouped)
+        let tableView = madeTableView()
         tableView.register(CategoryListCell.self, forCellReuseIdentifier: CategoryListCell.identifier)
-        tableView.separatorStyle = .singleLine
-        tableView.separatorInset.left = 15.95
-        tableView.separatorInset.right = 15.95
-        tableView.separatorColor = .ypBlackDay
-        tableView.layer.masksToBounds = true
-        tableView.layer.cornerRadius = 16
-        tableView.backgroundColor = .clear
         return tableView
     }()
     

@@ -70,10 +70,10 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         self.didPlusTap = didPlusTap
         labelEmoji.text = tracker.emoji
         labelName.text = tracker.name
-        viewCard.backgroundColor = tracker.color
+        viewCard.backgroundColor = tracker.color.color
         labelCountDay.text =  "0 дней"
         addButtonCompletion.setImage(UIImage.plusButton, for: .normal)
-        addButtonCompletion.backgroundColor = tracker.color
+        addButtonCompletion.backgroundColor = tracker.color.color
     }
     
     func configCompletion(counter: Int, isCompleted: Bool) {

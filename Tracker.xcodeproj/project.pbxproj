@@ -35,6 +35,7 @@
 			membershipExceptions = (
 				Tracker.swift,
 				TrackerCategory.swift,
+				TrackerColors.swift,
 				TrackerRecord.swift,
 			);
 			target = 129E670D2CD0E421002D5F10 /* Tracker */;

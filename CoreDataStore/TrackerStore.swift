@@ -39,7 +39,7 @@ final class TrackerStore: NSObject {
         trackerCoreData.id = tracker.id
         trackerCoreData.name = tracker.name
         trackerCoreData.emoji = tracker.emoji
-        trackerCoreData.color = tracker.color
+        trackerCoreData.color = tracker.color.color
         trackerCoreData.schedule = tracker.schedule as NSObject
         
         trackerCoreData.category = trackerCategoryCoreData

@@ -190,7 +190,7 @@ final class NewHabitViewController: BaseModelViewController, UIGestureRecognizer
         
         delegate?.didCreate(newTracker: .init(id: UUID(),
                                               name: nameTracker,
-                                              color: ColorCollectionViewCell.colorCell[colorIndexPath.row],
+                                              color: TrackerColors.allCases[colorIndexPath.row],
                                               emoji: "\(EmojiCollectionViewCell.emojiCell[emojiIndexPath.row])",
                                               schedule: selectedDays),
                             forCategory: nameCategory)
@@ -225,7 +225,7 @@ final class NewHabitViewController: BaseModelViewController, UIGestureRecognizer
 extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionView == emojiCollectionView ? EmojiCollectionViewCell.emojiCell.count : ColorCollectionViewCell.colorCell.count
+        return collectionView == emojiCollectionView ? EmojiCollectionViewCell.emojiCell.count : TrackerColors.allCases.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -249,7 +249,7 @@ extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDe
             
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 8
-            cell.colorLabel.backgroundColor = ColorCollectionViewCell.colorCell[indexPath.row]
+            cell.colorLabel.backgroundColor = TrackerColors.allCases[indexPath.row].color
             return cell
         default: return UICollectionViewCell()
         }
@@ -264,7 +264,7 @@ extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDe
         case colorCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
             cell?.layer.borderWidth = 3
-            cell?.layer.borderColor = ColorCollectionViewCell.colorCell[indexPath.row].withAlphaComponent(0.3).cgColor
+            cell?.layer.borderColor = TrackerColors.allCases[indexPath.row].color.withAlphaComponent(0.3).cgColor
         default: break
         }
         blockUpdateButton()
@@ -356,7 +356,7 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
             
             navigationController?.pushViewController(categoryListViewController, animated: true)
         case 1:
-            let scheduleViewController = ScheduleViewController()
+            let scheduleViewController = ScheduleViewController(viewModel: ScheduleViewModel(selectedDays: selectedDays))
             scheduleViewController.didSelectSchedule = { [weak self] schedule in
                 guard let self else { return }
                 

@@ -26,9 +26,10 @@ final class TrackerCategoriesStore: NSObject {
                     let name = trackerCoreData.name,
                     let emoji = trackerCoreData.emoji,
                     let color = trackerCoreData.color as? UIColor,
+                    let modelColor = TrackerColors(color: color),
                     let schedule = trackerCoreData.schedule as? Set<DaysOfWeek>
                 else { return nil }
-                return Tracker(id: id, name: name, color: color, emoji: emoji, schedule: schedule)
+                return Tracker(id: id, name: name, color: modelColor, emoji: emoji, schedule: schedule)
             })
             result.append(TrackerCategory(name: name, trackerArray: trackers))
         }

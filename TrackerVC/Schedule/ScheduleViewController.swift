@@ -2,9 +2,9 @@ import UIKit
 
 final class ScheduleViewController: BaseModelViewController {
     
-    var didSelectSchedule: ((Set<DaysOfWeek>) -> Void)?
+    private let viewModel: ScheduleViewModel
     
-    private var selectedDays: Set<DaysOfWeek> = []
+    var didSelectSchedule: ((Set<DaysOfWeek>) -> Void)?
     
     private lazy var readyToUse: UIButton = {
         let button = madeButton(title: .ready,
@@ -18,6 +18,15 @@ final class ScheduleViewController: BaseModelViewController {
         let scheduleTableView = madeTableView()
         return scheduleTableView
     }()
+    
+    init(viewModel: ScheduleViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +66,7 @@ final class ScheduleViewController: BaseModelViewController {
     }
     
     @objc func didReadyToUseTap() {
-        didSelectSchedule?(selectedDays)
+        didSelectSchedule?(viewModel.selectedDays)
         navigationController?.popViewController(animated: true)
     }
 }
@@ -71,13 +80,15 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource  {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = DaysOfWeek.allCases[indexPath.row].fullName
+        
+        cell.textLabel?.text = viewModel.daysOfWeek[indexPath.row].fullName
         cell.backgroundColor = .ypBackgroundDay
         cell.selectionStyle = .none
         
         let switchControl = UISwitch()
         switchControl.onTintColor = .ypBlue
         switchControl.tag = indexPath.row
+        switchControl.isOn = viewModel.isSelectedDay(viewModel.daysOfWeek[indexPath.row])
         switchControl.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         cell.accessoryView = switchControl
         
@@ -86,15 +97,10 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource  {
     
     @objc func switchValueChanged(_ sender: UISwitch) {
         
-        if sender.isOn {
-            selectedDays.insert(DaysOfWeek.allCases[sender.tag])
-        } else {
-            selectedDays.remove(DaysOfWeek.allCases[sender.tag])
-        }
+        viewModel.toggleDay(viewModel.daysOfWeek[sender.tag], isSelected: sender.isOn)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
-    
 }

@@ -65,7 +65,7 @@ final class CreateTrackerViewController: BaseModelViewController {
     }
     
     @objc func didIrregularEventButtonTap() {
-        let irregularEventViewController = NewIrregularEventViewController()
+        let irregularEventViewController = NewIrregularEventViewController(viewModel: NewIrregularEventViewModel())
         irregularEventViewController.delegate = delegate
         navigationController?.pushViewController(irregularEventViewController, animated: true)
     }
