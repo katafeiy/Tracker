@@ -157,17 +157,20 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
         let configContextMenu = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { action in
             
             return UIMenu(children: [
-                UIAction(title: "Редактировать") { action in
+                UIAction(title: "Редактировать" ,
+                         image: .pencilAndListClipboard.withTintColor(.ypBlackDay)) { action in
                     self.editCategory(indexPath: indexPath)
                 },
-                UIAction(title: "Удалить", attributes: .destructive) { action in
+                UIAction(title: "Удалить", image:
+                        .trash.withTintColor(.ypRed),
+                         attributes: .destructive) { action in
                     self.deleteCategory(indexPath: indexPath)
                 }
             ])
         }
         return configContextMenu
     }
-    
+     
     private func editCategory(indexPath: IndexPath) {
         
         let editCategoryViewController = EditCategoryViewController()

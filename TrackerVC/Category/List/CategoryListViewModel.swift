@@ -2,12 +2,13 @@
 final class CategoryListViewModel {
     
     private let categoryStore = TrackerCategoriesStore()
-    private var selectedCategory: String?{
+    private var selectedCategory: String? {
         didSet {
             guard let selectedCategory else { return }
             didUpdateSelectedCategory?(selectedCategory)
         }
     }
+    
     var didUpdatesCategories: (() -> Void)?
     var didUpdateSelectedCategory: ((String) -> Void)?
     
