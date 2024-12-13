@@ -15,4 +15,8 @@ final class CreateNewCategoryViewModel  {
         return !nameCategory.isEmpty &&
         nameCategory.count <= 38
     }
+    
+    func getNameCategory() -> String? {
+        return nameCategory
+    }
 }

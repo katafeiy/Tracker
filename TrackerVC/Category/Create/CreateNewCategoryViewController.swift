@@ -90,7 +90,7 @@ final class CreateNewCategoryViewController: BaseModelViewController {
     }
     
     @objc func didCreateNewCategoryTap() {
-        guard let nameCategory = nameCategory.text else { return }
+        guard let nameCategory = viewModel.getNameCategory() else { return }
         didSelectNewCategory?(nameCategory)
         navigationController?.popViewController(animated: true)
     }
