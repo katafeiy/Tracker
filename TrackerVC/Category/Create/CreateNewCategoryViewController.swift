@@ -2,6 +2,8 @@ import UIKit
 
 final class CreateNewCategoryViewController: BaseModelViewController {
     
+    private let viewModel: CreateNewCategoryViewModel
+    
     var didSelectNewCategory: ((String) -> Void)?
     
     private lazy var nameCategory: UITextField = {
@@ -29,12 +31,30 @@ final class CreateNewCategoryViewController: BaseModelViewController {
         return limitedTextField
     }()
     
+    init(viewModel: CreateNewCategoryViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         nameCategory.delegate = limitedTextField
+        binding()
         setupUI()
         setupNavigationBar()
+    }
+    
+    func binding() {
+        viewModel.updateCreateNewCategoryStatus = { [weak self] status in
+            guard let self else { return }
+            createNewCategoryButton.isEnabled = status
+            createNewCategoryButton.backgroundColor = status ? .ypBlackDay : .ypGray
+        }
     }
     
     func setupNavigationBar() {
@@ -66,27 +86,12 @@ final class CreateNewCategoryViewController: BaseModelViewController {
     }
     
     @objc func didChangeName(_ sender: UITextField) {
-        blockUpdateButton()
+        viewModel.updateNameCategory(sender.text)
     }
     
     @objc func didCreateNewCategoryTap() {
-        guard let categoryName = nameCategory.text else {return}
-        didSelectNewCategory?(categoryName)
+        guard let nameCategory = nameCategory.text else { return }
+        didSelectNewCategory?(nameCategory)
         navigationController?.popViewController(animated: true)
-    }
-    
-    private func blockUpdateButton() {
-        
-        guard let textInput = nameCategory.text else { return }
-        
-        if
-            textInput.isEmpty == true || textInput.count > 38 {
-            
-            createNewCategoryButton.isEnabled = false
-            createNewCategoryButton.backgroundColor = .ypGray
-        } else {
-            createNewCategoryButton.isEnabled = true
-            createNewCategoryButton.backgroundColor = .ypBlackDay
-        }
     }
 }

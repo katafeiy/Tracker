@@ -114,7 +114,7 @@ final class CategoryListViewController: BaseModelViewController {
     
     @objc func didAddNewCategoryTap() {
         
-        let createNewCategoryViewController = CreateNewCategoryViewController()
+        let createNewCategoryViewController = CreateNewCategoryViewController(viewModel: CreateNewCategoryViewModel())
         
         createNewCategoryViewController.didSelectNewCategory = { [weak self] category in
             guard let self else  { return }

@@ -56,9 +56,7 @@ final class NewIrregularEventViewModel {
     
     private func isCreatedTrackerValid() -> Bool {
         
-        guard let nameTracker else {
-            return false
-        }
+        guard let nameTracker else { return false }
         
         return !nameTracker.isEmpty &&
         nameTracker.count <= 38 &&
