@@ -12,7 +12,7 @@ final class TrackerViewModel {
     private let trackerCategoriesStore = TrackerCategoriesStore()
     private let trackerRecordStore = TrackerRecordStore()
     
-    private var currentDate: Date?
+    private var currentDate: Date? 
     
     init() {
         trackerStore.delegate = self
