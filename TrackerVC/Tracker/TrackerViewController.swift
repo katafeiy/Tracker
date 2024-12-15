@@ -23,7 +23,6 @@ final class TrackerViewController: BaseModelViewController {
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
         return collectionView
-        
     }()
     
     private lazy var datePicker: UIDatePicker = {
