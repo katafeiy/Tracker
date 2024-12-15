@@ -1,16 +1,24 @@
 import Foundation
 
-final class NewIrregularEventViewModel {
+final class NewTrackerEventViewModel {
     
+    enum Errors: Error {
+        case noRequiredData
+    }
+
     var updatedCreatedTrackerStatus: ((Bool) -> Void)?
     
     private var nameCategory: String?
     private var nameTracker: String?
     private var trackerColor: TrackerColors?
     private var trackerEmoji: String?
+    let withSchedule: Bool
     
-    enum Errors: Error {
-        case noRequiredData
+    private var selectedDays: Set<DaysOfWeek> = []
+    
+    init(withSchedule: Bool) {
+        self.withSchedule = withSchedule
+        selectedDays = withSchedule ? [] : Set(DaysOfWeek.allCases)
     }
     
     func createNewIrregularEvent() throws -> Tracker  {
@@ -23,7 +31,7 @@ final class NewIrregularEventViewModel {
                                  name: nameTracker,
                                  color: trackerColor,
                                  emoji: trackerEmoji,
-                                 schedule: Set(DaysOfWeek.allCases))
+                                 schedule: selectedDays)
         return newTracker
     }
     
@@ -46,12 +54,21 @@ final class NewIrregularEventViewModel {
         self.trackerEmoji = emoji
         updatedCreatedTrackerStatus?(isCreatedTrackerValid())
     }
-    
+
     func getNameCategory() throws -> String {
         guard let nameCategory else {
             throw Errors.noRequiredData
         }
         return nameCategory
+    }
+    
+    func getSelectedDays() -> Set<DaysOfWeek> {
+        return selectedDays
+    }
+    
+    func updateSelectedDays(_ selectedDays: Set<DaysOfWeek>) {
+        self.selectedDays = selectedDays
+        updatedCreatedTrackerStatus?(isCreatedTrackerValid())
     }
     
     private func isCreatedTrackerValid() -> Bool {
@@ -62,7 +79,8 @@ final class NewIrregularEventViewModel {
         nameTracker.count <= 38 &&
         trackerColor != nil &&
         trackerEmoji != nil &&
-        nameCategory != nil
+        nameCategory != nil &&
+        !selectedDays.isEmpty
     }
 }
 

@@ -55,7 +55,6 @@ final class OnboardingViewController: UIPageViewController {
 
 extension OnboardingViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
-    
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
         guard let index = pages.firstIndex(of: viewController) else { return nil }

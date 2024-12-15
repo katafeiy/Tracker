@@ -173,10 +173,9 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
      
     private func editCategory(indexPath: IndexPath) {
         
-        let editCategoryViewController = EditCategoryViewController()
         let category = self.viewModel.categories[indexPath.row]
         
-        editCategoryViewController.currentCategoryName = category
+        let editCategoryViewController = EditCategoryViewController(viewModel: EditCategoryViewModel(nameCategory: category))
         
         editCategoryViewController.didEditCategoryNameTap = { [weak self] newName in
             guard let self else { return }
@@ -193,13 +192,17 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
         alert.addAction(UIAlertAction(title: "Удалить",
                                       style: .destructive,
                                       handler: { [weak self] _ in
-            
             guard let self else { return }
             self.viewModel.deleteCategory(category)
-            
         }))
         alert.addAction(UIAlertAction(title: "Отменить", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            tableView.deleteRows(at: [indexPath], with: .left)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

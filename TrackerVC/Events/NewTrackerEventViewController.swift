@@ -1,25 +1,19 @@
 import UIKit
 
-protocol ProtocolNewHabitViewControllerOutput: AnyObject {
+protocol ProtocolNewTrackerEventViewControllerOutput: AnyObject {
     func didCreate(newTracker: Tracker, forCategory: String)
 }
 
-final class NewHabitViewController: BaseModelViewController, UIGestureRecognizerDelegate {
+final class NewTrackerEventViewController: BaseModelViewController, UIGestureRecognizerDelegate {
     
-    weak var delegate: ProtocolNewHabitViewControllerOutput?
+    private let viewModel: NewTrackerEventViewModel
     
-    private var nameCategory: String?
+    weak var delegate: ProtocolNewTrackerEventViewControllerOutput?
     
-    private var selectedDays: Set<DaysOfWeek> = [] {
-        didSet {
-            blockUpdateButton()
-        }
-    }
+    lazy var nameCell = viewModel.withSchedule ? [("Категория", "Название категории"), ("Расписание", "Дни недели")] : [("Категория", "Название категории")]
     
-    lazy var nameCell = [("Категория", "Название категории"), ("Расписание", "Дни недели")]
-    
-    private lazy var nameTracker: UITextField = {
-        var nameTracker = madeTextField(placeholder: .tracker)
+    private lazy var nameTracker: MyTextField = {
+        var nameTracker = MyTextField(placeholder: .tracker)
         nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameTracker
     }()
@@ -36,8 +30,8 @@ final class NewHabitViewController: BaseModelViewController, UIGestureRecognizer
     }()
     
     private lazy var tableView: UITableView = {
-        let newHabitTableView = madeTableView()
-        return newHabitTableView
+        let newIrregularEventTableView = madeTableView()
+        return newIrregularEventTableView
     }()
     
     private lazy var scrollView: UIScrollView = {
@@ -98,10 +92,29 @@ final class NewHabitViewController: BaseModelViewController, UIGestureRecognizer
         return cancelButton
     }()
     
+    init(viewModel: NewTrackerEventViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         setupUI()
+        binding()
+    }
+    
+    func binding() {
+        viewModel.updatedCreatedTrackerStatus = { [weak self] status in
+            guard let self else { return }
+            print(status)
+            createNewTrackerButton.isEnabled = status
+            createNewTrackerButton.backgroundColor = status ? .ypBlackDay : .ypGray
+        }
     }
     
     func setupUI() {
@@ -148,7 +161,7 @@ final class NewHabitViewController: BaseModelViewController, UIGestureRecognizer
             tableView.topAnchor.constraint(equalTo: nameTracker.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            tableView.heightAnchor.constraint(equalToConstant: 190),
+            tableView.heightAnchor.constraint(equalToConstant: viewModel.withSchedule ? 190 : 115),
             
             emojiCollectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 16),
             emojiCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -169,60 +182,33 @@ final class NewHabitViewController: BaseModelViewController, UIGestureRecognizer
     }
     
     func setupNavigationBar() {
-        navigationItem.title = "Новая привычка"
+        navigationItem.title = "Новое нерегулярное событие"
         navigationItem.hidesBackButton = true
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     @objc func didChangeName(_ sender: UITextField) {
-        blockUpdateButton()
+        viewModel.updateNameTracker(sender.text)
     }
     
     @objc func didCreateNewTrackerButtonTap() {
-        
-        guard
-            let nameTracker = nameTracker.text,
-            let colorIndexPath  = colorCollectionView.indexPathsForSelectedItems?.first,
-            let emojiIndexPath  = emojiCollectionView.indexPathsForSelectedItems?.first,
-            let nameCategory = nameCategory
-        else { return }
-        
-        delegate?.didCreate(newTracker: .init(id: UUID(),
-                                              name: nameTracker,
-                                              color: TrackerColors.allCases[colorIndexPath.row],
-                                              emoji: "\(EmojiCollectionViewCell.emojiCell[emojiIndexPath.row])",
-                                              schedule: selectedDays),
-                            forCategory: nameCategory)
-        dismiss(animated: true, completion: nil)
+        do {
+            delegate?.didCreate(newTracker: try viewModel.createNewIrregularEvent(),
+                                forCategory: try viewModel.getNameCategory())
+            dismiss(animated: true, completion: nil)
+            
+        } catch {
+            return
+        }
     }
     
     @objc func didCancelButtonTap() {
         navigationController?.popViewController(animated: true)
     }
-    
-    private func blockUpdateButton() {
-        
-        guard let textInput = nameTracker.text else { return }
-        
-        if
-            textInput.isEmpty == true ||
-                textInput.count > 38 ||
-                selectedDays.isEmpty ||
-                emojiCollectionView.indexPathsForSelectedItems?.first == nil ||
-                colorCollectionView.indexPathsForSelectedItems?.first == nil ||
-                nameCategory == nil
-        {
-            createNewTrackerButton.isEnabled = false
-            createNewTrackerButton.backgroundColor = .ypGray
-        } else {
-            createNewTrackerButton.isEnabled = true
-            createNewTrackerButton.backgroundColor = .ypBlackDay
-        }
-    }
 }
 
-extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionView == emojiCollectionView ? EmojiCollectionViewCell.emojiCell.count : TrackerColors.allCases.count
@@ -261,13 +247,14 @@ extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDe
         case emojiCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionViewCell
             cell?.emojiLabel.backgroundColor = .ypLightGray
+            viewModel.updateTrackerEmoji(EmojiCollectionViewCell.emojiCell[indexPath.row])
         case colorCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
             cell?.layer.borderWidth = 3
             cell?.layer.borderColor = TrackerColors.allCases[indexPath.row].color.withAlphaComponent(0.3).cgColor
+            viewModel.updateTrackerColor(TrackerColors.allCases[indexPath.row])
         default: break
         }
-        blockUpdateButton()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -276,10 +263,12 @@ extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDe
         case emojiCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionViewCell
             cell?.emojiLabel.backgroundColor = .ypWhiteDay
+            viewModel.updateTrackerEmoji(nil)
         case colorCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
             cell?.layer.borderWidth = 0
             cell?.layer.borderColor = UIColor.clear.cgColor
+            viewModel.updateTrackerColor(nil)
         default: break
         }
     }
@@ -293,7 +282,7 @@ extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDe
                 ofKind: kind,
                 withReuseIdentifier: EmojiHeaderCollectionViewCell.headerIdentifier,
                 for: indexPath
-            ) as? EmojiHeaderCollectionViewCell else { return UICollectionReusableView() }
+            ) as? EmojiHeaderCollectionViewCell else { return UICollectionReusableView()}
             
             headerView.emojiHeaderLabel.text = "Emoji"
             return headerView
@@ -302,7 +291,8 @@ extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDe
             guard let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: ColorHeaderCollectionViewCell.headerIdentifier,
-                for: indexPath) as? ColorHeaderCollectionViewCell else { return UICollectionReusableView() }
+                for: indexPath
+            ) as? ColorHeaderCollectionViewCell else { return UICollectionReusableView() }
             
             headerView.colorHeaderLabel.text = "Цвет"
             return headerView
@@ -315,7 +305,7 @@ extension NewHabitViewController: UICollectionViewDataSource, UICollectionViewDe
     }
 }
 
-extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
+extension NewTrackerEventViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return nameCell.count
@@ -342,21 +332,19 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch indexPath.row {
         case 0:
-            
-            let viewModel = CategoryListViewModel(selectedCategory: nameCategory)
+            let viewModel = CategoryListViewModel(selectedCategory: try? viewModel.getNameCategory())
             let categoryListViewController = CategoryListViewController(viewModel: viewModel)
             
             categoryListViewController.didSelectCategory = { [weak self] category in
                 guard let self else { return }
-                self.nameCategory = category
+                self.viewModel.updateNameCategory(category)
                 if let cell = tableView.cellForRow(at: indexPath) {
                     cell.detailTextLabel?.text = category
                 }
             }
-            
             navigationController?.pushViewController(categoryListViewController, animated: true)
         case 1:
-            let scheduleViewController = ScheduleViewController(viewModel: ScheduleViewModel(selectedDays: selectedDays))
+            let scheduleViewController = ScheduleViewController(viewModel: ScheduleViewModel(selectedDays: viewModel.getSelectedDays()))
             scheduleViewController.didSelectSchedule = { [weak self] schedule in
                 guard let self else { return }
                 
@@ -372,7 +360,7 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
                             .trimmingCharacters(in: .punctuationCharacters)
                     }
                 }
-                self.selectedDays = schedule
+                viewModel.updateSelectedDays(schedule)
             }
             navigationController?.pushViewController(scheduleViewController, animated: true)
         default:
@@ -384,4 +372,3 @@ extension NewHabitViewController: UITableViewDataSource, UITableViewDelegate {
         return 75
     }
 }
-

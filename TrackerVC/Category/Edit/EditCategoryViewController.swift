@@ -2,14 +2,13 @@ import UIKit
 
 final class EditCategoryViewController: BaseModelViewController {
     
-    var currentCategoryName: String? {
-        didSet { nameCategory.text = currentCategoryName }
-    }
+    private let viewModel: EditCategoryViewModel
     
     var didEditCategoryNameTap: ((String) -> Void)?
     
     private lazy var nameCategory: UITextField = {
         var nameCategory = madeTextField(placeholder: .category)
+        nameCategory.text = viewModel.getNameCategory()
         nameCategory.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameCategory
     }()
@@ -27,19 +26,36 @@ final class EditCategoryViewController: BaseModelViewController {
     
     private lazy var editedCategoryButton: UIButton = {
         let editedCategoryButton = madeButton(title: .ready,
-                                titleColor: .ypWhiteDay,
-                                backgroundColor: .ypGray)
-        editedCategoryButton.isEnabled = false
+                                              titleColor: .ypWhiteDay,
+                                              backgroundColor: .ypBlackDay)
         editedCategoryButton.addTarget(self, action: #selector(didChangeNameCategoryTap), for: .touchUpInside)
         return editedCategoryButton
     }()
+    
+    init(viewModel: EditCategoryViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         nameCategory.delegate = limitedTextField
-        setupUI()
         setupNavigationBar()
+        setupUI()
+        binding()
+    }
+    
+    func binding() {
+        viewModel.didUpdateNameCategoryStatus = { [weak self] status in
+            guard let self else { return }
+            editedCategoryButton.isEnabled = status
+            editedCategoryButton.backgroundColor = status ? .ypBlackDay : .ypGray
+        }
     }
     
     func setupNavigationBar() {
@@ -71,27 +87,12 @@ final class EditCategoryViewController: BaseModelViewController {
     }
     
     @objc func didChangeName(_ sender: UITextField) {
-        blockUpdateButton()
+        viewModel.updateNameCategory(sender.text)
     }
     
     @objc func didChangeNameCategoryTap() {
-        guard let newName = nameCategory.text else { return }
+        guard let newName = viewModel.getNameCategory() else { return }
         didEditCategoryNameTap?(newName)
         navigationController?.popViewController(animated: true)
-    }
-    
-    private func blockUpdateButton() {
-        
-        guard let textInput = nameCategory.text else { return }
-        
-        if
-            textInput.isEmpty == true || textInput.count > 38 {
-            
-            editedCategoryButton.isEnabled = false
-            editedCategoryButton.backgroundColor = .ypGray
-        } else {
-            editedCategoryButton.isEnabled = true
-            editedCategoryButton.backgroundColor = .ypBlackDay
-        }
     }
 }

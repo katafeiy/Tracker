@@ -1,4 +1,4 @@
-enum placeholderText {
+enum PlaceholderText {
     case tracker
     case category
     

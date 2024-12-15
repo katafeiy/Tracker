@@ -2,7 +2,7 @@ import UIKit
 
 enum FabricaOfElements {
     
-    static func madeTextField(placeholder: placeholderText) -> UITextField {
+    static func madeTextField(placeholder: PlaceholderText) -> UITextField {
         let textField = UITextField()
         textField.placeholder = placeholder.text
         textField.backgroundColor = .ypBackgroundDay
@@ -18,9 +18,31 @@ enum FabricaOfElements {
     }
 }
 
+class MyTextField: UITextField {
+    
+    init(placeholder: PlaceholderText) {
+        super.init(frame: .zero)
+        self.placeholder = placeholder.text
+        backgroundColor = .ypBackgroundDay
+        font = .systemFont(ofSize: 17, weight: .regular)
+        textColor = .ypBlackDay
+        layer.masksToBounds = true
+        layer.cornerRadius = 16
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+        leftView = paddingView
+        leftViewMode = .always
+        clearButtonMode = .whileEditing
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+
 class BaseModelViewController: UIViewController {
     
-    func madeTextField(placeholder: placeholderText) -> UITextField {
+    func madeTextField(placeholder: PlaceholderText) -> UITextField {
         let textField = UITextField()
         textField.placeholder = placeholder.text
         textField.backgroundColor = .ypBackgroundDay
