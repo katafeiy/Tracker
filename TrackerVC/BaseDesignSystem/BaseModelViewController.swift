@@ -1,23 +1,5 @@
 import UIKit
 
-enum FabricaOfElements {
-    
-    static func madeTextField(placeholder: PlaceholderText) -> UITextField {
-        let textField = UITextField()
-        textField.placeholder = placeholder.text
-        textField.backgroundColor = .ypBackgroundDay
-        textField.font = .systemFont(ofSize: 17, weight: .regular)
-        textField.textColor = .ypBlackDay
-        textField.layer.masksToBounds = true
-        textField.layer.cornerRadius = 16
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        textField.leftView = paddingView
-        textField.leftViewMode = .always
-        textField.clearButtonMode = .whileEditing
-        return textField
-    }
-}
-
 class MyTextField: UITextField {
     
     init(placeholder: PlaceholderText) {
@@ -38,7 +20,6 @@ class MyTextField: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
 
 class BaseModelViewController: UIViewController {
     

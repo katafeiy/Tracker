@@ -1,6 +1,9 @@
 
 final class CategoryListViewModel {
     
+    var didUpdateSelectedCategory: ((String) -> Void)?
+    var didUpdatesCategories: (() -> Void)?
+    
     private let categoryStore = TrackerCategoriesStore()
     private var selectedCategory: String? {
         didSet {
@@ -8,9 +11,6 @@ final class CategoryListViewModel {
             didUpdateSelectedCategory?(selectedCategory)
         }
     }
-    
-    var didUpdatesCategories: (() -> Void)?
-    var didUpdateSelectedCategory: ((String) -> Void)?
     
     private(set) var categories: [String] = [] {
         didSet {
@@ -20,7 +20,6 @@ final class CategoryListViewModel {
     
     init(selectedCategory: String?) {
         self.selectedCategory = selectedCategory
-    
     }
     
     func addNewCategory(_ category: String) {

@@ -201,12 +201,11 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         cell.configureCell(tracker: tracker) { [weak self, weak cell] in
             guard let self else { return }
-            
             let isCompleted = viewModel.toggleTracker(tracker)
             let count = viewModel.countTrackerExecution(tracker)
             cell?.configCompletion(counter: count, isCompleted: isCompleted)
-            
         }
+        
         let count = viewModel.countTrackerExecution(tracker)
         let isCompleted = viewModel.isTrackerExecuted(tracker)
         cell.configCompletion(counter: count, isCompleted: isCompleted)
@@ -232,7 +231,7 @@ extension TrackerViewController: UISearchControllerDelegate, UISearchResultsUpda
 }
 
 extension TrackerViewController: ProtocolNewTrackerEventViewControllerOutput {
-    
+
     func didCreate(newTracker: Tracker, forCategory: String) {
         viewModel.didCreateTracker(newTracker: newTracker, forCategory: forCategory)
     }

@@ -197,7 +197,6 @@ final class NewTrackerEventViewController: BaseModelViewController, UIGestureRec
             delegate?.didCreate(newTracker: try viewModel.createNewIrregularEvent(),
                                 forCategory: try viewModel.getNameCategory())
             dismiss(animated: true, completion: nil)
-            
         } catch {
             return
         }

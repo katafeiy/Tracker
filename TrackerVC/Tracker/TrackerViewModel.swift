@@ -62,8 +62,9 @@ final class TrackerViewModel {
     func toggleTracker(_ tracker: Tracker) -> Bool {
         
         if
-            let record = completedTrackers.first(where:{$0.id == tracker.id && $0.date == self.currentDate}) {
-            completedTrackers.removeAll(where:{$0.id == tracker.id && $0.date == self.currentDate})
+            let record = completedTrackers.first(where:{ $0.id == tracker.id && $0.date == self.currentDate }) {
+            completedTrackers.removeAll(where:{ $0.id == tracker.id && $0.date == self.currentDate })
+            
             try? self.trackerRecordStore.deleteRecord(record)
             return false
             
@@ -71,6 +72,7 @@ final class TrackerViewModel {
             
             let record = TrackerRecord(id: tracker.id , date: currentDate ?? Date())
             completedTrackers.append(record)
+            
             try? self.trackerRecordStore.addRecord(record)
             return true
         }
@@ -86,12 +88,7 @@ final class TrackerViewModel {
     }
     
     func didCreateTracker(newTracker: Tracker, forCategory: String) {
-        
-        do {
-            try trackerStore.newTracker(tracker: newTracker, categoryName: forCategory)
-        } catch {
-            print("Save error: \(error)")
-        }
+        try? trackerStore.newTracker(tracker: newTracker, categoryName: forCategory)
     }
 }
 
@@ -99,5 +96,4 @@ extension TrackerViewModel: TrackerStoreDelegate {
     func didUpdateData() {
         updateArrayCategories()
     }
-    
 }

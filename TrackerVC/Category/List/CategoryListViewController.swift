@@ -3,6 +3,7 @@ import UIKit
 final class CategoryListViewController: BaseModelViewController {
     
     var didSelectCategory: ((String) -> Void)?
+    
     private let viewModel: CategoryListViewModel
     
     private lazy var starImage: UIImageView = {
