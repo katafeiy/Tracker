@@ -1,5 +1,26 @@
 import UIKit
 
+class UpgradedTextField: UITextField {
+    
+    init(placeholder: PlaceholderText) {
+        super.init(frame: .zero)
+        self.placeholder = placeholder.text
+        backgroundColor = .ypBackgroundDay
+        font = .systemFont(ofSize: 17, weight: .regular)
+        textColor = .ypBlackDay
+        layer.masksToBounds = true
+        layer.cornerRadius = 16
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+        leftView = paddingView
+        leftViewMode = .always
+        clearButtonMode = .whileEditing
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class LimitedTextField: NSObject, UITextFieldDelegate {
     
     private var characterLimit: Int?
@@ -32,5 +53,4 @@ class LimitedTextField: NSObject, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-    
 }

@@ -132,12 +132,11 @@ final class TrackerViewController: BaseModelViewController {
     }
     
     @objc private func setDatePickerValueChanged(_ sender: UIDatePicker) {
-        viewModel.updateCarrentDate(sender.date)
+        viewModel.updateCurrentDate(sender.date)
         view.endEditing(true)
     }
     
     @objc private func setNewTracker() {
-        
         let createTracker = CreateTrackerViewController()
         createTracker.delegate = self
         let navigationController = UINavigationController(rootViewController: createTracker)

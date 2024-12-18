@@ -12,8 +12,8 @@ final class NewTrackerEventViewController: BaseModelViewController, UIGestureRec
     
     lazy var nameCell = viewModel.withSchedule ? [("Категория", "Название категории"), ("Расписание", "Дни недели")] : [("Категория", "Название категории")]
     
-    private lazy var nameTracker: MyTextField = {
-        var nameTracker = MyTextField(placeholder: .tracker)
+    private lazy var nameTracker: UpgradedTextField = {
+        var nameTracker = UpgradedTextField(placeholder: .tracker)
         nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameTracker
     }()
@@ -39,8 +39,8 @@ final class NewTrackerEventViewController: BaseModelViewController, UIGestureRec
         return scrollView
     }()
     
-    private lazy var contentView: UIView = {
-        let contentView = madeContentView()
+    private lazy var contentView: UpgradedUIView = {
+        let contentView = UpgradedUIView()
         return contentView
     }()
     
@@ -182,7 +182,7 @@ final class NewTrackerEventViewController: BaseModelViewController, UIGestureRec
     }
     
     func setupNavigationBar() {
-        navigationItem.title = "Новое нерегулярное событие"
+        navigationItem.title = viewModel.withSchedule ? "Новая привычка" : "Новое нерегулярное событие"
         navigationItem.hidesBackButton = true
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = self

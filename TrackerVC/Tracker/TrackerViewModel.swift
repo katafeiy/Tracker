@@ -1,3 +1,4 @@
+
 import Foundation
 
 final class TrackerViewModel {
@@ -12,11 +13,12 @@ final class TrackerViewModel {
     private let trackerCategoriesStore = TrackerCategoriesStore()
     private let trackerRecordStore = TrackerRecordStore()
     
-    private var currentDate: Date? 
-    
+    private var currentDate: Date?
+        
     init() {
         trackerStore.delegate = self
-        updateCarrentDate(Date())
+        updateCurrentDate(Date())
+        print(currentDate ?? Date())
     }
     
     private func updateVisibleData() {
@@ -34,11 +36,14 @@ final class TrackerViewModel {
         didUpdateVisibleData?()
     }
     
-    func updateCarrentDate(_ date: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        let formattedDate = dateFormatter.string(from: date)
-        currentDate = dateFormatter.date(from: formattedDate) ?? Date()
+    func updateCurrentDate(_ date: Date?) {
+        guard let date else { return }
+        var calendar = Calendar.current
+        calendar.timeZone = (TimeZone.init(secondsFromGMT: 0) ?? .current)
+        let components = calendar.dateComponents([.day, .month, .year], from: date)
+        self.currentDate = calendar.date(from: components) ?? Date()
+        updateVisibleData()
+        print(currentDate ?? Date())
     }
     
     private func updateArrayCategories() {
@@ -56,21 +61,22 @@ final class TrackerViewModel {
     }
     
     func isEnabledDate() -> Bool {
-        (currentDate ?? Date()) <= Date()
+        (self.currentDate ?? Date()) <= Date()
     }
     
     func toggleTracker(_ tracker: Tracker) -> Bool {
         
         if
             let record = completedTrackers.first(where:{ $0.id == tracker.id && $0.date == self.currentDate }) {
+            print(currentDate ?? Date())
             completedTrackers.removeAll(where:{ $0.id == tracker.id && $0.date == self.currentDate })
-            
             try? self.trackerRecordStore.deleteRecord(record)
             return false
             
         } else {
             
             let record = TrackerRecord(id: tracker.id , date: currentDate ?? Date())
+            print(currentDate ?? Date())
             completedTrackers.append(record)
             
             try? self.trackerRecordStore.addRecord(record)

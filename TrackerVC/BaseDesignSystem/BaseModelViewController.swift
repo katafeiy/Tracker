@@ -1,42 +1,6 @@
 import UIKit
 
-class MyTextField: UITextField {
-    
-    init(placeholder: PlaceholderText) {
-        super.init(frame: .zero)
-        self.placeholder = placeholder.text
-        backgroundColor = .ypBackgroundDay
-        font = .systemFont(ofSize: 17, weight: .regular)
-        textColor = .ypBlackDay
-        layer.masksToBounds = true
-        layer.cornerRadius = 16
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        leftView = paddingView
-        leftViewMode = .always
-        clearButtonMode = .whileEditing
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 class BaseModelViewController: UIViewController {
-    
-    func madeTextField(placeholder: PlaceholderText) -> UITextField {
-        let textField = UITextField()
-        textField.placeholder = placeholder.text
-        textField.backgroundColor = .ypBackgroundDay
-        textField.font = .systemFont(ofSize: 17, weight: .regular)
-        textField.textColor = .ypBlackDay
-        textField.layer.masksToBounds = true
-        textField.layer.cornerRadius = 16
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        textField.leftView = paddingView
-        textField.leftViewMode = .always
-        textField.clearButtonMode = .whileEditing
-        return textField
-    }
     
     func madeSubtitleLabel() -> UILabel {
         let subtitle = UILabel()
@@ -65,12 +29,6 @@ class BaseModelViewController: UIViewController {
         scrollView.backgroundColor = .clear
         scrollView.alwaysBounceVertical = true
         return scrollView
-    }
-    
-    func madeContentView() -> UIView {
-        let contentView = UIView()
-        contentView.backgroundColor = .clear
-        return contentView
     }
     
     func madeCollectionView() -> UICollectionView {

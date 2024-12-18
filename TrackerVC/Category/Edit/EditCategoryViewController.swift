@@ -6,8 +6,8 @@ final class EditCategoryViewController: BaseModelViewController {
     
     var didEditCategoryNameTap: ((String) -> Void)?
     
-    private lazy var nameCategory: UITextField = {
-        var nameCategory = madeTextField(placeholder: .category)
+    private lazy var nameCategory: UpgradedTextField = {
+        var nameCategory = UpgradedTextField(placeholder: .category)
         nameCategory.text = viewModel.getNameCategory()
         nameCategory.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameCategory

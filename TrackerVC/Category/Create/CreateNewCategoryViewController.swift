@@ -6,8 +6,8 @@ final class CreateNewCategoryViewController: BaseModelViewController {
     
     var didSelectNewCategory: ((String) -> Void)?
     
-    private lazy var nameCategory: UITextField = {
-        var nameCategory = madeTextField(placeholder: .category)
+    private lazy var nameCategory: UpgradedTextField = {
+        let nameCategory = UpgradedTextField(placeholder: .category)
         nameCategory.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameCategory
     }()
