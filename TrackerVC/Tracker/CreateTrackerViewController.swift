@@ -40,7 +40,16 @@ final class CreateTrackerViewController: UIViewController {
         view.backgroundColor = .ypWhiteDay
         setupUI()
         configurationNavigationBar()
+        binding()
     }
+    
+    func binding() {
+        viewModel.isOpenNewTrackerEvent = { [weak self] status in
+            self?.openNewTrackerEvent(status)
+        }
+    }
+    
+    
     
     private func setupUI() {
         
