@@ -48,9 +48,7 @@ final class CreateTrackerViewController: UIViewController {
             self?.openNewTrackerEvent(status)
         }
     }
-    
-    
-    
+
     private func setupUI() {
         
         view.addSubviews(stackView)
