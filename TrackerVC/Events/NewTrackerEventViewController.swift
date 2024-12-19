@@ -22,18 +22,14 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
         return ImprovedUILabel(fontSize: 17,
                                weight: .regular,
                                textColor: .ypLightGray)
-        
     }()
     
     private lazy var limitedTextField: LimitedTextField = {
-        let limitedTextField = LimitedTextField(characterLimit: 38,
-                                                subtitleLabel: subtitleNameTracker)
-        return limitedTextField
+        return LimitedTextField(characterLimit: 38, subtitleLabel: subtitleNameTracker)
     }()
     
     private lazy var tableView: ImprovedUITableView = {
-        let newIrregularEventTableView = ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
-        return newIrregularEventTableView
+        return ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
     }()
     
     private lazy var scrollView: ImprovedUIScrollView = {
@@ -41,8 +37,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }()
     
     private lazy var contentView: ImprovedUIView = {
-        let contentView = ImprovedUIView()
-        return contentView
+        return ImprovedUIView()
     }()
     
     private lazy var emojiCollectionView: ImprovedUICollectionView = {
@@ -70,8 +65,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }()
     
     private lazy var stackView: ImprovedUIStackView = {
-        let stackView = ImprovedUIStackView(arrangedSubviews: [cancelButton, createNewTrackerButton], axis: .horizontal)
-        return stackView
+        return ImprovedUIStackView(arrangedSubviews: [cancelButton, createNewTrackerButton], axis: .horizontal)
     }()
     
     private lazy var createNewTrackerButton: ImprovedUIButton = {

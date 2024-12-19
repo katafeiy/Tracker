@@ -134,7 +134,7 @@ final class TrackerViewController: UIViewController {
     }
     
     @objc private func setNewTracker() {
-        let createTracker = CreateTrackerViewController()
+        let createTracker = CreateTrackerViewController(viewModel: CreateTrackerViewModel())
         createTracker.delegate = self
         let navigationController = UINavigationController(rootViewController: createTracker)
         navigationController.modalPresentationStyle = .formSheet

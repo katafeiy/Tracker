@@ -2,6 +2,8 @@ import UIKit
 
 final class CreateTrackerViewController: UIViewController {
     
+    weak var delegate: ProtocolNewTrackerEventViewControllerOutput?
+    
     private let viewModel: CreateTrackerViewModel
     
     private lazy var habitButton: ImprovedUIButton = {
@@ -21,8 +23,7 @@ final class CreateTrackerViewController: UIViewController {
     }()
     
     private lazy var stackView: ImprovedUIStackView = {
-        let stackView = ImprovedUIStackView(arrangedSubviews: [habitButton, irregularEventButton], axis: .vertical)
-        return stackView
+        return ImprovedUIStackView(arrangedSubviews: [habitButton, irregularEventButton], axis: .vertical)
     }()
     
     init(viewModel: CreateTrackerViewModel) {
@@ -75,7 +76,7 @@ final class CreateTrackerViewController: UIViewController {
     
     func openNewTrackerEvent(_ status: Bool) {
         let newTrackerEventViewController = NewTrackerEventViewController(viewModel: NewTrackerEventViewModel(withSchedule: status))
-        newTrackerEventViewController.delegate = viewModel.delegate
+        newTrackerEventViewController.delegate = delegate
         navigationController?.pushViewController(newTrackerEventViewController, animated: true)
     }
 }

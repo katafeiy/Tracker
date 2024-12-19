@@ -4,11 +4,8 @@ final class EmojiHeaderCollectionViewCell: UICollectionViewCell {
     
     static let headerIdentifier: String = "emojiHeader"
     
-    let emojiHeaderLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 19, weight: .bold)
-        label.textColor = .ypBlackDay
-        return label
+    let emojiHeaderLabel: ImprovedUILabel = {
+        return ImprovedUILabel(fontSize: 19, weight: .bold, textColor: .ypBlackDay)
     }()
     
     override init(frame: CGRect) {
