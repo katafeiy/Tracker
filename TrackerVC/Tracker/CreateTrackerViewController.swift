@@ -1,30 +1,29 @@
 import UIKit
 
-final class CreateTrackerViewController: BaseModelViewController {
+final class CreateTrackerViewController: UIViewController {
     
     weak var delegate: ProtocolNewTrackerEventViewControllerOutput?
     
-    private lazy var habitButton: UIButton = {
-        let habitButton = madeButton(title: .habit,
+    private lazy var habitButton: ImprovedUIButton = {
+        let habitButton = ImprovedUIButton(title: .habit,
                                 titleColor: .ypWhiteDay,
                                 backgroundColor: .ypBlackDay)
         habitButton.addTarget(self, action: #selector(didHabitButtonTap), for: .touchUpInside)
         return habitButton
     }()
     
-    private lazy var irregularEventButton: UIButton = {
-        let button = madeButton(title: .irregular,
+    private lazy var irregularEventButton: ImprovedUIButton = {
+        let button = ImprovedUIButton(title: .irregular,
                                 titleColor: .ypWhiteDay,
                                 backgroundColor: .ypBlackDay)
         button.addTarget(self, action: #selector(didIrregularEventButtonTap), for: .touchUpInside)
         return button
     }()
     
-    private lazy var stackView: UIStackView = {
-        let stackView = madeStackView(view: [habitButton, irregularEventButton], axis: .vertical)
+    private lazy var stackView: ImprovedUIStackView = {
+        let stackView = ImprovedUIStackView(arrangedSubviews: [habitButton, irregularEventButton], axis: .vertical)
         return stackView
     }()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()

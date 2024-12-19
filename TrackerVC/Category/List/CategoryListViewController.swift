@@ -1,6 +1,6 @@
 import UIKit
 
-final class CategoryListViewController: BaseModelViewController {
+final class CategoryListViewController: UIViewController {
     
     var didSelectCategory: ((String) -> Void)?
     
@@ -22,14 +22,16 @@ final class CategoryListViewController: BaseModelViewController {
         return label
     }()
     
-    private lazy var addNewCategoryButton: UIButton = {
-        let button = madeButton(title: .add, titleColor: .ypWhiteDay, backgroundColor: .ypBlackDay)
+    private lazy var addNewCategoryButton: ImprovedUIButton = {
+        let button = ImprovedUIButton(title: .add,
+                                      titleColor: .ypWhiteDay,
+                                      backgroundColor: .ypBlackDay)
         button.addTarget(self, action: #selector(didAddNewCategoryTap), for: .touchUpInside)
         return button
     }()
     
-    private lazy var tableView: UITableView = {
-        let tableView = madeTableView()
+    private lazy var tableView: ImprovedUITableView = {
+        let tableView = ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
         tableView.register(CategoryListCell.self, forCellReuseIdentifier: CategoryListCell.identifier)
         return tableView
     }()
@@ -53,7 +55,6 @@ final class CategoryListViewController: BaseModelViewController {
         viewModel.loadCategories()
         setupNavigationBar()
         setupUI()
-        
     }
     
     func setupUI() {

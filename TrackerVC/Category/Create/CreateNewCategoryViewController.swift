@@ -1,27 +1,27 @@
 import UIKit
 
-final class CreateNewCategoryViewController: BaseModelViewController {
+final class CreateNewCategoryViewController: UIViewController {
     
     private let viewModel: CreateNewCategoryViewModel
     
     var didSelectNewCategory: ((String) -> Void)?
     
-    private lazy var nameCategory: UpgradedTextField = {
-        let nameCategory = UpgradedTextField(placeholder: .category)
+    private lazy var nameCategory: ImprovedUITextField = {
+        let nameCategory = ImprovedUITextField(placeholder: .category)
         nameCategory.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameCategory
     }()
     
-    private lazy var createNewCategoryButton: UIButton = {
-        let button = madeButton(title: .ready,
+    private lazy var createNewCategoryButton: ImprovedUIButton = {
+        let button = ImprovedUIButton(title: .ready,
                                 titleColor: .ypWhiteDay,
                                 backgroundColor: .ypGray)
         button.addTarget(self, action: #selector(didCreateNewCategoryTap), for: .touchUpInside)
         return button
     }()
     
-    private lazy var subtitleNameCategory: UILabel = {
-        let subtitleNameCategory = madeSubtitleLabel()
+    private lazy var subtitleNameCategory: ImprovedUILabel = {
+        let subtitleNameCategory = ImprovedUILabel()
         return subtitleNameCategory
     }()
     

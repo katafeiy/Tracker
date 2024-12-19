@@ -1,6 +1,18 @@
 import UIKit
 
-class UpgradedTextField: UITextField {
+class ImprovedUITextField: UITextField {
+    
+    enum PlaceholderText {
+        case tracker
+        case category
+        
+        var text: String {
+            return switch self {
+            case .tracker: "Введите название трекера"
+            case .category: "Введите название категории"
+            }
+        }
+    }
     
     init(placeholder: PlaceholderText) {
         super.init(frame: .zero)

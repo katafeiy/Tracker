@@ -4,7 +4,7 @@ protocol ProtocolNewTrackerEventViewControllerOutput: AnyObject {
     func didCreate(newTracker: Tracker, forCategory: String)
 }
 
-final class NewTrackerEventViewController: BaseModelViewController, UIGestureRecognizerDelegate {
+final class NewTrackerEventViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private let viewModel: NewTrackerEventViewModel
     
@@ -12,14 +12,14 @@ final class NewTrackerEventViewController: BaseModelViewController, UIGestureRec
     
     lazy var nameCell = viewModel.withSchedule ? [("Категория", "Название категории"), ("Расписание", "Дни недели")] : [("Категория", "Название категории")]
     
-    private lazy var nameTracker: UpgradedTextField = {
-        var nameTracker = UpgradedTextField(placeholder: .tracker)
+    private lazy var nameTracker: ImprovedUITextField = {
+        var nameTracker = ImprovedUITextField(placeholder: .tracker)
         nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameTracker
     }()
     
-    private lazy var subtitleNameTracker: UILabel = {
-        let subtitleNameTracker = madeSubtitleLabel()
+    private lazy var subtitleNameTracker: ImprovedUILabel = {
+        let subtitleNameTracker = ImprovedUILabel()
         return subtitleNameTracker
     }()
     
@@ -29,23 +29,23 @@ final class NewTrackerEventViewController: BaseModelViewController, UIGestureRec
         return limitedTextField
     }()
     
-    private lazy var tableView: UITableView = {
-        let newIrregularEventTableView = madeTableView()
+    private lazy var tableView: ImprovedUITableView = {
+        let newIrregularEventTableView = ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
         return newIrregularEventTableView
     }()
     
-    private lazy var scrollView: UIScrollView = {
-        let scrollView = madeScrollView()
+    private lazy var scrollView: ImprovedUIScrollView = {
+        let scrollView = ImprovedUIScrollView()
         return scrollView
     }()
     
-    private lazy var contentView: UpgradedUIView = {
-        let contentView = UpgradedUIView()
+    private lazy var contentView: ImprovedUIView = {
+        let contentView = ImprovedUIView()
         return contentView
     }()
     
-    private lazy var emojiCollectionView: UICollectionView = {
-        let collectionView = madeCollectionView()
+    private lazy var emojiCollectionView: ImprovedUICollectionView = {
+        let collectionView = ImprovedUICollectionView()
         collectionView.register(
             EmojiCollectionViewCell.self,
             forCellWithReuseIdentifier: EmojiCollectionViewCell.cellIdentifier)
@@ -56,8 +56,8 @@ final class NewTrackerEventViewController: BaseModelViewController, UIGestureRec
         return collectionView
     }()
     
-    private lazy var colorCollectionView: UICollectionView = {
-        let collectionView = madeCollectionView()
+    private lazy var colorCollectionView: ImprovedUICollectionView = {
+        let collectionView = ImprovedUICollectionView()
         collectionView.register(
             ColorCollectionViewCell.self,
             forCellWithReuseIdentifier: ColorCollectionViewCell.cellIdentifier)
@@ -68,13 +68,13 @@ final class NewTrackerEventViewController: BaseModelViewController, UIGestureRec
         return collectionView
     }()
     
-    private lazy var stackView: UIStackView = {
-        let stackView = madeStackView(view: [cancelButton, createNewTrackerButton], axis: .horizontal)
+    private lazy var stackView: ImprovedUIStackView = {
+        let stackView = ImprovedUIStackView(arrangedSubviews: [cancelButton, createNewTrackerButton], axis: .horizontal)
         return stackView
     }()
     
-    private lazy var createNewTrackerButton: UIButton = {
-        let createButton = madeButton(title: .create,
+    private lazy var createNewTrackerButton: ImprovedUIButton = {
+        let createButton = ImprovedUIButton(title: .create,
                                       titleColor: .ypWhiteDay,
                                       backgroundColor: .ypGray)
         createButton.isEnabled = false
@@ -82,8 +82,8 @@ final class NewTrackerEventViewController: BaseModelViewController, UIGestureRec
         return createButton
     }()
     
-    private lazy var cancelButton: UIButton = {
-        let cancelButton = madeButton(title: .cancel,
+    private lazy var cancelButton: ImprovedUIButton = {
+        let cancelButton = ImprovedUIButton(title: .cancel,
                                       titleColor: .ypRed,
                                       backgroundColor: .ypWhiteDay)
         cancelButton.layer.borderWidth = 1

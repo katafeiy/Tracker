@@ -2,6 +2,13 @@ import UIKit
 
 final class OnboardingViewController: UIPageViewController {
     
+    var skipIndicator: Bool? {
+        didSet {
+            guard let skipIndicator else { return }
+            Indicator.indicatorIsSkipped = skipIndicator
+        }
+    }
+    
     private lazy var controlPageIndicator: UIPageControl = {
         let pageIndicator = UIPageControl()
         pageIndicator.numberOfPages = pages.count
@@ -28,7 +35,7 @@ final class OnboardingViewController: UIPageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        skipIndicator = true
         dataSource = self
         delegate = self
         setupUI()

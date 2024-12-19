@@ -1,21 +1,21 @@
 import UIKit
 
-final class ScheduleViewController: BaseModelViewController {
+final class ScheduleViewController: UIViewController {
     
     private let viewModel: ScheduleViewModel
     
     var didSelectSchedule: ((Set<DaysOfWeek>) -> Void)?
     
-    private lazy var readyToUse: UIButton = {
-        let button = madeButton(title: .ready,
+    private lazy var readyToUse: ImprovedUIButton = {
+        let button = ImprovedUIButton(title: .ready,
                                 titleColor: .ypWhiteDay,
                                 backgroundColor: .ypBlackDay)
         button.addTarget(self, action: #selector(didReadyToUseTap), for: .touchUpInside)
         return button
     }()
     
-    private lazy var scheduleTableView: UITableView = {
-        let scheduleTableView = madeTableView()
+    private lazy var scheduleTableView: ImprovedUITableView = {
+        let scheduleTableView = ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
         return scheduleTableView
     }()
     

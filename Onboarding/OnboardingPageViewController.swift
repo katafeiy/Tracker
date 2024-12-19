@@ -1,6 +1,6 @@
 import UIKit
 
-final class OnboardingPageViewController: BaseModelViewController {
+final class OnboardingPageViewController: UIViewController {
     
     private let skipAction: () -> Void
     
@@ -19,8 +19,8 @@ final class OnboardingPageViewController: BaseModelViewController {
         return label
     }()
 
-    private lazy var buttonSkip: UIButton = {
-        let button = madeButton(title: .skip,
+    private lazy var buttonSkip: ImprovedUIButton = {
+        let button = ImprovedUIButton(title: .skip,
                                 titleColor: .ypWhiteDay,
                                 backgroundColor: .ypBlackDay)
         button.addTarget(self, action: #selector(skipActionButton), for: .touchUpInside)

@@ -17,7 +17,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private let labelEmoji: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
-        label.text = "😂"
+        label.text = ""
         label.textColor = .ypBlackDay
         return label
     }()
@@ -26,7 +26,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .ypWhiteDay
-        label.text = "Здесь будет ваше описание"
+        label.text = ""
         label.numberOfLines = 2
         return label
     }()
@@ -35,7 +35,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .ypBlackDay
-        label.text = "3 дня"
+        label.text = ""
         return label
     }()
     
@@ -51,7 +51,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         let button = UIButton.systemButton(with: .plusTracker,
                                            target: self,
                                            action: #selector(didAddButtonTap))
-        button.backgroundColor = .colorSelection1
+        button.backgroundColor = .clear
         button.layer.cornerRadius = 17
         button.layer.masksToBounds = true
         button.tintColor = .ypWhiteDay

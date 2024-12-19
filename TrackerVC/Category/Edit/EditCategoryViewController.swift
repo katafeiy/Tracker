@@ -1,20 +1,20 @@
 import UIKit
 
-final class EditCategoryViewController: BaseModelViewController {
+final class EditCategoryViewController: UIViewController {
     
     private let viewModel: EditCategoryViewModel
     
     var didEditCategoryNameTap: ((String) -> Void)?
     
-    private lazy var nameCategory: UpgradedTextField = {
-        var nameCategory = UpgradedTextField(placeholder: .category)
+    private lazy var nameCategory: ImprovedUITextField = {
+        var nameCategory = ImprovedUITextField(placeholder: .category)
         nameCategory.text = viewModel.getNameCategory()
         nameCategory.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameCategory
     }()
     
-    private lazy var subtitleNameCategory: UILabel = {
-        let subtitleNameCategory = madeSubtitleLabel()
+    private lazy var subtitleNameCategory: ImprovedUILabel = {
+        let subtitleNameCategory = ImprovedUILabel()
         return subtitleNameCategory
     }()
     
@@ -24,8 +24,8 @@ final class EditCategoryViewController: BaseModelViewController {
         return limitedTextField
     }()
     
-    private lazy var editedCategoryButton: UIButton = {
-        let editedCategoryButton = madeButton(title: .ready,
+    private lazy var editedCategoryButton: ImprovedUIButton = {
+        let editedCategoryButton = ImprovedUIButton(title: .ready,
                                               titleColor: .ypWhiteDay,
                                               backgroundColor: .ypBlackDay)
         editedCategoryButton.addTarget(self, action: #selector(didChangeNameCategoryTap), for: .touchUpInside)

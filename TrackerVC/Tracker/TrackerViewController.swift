@@ -1,6 +1,6 @@
 import UIKit
 
-final class TrackerViewController: BaseModelViewController {
+final class TrackerViewController: UIViewController {
     
     private let viewModel: TrackerViewModel
     

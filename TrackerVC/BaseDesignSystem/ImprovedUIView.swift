@@ -1,6 +1,6 @@
 import UIKit
 
-class UpgradedUIView: UIView {
+class ImprovedUIView: UIView {
     
     init() {
         super.init(frame: .zero)
