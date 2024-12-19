@@ -14,21 +14,21 @@ final class CreateNewCategoryViewController: UIViewController {
     
     private lazy var createNewCategoryButton: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .ready,
-                                titleColor: .ypWhiteDay,
-                                backgroundColor: .ypGray)
+                                      titleColor: .ypWhiteDay,
+                                      backgroundColor: .ypGray)
         button.addTarget(self, action: #selector(didCreateNewCategoryTap), for: .touchUpInside)
         return button
     }()
     
     private lazy var subtitleNameCategory: ImprovedUILabel = {
-        let subtitleNameCategory = ImprovedUILabel()
-        return subtitleNameCategory
+        return ImprovedUILabel(fontSize: 17,
+                               weight: .regular,
+                               textColor: .ypLightGray)
+        
     }()
     
     private lazy var limitedTextField: LimitedTextField = {
-        let limitedTextField = LimitedTextField(characterLimit: 38,
-                                                subtitleLabel: subtitleNameCategory)
-        return limitedTextField
+        return LimitedTextField(characterLimit: 38, subtitleLabel: subtitleNameCategory)
     }()
     
     init(viewModel: CreateNewCategoryViewModel) {

@@ -14,20 +14,20 @@ final class EditCategoryViewController: UIViewController {
     }()
     
     private lazy var subtitleNameCategory: ImprovedUILabel = {
-        let subtitleNameCategory = ImprovedUILabel()
-        return subtitleNameCategory
+        return ImprovedUILabel(fontSize: 17,
+                               weight: .regular,
+                               textColor: .ypLightGray)
+        
     }()
     
     private lazy var limitedTextField: LimitedTextField = {
-        let limitedTextField = LimitedTextField(characterLimit: 38,
-                                                subtitleLabel: subtitleNameCategory)
-        return limitedTextField
+        return LimitedTextField(characterLimit: 38, subtitleLabel: subtitleNameCategory)
     }()
     
     private lazy var editedCategoryButton: ImprovedUIButton = {
         let editedCategoryButton = ImprovedUIButton(title: .ready,
-                                              titleColor: .ypWhiteDay,
-                                              backgroundColor: .ypBlackDay)
+                                                    titleColor: .ypWhiteDay,
+                                                    backgroundColor: .ypBlackDay)
         editedCategoryButton.addTarget(self, action: #selector(didChangeNameCategoryTap), for: .touchUpInside)
         return editedCategoryButton
     }()

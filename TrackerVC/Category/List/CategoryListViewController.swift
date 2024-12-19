@@ -6,20 +6,17 @@ final class CategoryListViewController: UIViewController {
     
     private let viewModel: CategoryListViewModel
     
-    private lazy var starImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.star
-        return imageView
+    private lazy var starImage: ImprovedUIImageView = {
+        return ImprovedUIImageView(image: .star)
     }()
-    
-    private lazy var habitLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Привычки и события можно\n" + "объединить по смыслу"
-        label.numberOfLines = 2
-        label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .ypBlackDay
-        label.textAlignment = .center
-        return label
+
+    private lazy var eventLabel: ImprovedUILabel = {
+        return ImprovedUILabel(
+            text: "Привычки и события можно\n" + "объединить по смыслу",
+            fontSize: 12,
+            weight: .medium,
+            textColor: .ypBlackDay,
+            numberOfLines: 2)
     }()
     
     private lazy var addNewCategoryButton: ImprovedUIButton = {
@@ -59,7 +56,7 @@ final class CategoryListViewController: UIViewController {
     
     func setupUI() {
         
-        view.addSubviews(starImage, habitLabel, addNewCategoryButton, tableView)
+        view.addSubviews(starImage, eventLabel, addNewCategoryButton, tableView)
         
         NSLayoutConstraint.activate([
             
@@ -69,14 +66,14 @@ final class CategoryListViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: addNewCategoryButton.topAnchor, constant: -16),
             
             starImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            starImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -20),
+            starImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -50),
             starImage.heightAnchor.constraint(equalToConstant: 80),
             starImage.widthAnchor.constraint(equalToConstant: 80),
             
-            habitLabel.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
-            habitLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            habitLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            habitLabel.heightAnchor.constraint(equalToConstant: 36),
+            eventLabel.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
+            eventLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            eventLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            eventLabel.heightAnchor.constraint(equalToConstant: 36),
             
             addNewCategoryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             addNewCategoryButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -89,7 +86,7 @@ final class CategoryListViewController: UIViewController {
         viewModel.didUpdatesCategories = { [weak self] in
             guard let self else { return }
             starImage.isHidden = !viewModel.categories.isEmpty
-            habitLabel.isHidden = !viewModel.categories.isEmpty
+            eventLabel.isHidden = !viewModel.categories.isEmpty
             tableView.reloadData()
         }
         

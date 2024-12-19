@@ -36,19 +36,16 @@ final class TrackerViewController: UIViewController {
         return datePicker
     }()
     
-    private lazy var starImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.star
-        return imageView
+    private lazy var starImage: ImprovedUIImageView = {
+        return ImprovedUIImageView(image: .star)
     }()
     
-    private lazy var whatSearch: UILabel = {
-        let label = UILabel()
-        label.text = "Что будем отслеживать?"
-        label.textAlignment = .center
-        label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .ypBlackDay
-        return label
+    private lazy var whatSearch: ImprovedUILabel = {
+        return ImprovedUILabel(text: "Что будем отслеживать?",
+                               fontSize: 12,
+                               weight: .medium,
+                               textColor: .ypBlackDay)
+        
     }()
     
     private lazy var searchViewController: UISearchController = {
@@ -228,7 +225,7 @@ extension TrackerViewController: UISearchControllerDelegate, UISearchResultsUpda
 }
 
 extension TrackerViewController: ProtocolNewTrackerEventViewControllerOutput {
-
+    
     func didCreate(newTracker: Tracker, forCategory: String) {
         viewModel.didCreateTracker(newTracker: newTracker, forCategory: forCategory)
     }

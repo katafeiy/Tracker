@@ -19,8 +19,10 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }()
     
     private lazy var subtitleNameTracker: ImprovedUILabel = {
-        let subtitleNameTracker = ImprovedUILabel()
-        return subtitleNameTracker
+        return ImprovedUILabel(fontSize: 17,
+                               weight: .regular,
+                               textColor: .ypLightGray)
+        
     }()
     
     private lazy var limitedTextField: LimitedTextField = {
@@ -35,8 +37,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }()
     
     private lazy var scrollView: ImprovedUIScrollView = {
-        let scrollView = ImprovedUIScrollView()
-        return scrollView
+        return ImprovedUIScrollView()
     }()
     
     private lazy var contentView: ImprovedUIView = {
@@ -75,8 +76,8 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     
     private lazy var createNewTrackerButton: ImprovedUIButton = {
         let createButton = ImprovedUIButton(title: .create,
-                                      titleColor: .ypWhiteDay,
-                                      backgroundColor: .ypGray)
+                                            titleColor: .ypWhiteDay,
+                                            backgroundColor: .ypGray)
         createButton.isEnabled = false
         createButton.addTarget(self, action: #selector(didCreateNewTrackerButtonTap), for: .touchUpInside)
         return createButton
@@ -84,8 +85,8 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     
     private lazy var cancelButton: ImprovedUIButton = {
         let cancelButton = ImprovedUIButton(title: .cancel,
-                                      titleColor: .ypRed,
-                                      backgroundColor: .ypWhiteDay)
+                                            titleColor: .ypRed,
+                                            backgroundColor: .ypWhiteDay)
         cancelButton.layer.borderWidth = 1
         cancelButton.layer.borderColor = UIColor.ypRed.cgColor
         cancelButton.addTarget(self, action: #selector(didCancelButtonTap), for: .touchUpInside)
