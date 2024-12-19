@@ -2,7 +2,7 @@ import UIKit
 
 final class CreateTrackerViewController: UIViewController {
     
-    weak var delegate: ProtocolNewTrackerEventViewControllerOutput?
+    private let viewModel: CreateTrackerViewModel
     
     private lazy var habitButton: ImprovedUIButton = {
         let habitButton = ImprovedUIButton(title: .habit,
@@ -24,6 +24,15 @@ final class CreateTrackerViewController: UIViewController {
         let stackView = ImprovedUIStackView(arrangedSubviews: [habitButton, irregularEventButton], axis: .vertical)
         return stackView
     }()
+    
+    init(viewModel: CreateTrackerViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,14 +67,15 @@ final class CreateTrackerViewController: UIViewController {
     }
     
     @objc func didHabitButtonTap() {
-        openNewTrackerEvent(true)
+        viewModel.didOpenNewCreateTrackerTap(true)
     }
     @objc func didIrregularEventButtonTap() {
-        openNewTrackerEvent(false)
+        viewModel.didOpenNewCreateTrackerTap(false)
     }
+    
     func openNewTrackerEvent(_ status: Bool) {
         let newTrackerEventViewController = NewTrackerEventViewController(viewModel: NewTrackerEventViewModel(withSchedule: status))
-        newTrackerEventViewController.delegate = delegate
+        newTrackerEventViewController.delegate = viewModel.delegate
         navigationController?.pushViewController(newTrackerEventViewController, animated: true)
     }
 }
