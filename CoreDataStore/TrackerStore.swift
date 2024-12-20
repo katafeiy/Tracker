@@ -24,9 +24,9 @@ final class TrackerStore: NSObject {
             sectionNameKeyPath: nil,
             cacheName: nil
         )
-
+        
         super.init()
-
+        
         fetchResultController.delegate = self
         try? fetchResultController.performFetch()
     }
@@ -35,8 +35,9 @@ final class TrackerStore: NSObject {
         
         let trackerCategoryCoreData = try getOrCreateCategory(categoryName: categoryName)
         let trackerCoreData = TrackerCoreData(context: context)
-    
+        
         trackerCoreData.id = tracker.id
+        trackerCoreData.isHabit = tracker.isHabit
         trackerCoreData.name = tracker.name
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.color = tracker.color.color
@@ -45,7 +46,8 @@ final class TrackerStore: NSObject {
         trackerCoreData.category = trackerCategoryCoreData
         trackerCategoryCoreData.addToTrackers(trackerCoreData)
         
-        try context.save()        
+        try context.save()
+        print(Tracker.self)
     }
     
     private func getOrCreateCategory(categoryName: String) throws -> TrackerCategoryCoreData  {

@@ -230,4 +230,3 @@ extension TrackerViewController: ProtocolNewTrackerEventViewControllerOutput {
         viewModel.didCreateTracker(newTracker: newTracker, forCategory: forCategory)
     }
 }
-

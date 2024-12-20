@@ -12,22 +12,24 @@ final class NewTrackerEventViewModel {
     private var nameTracker: String?
     private var trackerColor: TrackerColors?
     private var trackerEmoji: String?
-    let withSchedule: Bool
+    var isHabit: Bool
+    
     
     private var selectedDays: Set<DaysOfWeek> = []
     
-    init(withSchedule: Bool) {
-        self.withSchedule = withSchedule
-        selectedDays = withSchedule ? [] : Set(DaysOfWeek.allCases)
+    init(isHabit: Bool) {
+        self.isHabit = isHabit
+        selectedDays = isHabit ? [] : Set(DaysOfWeek.allCases)
     }
     
-    func createNewIrregularEvent() throws -> Tracker  {
+    func createNewEvent() throws -> Tracker  {
         
         guard let nameTracker, let trackerColor, let trackerEmoji else {
             throw Errors.noRequiredData
         }
         
         let newTracker = Tracker(id: UUID(),
+                                 isHabit: isHabit,
                                  name: nameTracker,
                                  color: trackerColor,
                                  emoji: trackerEmoji,

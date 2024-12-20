@@ -14,7 +14,7 @@ final class TrackerViewModel {
     private let trackerRecordStore = TrackerRecordStore()
     
     private var currentDate: Date?
-        
+    
     init() {
         trackerStore.delegate = self
         updateCurrentDate(Date())
@@ -28,7 +28,26 @@ final class TrackerViewModel {
         visibleCategories = []
         
         categories.forEach {
-            let trackers = $0.trackerArray.filter({$0.schedule.contains(dayOfWeek)})
+            let trackers = $0.trackerArray.filter({ tracker in
+                
+                let isHabit = tracker.isHabit
+                let showIfIsHabit = isHabit && tracker.schedule.contains(dayOfWeek)
+                let completedRecord = completedTrackers.first(where: {$0.id == tracker.id})
+                let completedInCurrentDay: Bool
+                let notCompleted: Bool
+                if let completedRecord {
+                    notCompleted = false
+                    completedInCurrentDay = completedRecord.date == currentDate
+                } else {
+                    notCompleted = true
+                    completedInCurrentDay = false
+                }
+                
+                let showIfIsIrregularEven = !isHabit && (completedInCurrentDay || notCompleted)
+                
+                return showIfIsHabit || showIfIsIrregularEven
+            })
+            
             if !trackers.isEmpty {
                 visibleCategories.append(.init(name: $0.name, trackerArray: trackers))
             }

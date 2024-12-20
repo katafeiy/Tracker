@@ -10,7 +10,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     
     weak var delegate: ProtocolNewTrackerEventViewControllerOutput?
     
-    lazy var nameCell = viewModel.withSchedule ? [("Категория", "Название категории"), ("Расписание", "Дни недели")] : [("Категория", "Название категории")]
+    lazy var nameCell = viewModel.isHabit ? [("Категория", "Название категории"), ("Расписание", "Дни недели")] : [("Категория", "Название категории")]
     
     private lazy var nameTracker: ImprovedUITextField = {
         var nameTracker = ImprovedUITextField(placeholder: .tracker)
@@ -156,7 +156,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
             tableView.topAnchor.constraint(equalTo: nameTracker.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            tableView.heightAnchor.constraint(equalToConstant: viewModel.withSchedule ? 190 : 115),
+            tableView.heightAnchor.constraint(equalToConstant: viewModel.isHabit ? 190 : 115),
             
             emojiCollectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 16),
             emojiCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -177,7 +177,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }
     
     func setupNavigationBar() {
-        navigationItem.title = viewModel.withSchedule ? "Новая привычка" : "Новое нерегулярное событие"
+        navigationItem.title = viewModel.isHabit ? "Новая привычка" : "Новое нерегулярное событие"
         navigationItem.hidesBackButton = true
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -189,7 +189,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     
     @objc func didCreateNewTrackerButtonTap() {
         do {
-            delegate?.didCreate(newTracker: try viewModel.createNewIrregularEvent(),
+            delegate?.didCreate(newTracker: try viewModel.createNewEvent(),
                                 forCategory: try viewModel.getNameCategory())
             dismiss(animated: true, completion: nil)
         } catch {

@@ -27,7 +27,7 @@ enum TrackerColors: Int, CaseIterable {
     
     init?(color: UIColor) {
         guard
-            let colorIndex = TrackerColors.colorCell.firstIndex(where: { $0 == color }),
+            let colorIndex = TrackerColors.colorCell.firstIndex(where: { $0.cgColor == color.cgColor }),
             let value = TrackerColors.init(rawValue: colorIndex)
         else { return nil }
         self = value
