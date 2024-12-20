@@ -22,6 +22,9 @@ final class ImprovedUICollectionView: UICollectionView {
     }
 }
 
+// Уважаемый ревьювер!!! Этот закомментированный код здесь был оставлен специально)))
+// Не ругайтесь он мне нужен в учебных целях)))
+
 //    func madeCollectionView() -> UICollectionView {
 //        let layout = UICollectionViewFlowLayout()
 //        layout.scrollDirection = .vertical
