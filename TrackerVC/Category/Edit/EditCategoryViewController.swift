@@ -14,14 +14,14 @@ final class EditCategoryViewController: UIViewController {
     }()
     
     private lazy var subtitleNameCategory: ImprovedUILabel = {
-        return ImprovedUILabel(fontSize: 17,
-                               weight: .regular,
-                               textColor: .ypLightGray)
+        ImprovedUILabel(fontSize: 17,
+                        weight: .regular,
+                        textColor: .ypLightGray)
         
     }()
     
     private lazy var limitedTextField: LimitedTextField = {
-        return LimitedTextField(characterLimit: 38, subtitleLabel: subtitleNameCategory)
+        LimitedTextField(characterLimit: 38, subtitleLabel: subtitleNameCategory)
     }()
     
     private lazy var editedCategoryButton: ImprovedUIButton = {

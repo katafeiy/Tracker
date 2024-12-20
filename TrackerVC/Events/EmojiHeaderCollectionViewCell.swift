@@ -5,7 +5,7 @@ final class EmojiHeaderCollectionViewCell: UICollectionViewCell {
     static let headerIdentifier: String = "emojiHeader"
     
     let emojiHeaderLabel: ImprovedUILabel = {
-        return ImprovedUILabel(fontSize: 19, weight: .bold, textColor: .ypBlackDay)
+        ImprovedUILabel(fontSize: 19, weight: .bold, textColor: .ypBlackDay)
     }()
     
     override init(frame: CGRect) {

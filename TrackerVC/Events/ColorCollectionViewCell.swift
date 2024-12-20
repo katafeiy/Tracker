@@ -4,21 +4,15 @@ final class ColorCollectionViewCell: UICollectionViewCell {
     
     static let cellIdentifier: String = "colorCell"
     
-    let colorLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .ypWhiteDay
-        label.layer.masksToBounds = true
-        label.layer.cornerRadius = 8
-        label.font = .systemFont(ofSize: 32, weight: .bold)
-        label.textAlignment = .center
-        return label
+    let colorLabel: ImprovedUILabel = {
+        ImprovedUILabel(fontSize: 32, weight: .bold, textColor: .ypWhiteDay, cornerRadius: 8)
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         contentView.addSubviews(colorLabel)
-
+        
         NSLayoutConstraint.activate([
             colorLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             colorLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),

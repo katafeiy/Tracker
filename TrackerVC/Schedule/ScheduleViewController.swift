@@ -15,7 +15,7 @@ final class ScheduleViewController: UIViewController {
     }()
     
     private lazy var scheduleTableView: ImprovedUITableView = {
-        return ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
+        ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
     }()
     
     init(viewModel: ScheduleViewModel) {
@@ -72,7 +72,7 @@ final class ScheduleViewController: UIViewController {
 extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource  {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return DaysOfWeek.allCases.count
+        DaysOfWeek.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -99,6 +99,6 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource  {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        75
     }
 }

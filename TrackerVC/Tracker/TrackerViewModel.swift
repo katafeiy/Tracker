@@ -18,7 +18,6 @@ final class TrackerViewModel {
     init() {
         trackerStore.delegate = self
         updateCurrentDate(Date())
-        print(currentDate ?? Date())
     }
     
     private func updateVisibleData() {
@@ -62,7 +61,6 @@ final class TrackerViewModel {
         let components = calendar.dateComponents([.day, .month, .year], from: date)
         self.currentDate = calendar.date(from: components) ?? Date()
         updateVisibleData()
-        print(currentDate ?? Date())
     }
     
     private func updateArrayCategories() {
@@ -87,7 +85,6 @@ final class TrackerViewModel {
         
         if
             let record = completedTrackers.first(where:{ $0.id == tracker.id && $0.date == self.currentDate }) {
-            print(currentDate ?? Date())
             completedTrackers.removeAll(where:{ $0.id == tracker.id && $0.date == self.currentDate })
             try? self.trackerRecordStore.deleteRecord(record)
             return false
@@ -95,7 +92,6 @@ final class TrackerViewModel {
         } else {
             
             let record = TrackerRecord(id: tracker.id , date: currentDate ?? Date())
-            print(currentDate ?? Date())
             completedTrackers.append(record)
             
             try? self.trackerRecordStore.addRecord(record)

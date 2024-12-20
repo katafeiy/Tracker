@@ -3,7 +3,7 @@ final class ScheduleViewModel {
     private(set) var selectedDays: Set<DaysOfWeek> = []
     
     var daysOfWeek: [DaysOfWeek] {
-        return DaysOfWeek.allCases
+        DaysOfWeek.allCases
     }
     
     init(selectedDays: Set<DaysOfWeek>) {

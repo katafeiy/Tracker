@@ -7,11 +7,11 @@ final class CategoryListViewController: UIViewController {
     private let viewModel: CategoryListViewModel
     
     private lazy var starImage: ImprovedUIImageView = {
-        return ImprovedUIImageView(image: .star)
+        ImprovedUIImageView(image: .star)
     }()
-
+    
     private lazy var eventLabel: ImprovedUILabel = {
-        return ImprovedUILabel(
+       ImprovedUILabel(
             text: "Привычки и события можно\n" + "объединить по смыслу",
             fontSize: 12,
             weight: .medium,
@@ -146,7 +146,7 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-            viewModel.didSelectCategory(viewModel.categories[indexPath.row])
+        viewModel.didSelectCategory(viewModel.categories[indexPath.row])
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -158,18 +158,18 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
             return UIMenu(children: [
                 UIAction(title: "Редактировать" ,
                          image: .pencilAndListClipboard.withTintColor(.ypBlackDay)) { action in
-                    self.editCategory(indexPath: indexPath)
-                },
+                             self.editCategory(indexPath: indexPath)
+                         },
                 UIAction(title: "Удалить", image:
                         .trash.withTintColor(.ypRed),
                          attributes: .destructive) { action in
-                    self.deleteCategory(indexPath: indexPath)
-                }
+                             self.deleteCategory(indexPath: indexPath)
+                         }
             ])
         }
         return configContextMenu
     }
-     
+    
     private func editCategory(indexPath: IndexPath) {
         
         let category = self.viewModel.categories[indexPath.row]

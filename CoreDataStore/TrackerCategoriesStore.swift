@@ -14,7 +14,6 @@ final class TrackerCategoriesStore: NSObject {
         
         let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         let categories = try context.fetch(request)
-        print(categories)
         
         var result = [TrackerCategory]()
         
@@ -31,7 +30,6 @@ final class TrackerCategoriesStore: NSObject {
                     let schedule = trackerCoreData.schedule as? Set<DaysOfWeek>
                 else { return nil }
                 let isHabit = trackerCoreData.isHabit
-                print(id, name, emoji, schedule, modelColor, isHabit)
                 return Tracker(id: id, isHabit: isHabit, name: name, color: modelColor, emoji: emoji, schedule: schedule)
             })
             result.append(TrackerCategory(name: name, trackerArray: trackers))
@@ -44,7 +42,6 @@ final class TrackerCategoriesStore: NSObject {
         newCategory.name = name
         newCategory.trackers = []
         try context.save()
-        print(name)
     }
     
     func getCategoryNames() throws -> [String] {

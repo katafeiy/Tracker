@@ -29,7 +29,6 @@ final class CategoryListViewModel {
     
     func loadCategories() {
         categories = (try? categoryStore.getCategoryNames()) ?? []
-        print(categories)
     }
     
     func isSelectedCategory(_ category: String) -> Bool {

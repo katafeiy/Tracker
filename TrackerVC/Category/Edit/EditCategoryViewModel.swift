@@ -17,7 +17,7 @@ final class EditCategoryViewModel {
     }
     
     func getNameCategory() -> String? {
-        return nameCategory
+        nameCategory
     }
     
     private func validateNameCategory() {

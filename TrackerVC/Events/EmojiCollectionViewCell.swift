@@ -6,14 +6,8 @@ final class EmojiCollectionViewCell: UICollectionViewCell {
     
     static let emojiCell: [String] = ["🙂", "😻", "🌺", "🐶", "❤️", "😱" , "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🏅", "🎸", "🏝️", "😪"]
     
-    let emojiLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .ypWhiteDay
-        label.layer.masksToBounds = true
-        label.layer.cornerRadius = 16
-        label.font = .systemFont(ofSize: 32, weight: .bold)
-        label.textAlignment = .center
-        return label
+    let emojiLabel: ImprovedUILabel = {
+        ImprovedUILabel(fontSize: 32, weight: .bold, textColor: .ypWhiteDay, cornerRadius: 16)
     }()
     
     override init(frame: CGRect) {

@@ -23,7 +23,7 @@ final class CreateTrackerViewController: UIViewController {
     }()
     
     private lazy var stackView: ImprovedUIStackView = {
-        return ImprovedUIStackView(arrangedSubviews: [habitButton, irregularEventButton], axis: .vertical)
+        ImprovedUIStackView(arrangedSubviews: [habitButton, irregularEventButton], axis: .vertical)
     }()
     
     init(viewModel: CreateTrackerViewModel) {

@@ -5,11 +5,8 @@ final class TrackerCategoryNameCell: UICollectionViewCell {
     
     static let headerIdentifier: String = "header"
     
-    private let nameLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 19, weight: .bold)
-        label.textColor = .ypBlackDay
-        return label
+    private let nameLabel: ImprovedUILabel = {
+        ImprovedUILabel(fontSize: 19, weight: .bold, textColor: .ypBlackDay)
     }()
     
     override init (frame: CGRect) {

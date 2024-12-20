@@ -5,7 +5,7 @@ final class NewTrackerEventViewModel {
     enum Errors: Error {
         case noRequiredData
     }
-
+    
     var updatedCreatedTrackerStatus: ((Bool) -> Void)?
     
     private var nameCategory: String?
@@ -13,7 +13,6 @@ final class NewTrackerEventViewModel {
     private var trackerColor: TrackerColors?
     private var trackerEmoji: String?
     var isHabit: Bool
-    
     
     private var selectedDays: Set<DaysOfWeek> = []
     
@@ -28,13 +27,12 @@ final class NewTrackerEventViewModel {
             throw Errors.noRequiredData
         }
         
-        let newTracker = Tracker(id: UUID(),
-                                 isHabit: isHabit,
-                                 name: nameTracker,
-                                 color: trackerColor,
-                                 emoji: trackerEmoji,
-                                 schedule: selectedDays)
-        return newTracker
+        return Tracker(id: UUID(),
+                       isHabit: isHabit,
+                       name: nameTracker,
+                       color: trackerColor,
+                       emoji: trackerEmoji,
+                       schedule: selectedDays)
     }
     
     func updateNameCategory(_ nameCategory: String) {
@@ -56,7 +54,7 @@ final class NewTrackerEventViewModel {
         self.trackerEmoji = emoji
         updatedCreatedTrackerStatus?(isCreatedTrackerValid())
     }
-
+    
     func getNameCategory() throws -> String {
         guard let nameCategory else {
             throw Errors.noRequiredData
@@ -65,7 +63,7 @@ final class NewTrackerEventViewModel {
     }
     
     func getSelectedDays() -> Set<DaysOfWeek> {
-        return selectedDays
+        selectedDays
     }
     
     func updateSelectedDays(_ selectedDays: Set<DaysOfWeek>) {

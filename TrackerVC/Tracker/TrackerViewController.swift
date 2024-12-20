@@ -37,15 +37,14 @@ final class TrackerViewController: UIViewController {
     }()
     
     private lazy var starImage: ImprovedUIImageView = {
-        return ImprovedUIImageView(image: .star)
+        ImprovedUIImageView(image: .star)
     }()
     
     private lazy var whatSearch: ImprovedUILabel = {
-        return ImprovedUILabel(text: "Что будем отслеживать?",
-                               fontSize: 12,
-                               weight: .medium,
-                               textColor: .ypBlackDay)
-        
+        ImprovedUILabel(text: "Что будем отслеживать?",
+                        fontSize: 12,
+                        weight: .medium,
+                        textColor: .ypBlackDay)
     }()
     
     private lazy var searchViewController: UISearchController = {
@@ -140,27 +139,16 @@ final class TrackerViewController: UIViewController {
         navigationController.modalPresentationStyle = .formSheet
         present(navigationController, animated: true)
     }
-    
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .none
-        return formatter
-    }()
-    
-    private func dateString(_ date: Date) -> String {
-        dateFormatter.string(from: date)
-    }
 }
 
 extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return viewModel.visibleCategories.count
+        viewModel.visibleCategories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.visibleCategories[section].trackerArray.count
+        viewModel.visibleCategories[section].trackerArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -180,7 +168,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: collectionView.frame.width, height: 30)
+        .init(width: collectionView.frame.width, height: 30)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -209,7 +197,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 167, height: 148)
+        CGSize(width: 167, height: 148)
     }
 }
 

@@ -17,6 +17,6 @@ final class CreateNewCategoryViewModel  {
     }
     
     func getNameCategory() -> String? {
-        return nameCategory
+        nameCategory
     }
 }

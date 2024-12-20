@@ -19,25 +19,25 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }()
     
     private lazy var subtitleNameTracker: ImprovedUILabel = {
-        return ImprovedUILabel(fontSize: 17,
+        ImprovedUILabel(fontSize: 17,
                                weight: .regular,
                                textColor: .ypLightGray)
     }()
     
     private lazy var limitedTextField: LimitedTextField = {
-        return LimitedTextField(characterLimit: 38, subtitleLabel: subtitleNameTracker)
+        LimitedTextField(characterLimit: 38, subtitleLabel: subtitleNameTracker)
     }()
     
     private lazy var tableView: ImprovedUITableView = {
-        return ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
+        ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
     }()
     
     private lazy var scrollView: ImprovedUIScrollView = {
-        return ImprovedUIScrollView()
+        ImprovedUIScrollView()
     }()
     
     private lazy var contentView: ImprovedUIView = {
-        return ImprovedUIView()
+        ImprovedUIView()
     }()
     
     private lazy var emojiCollectionView: ImprovedUICollectionView = {
@@ -65,7 +65,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }()
     
     private lazy var stackView: ImprovedUIStackView = {
-        return ImprovedUIStackView(arrangedSubviews: [cancelButton, createNewTrackerButton], axis: .horizontal)
+        ImprovedUIStackView(arrangedSubviews: [cancelButton, createNewTrackerButton], axis: .horizontal)
     }()
     
     private lazy var createNewTrackerButton: ImprovedUIButton = {
@@ -106,7 +106,6 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     func binding() {
         viewModel.updatedCreatedTrackerStatus = { [weak self] status in
             guard let self else { return }
-            print(status)
             createNewTrackerButton.isEnabled = status
             createNewTrackerButton.backgroundColor = status ? .ypBlackDay : .ypGray
         }
@@ -295,14 +294,14 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: collectionView.frame.width, height: 18)
+        .init(width: collectionView.frame.width, height: 18)
     }
 }
 
 extension NewTrackerEventViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return nameCell.count
+        nameCell.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -363,6 +362,6 @@ extension NewTrackerEventViewController: UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        75
     }
 }

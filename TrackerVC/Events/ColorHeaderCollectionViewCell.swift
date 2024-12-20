@@ -4,16 +4,13 @@ final class ColorHeaderCollectionViewCell: UICollectionViewCell {
     
     static let headerIdentifier: String = "colorHeader"
     
-    let colorHeaderLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 19, weight: .bold)
-        label.textColor = .ypBlackDay
-        return label
+    let colorHeaderLabel: ImprovedUILabel = {
+        ImprovedUILabel(fontSize: 19, weight: .bold, textColor: .ypBlackDay)
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-     
+        
         contentView.addSubviews(colorHeaderLabel)
         
         NSLayoutConstraint.activate([
