@@ -8,16 +8,22 @@ final class CreateTrackerViewController: UIViewController {
     
     private lazy var habitButton: ImprovedUIButton = {
         let habitButton = ImprovedUIButton(title: .habit,
-                                titleColor: .ypWhiteDay,
-                                backgroundColor: .ypBlackDay)
+                                           titleColor: .ypWhiteDay,
+                                           backgroundColor: .ypBlackDay,
+                                           cornerRadius: 16,
+                                           fontSize: 16,
+                                           fontWeight: .medium)
         habitButton.addTarget(self, action: #selector(didHabitButtonTap), for: .touchUpInside)
         return habitButton
     }()
     
     private lazy var irregularEventButton: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .irregular,
-                                titleColor: .ypWhiteDay,
-                                backgroundColor: .ypBlackDay)
+                                      titleColor: .ypWhiteDay,
+                                      backgroundColor: .ypBlackDay,
+                                      cornerRadius: 16,
+                                      fontSize: 16,
+                                      fontWeight: .medium)
         button.addTarget(self, action: #selector(didIrregularEventButtonTap), for: .touchUpInside)
         return button
     }()
@@ -48,7 +54,7 @@ final class CreateTrackerViewController: UIViewController {
             self?.openNewTrackerEvent(status)
         }
     }
-
+    
     private func setupUI() {
         
         view.addSubviews(stackView)
@@ -65,7 +71,7 @@ final class CreateTrackerViewController: UIViewController {
         ])
     }
     
-    func configurationNavigationBar() {        
+    func configurationNavigationBar() {
         navigationItem.title = "Создание трекера"
         navigationController?.navigationBar.tintColor = .ypBlackDay
         navigationController?.navigationBar.titleTextAttributes = [

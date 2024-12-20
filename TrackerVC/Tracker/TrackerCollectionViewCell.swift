@@ -6,45 +6,28 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     private var didPlusTap: (() -> Void)?
     
-    private let viewCard: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 10
-        view.layer.masksToBounds = true
-        view.backgroundColor = .ypBlue
-        return view
+    private let viewCard: ImprovedUIView = {
+        ImprovedUIView(cornerRadius: 10)
     }()
     
-    private let labelEmoji: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.text = ""
-        label.textColor = .ypBlackDay
-        return label
+    private let labelEmoji: ImprovedUILabel = {
+        ImprovedUILabel(fontSize: 12, weight: .medium, textColor: .ypBlackDay)
     }()
     
-    private let labelName: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = .ypWhiteDay
-        label.text = ""
-        label.numberOfLines = 2
-        return label
+    private let labelName: ImprovedUILabel = {
+        ImprovedUILabel(fontSize: 12,
+                        weight: .medium,
+                        textColor: .ypWhiteDay,
+                        numberOfLines: 2,
+                        textAlignment: .left)
     }()
     
-    private let labelCountDay: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = .ypBlackDay
-        label.text = ""
-        return label
+    private let labelCountDay: ImprovedUILabel = {
+        ImprovedUILabel(fontSize: 12, weight: .medium, textColor: .ypBlackDay)
     }()
     
     private let viewEmoji: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 12
-        view.layer.masksToBounds = true
-        view.backgroundColor = UIColor.ypWhiteDay.withAlphaComponent(0.3)
-        return view
+        ImprovedUIView(backgroundColor: .ypWhiteDay.withAlphaComponent(0.3), cornerRadius: 12)
     }()
     
     private lazy var addButtonCompletion: UIButton = {
@@ -55,6 +38,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         button.layer.cornerRadius = 17
         button.layer.masksToBounds = true
         button.tintColor = .ypWhiteDay
+        button.imageView?.image = .plusTracker
         return button
     }()
     

@@ -27,7 +27,10 @@ final class EditCategoryViewController: UIViewController {
     private lazy var editedCategoryButton: ImprovedUIButton = {
         let editedCategoryButton = ImprovedUIButton(title: .ready,
                                                     titleColor: .ypWhiteDay,
-                                                    backgroundColor: .ypBlackDay)
+                                                    backgroundColor: .ypBlackDay,
+                                                    cornerRadius: 16,
+                                                    fontSize: 16,
+                                                    fontWeight: .medium)
         editedCategoryButton.addTarget(self, action: #selector(didChangeNameCategoryTap), for: .touchUpInside)
         return editedCategoryButton
     }()

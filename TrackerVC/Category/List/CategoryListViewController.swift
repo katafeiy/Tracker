@@ -22,7 +22,10 @@ final class CategoryListViewController: UIViewController {
     private lazy var addNewCategoryButton: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .add,
                                       titleColor: .ypWhiteDay,
-                                      backgroundColor: .ypBlackDay)
+                                      backgroundColor: .ypBlackDay,
+                                      cornerRadius: 16,
+                                      fontSize: 16,
+                                      fontWeight: .medium)
         button.addTarget(self, action: #selector(didAddNewCategoryTap), for: .touchUpInside)
         return button
     }()

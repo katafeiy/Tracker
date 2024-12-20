@@ -15,7 +15,10 @@ final class CreateNewCategoryViewController: UIViewController {
     private lazy var createNewCategoryButton: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .ready,
                                       titleColor: .ypWhiteDay,
-                                      backgroundColor: .ypGray)
+                                      backgroundColor: .ypGray,
+                                      cornerRadius: 16,
+                                      fontSize: 16,
+                                      fontWeight: .medium)
         button.addTarget(self, action: #selector(didCreateNewCategoryTap), for: .touchUpInside)
         return button
     }()

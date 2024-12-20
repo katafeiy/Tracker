@@ -8,8 +8,11 @@ final class ScheduleViewController: UIViewController {
     
     private lazy var readyToUse: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .ready,
-                                titleColor: .ypWhiteDay,
-                                backgroundColor: .ypBlackDay)
+                                      titleColor: .ypWhiteDay,
+                                      backgroundColor: .ypBlackDay,
+                                      cornerRadius: 16,
+                                      fontSize: 16,
+                                      fontWeight: .medium)
         button.addTarget(self, action: #selector(didReadyToUseTap), for: .touchUpInside)
         return button
     }()

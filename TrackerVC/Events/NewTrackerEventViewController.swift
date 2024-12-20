@@ -71,7 +71,10 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     private lazy var createNewTrackerButton: ImprovedUIButton = {
         let createButton = ImprovedUIButton(title: .create,
                                             titleColor: .ypWhiteDay,
-                                            backgroundColor: .ypGray)
+                                            backgroundColor: .ypGray,
+                                            cornerRadius: 16,
+                                            fontSize: 16,
+                                            fontWeight: .medium)
         createButton.isEnabled = false
         createButton.addTarget(self, action: #selector(didCreateNewTrackerButtonTap), for: .touchUpInside)
         return createButton
@@ -80,7 +83,10 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     private lazy var cancelButton: ImprovedUIButton = {
         let cancelButton = ImprovedUIButton(title: .cancel,
                                             titleColor: .ypRed,
-                                            backgroundColor: .ypWhiteDay)
+                                            backgroundColor: .ypWhiteDay,
+                                            cornerRadius: 16,
+                                            fontSize: 16,
+                                            fontWeight: .medium)
         cancelButton.layer.borderWidth = 1
         cancelButton.layer.borderColor = UIColor.ypRed.cgColor
         cancelButton.addTarget(self, action: #selector(didCancelButtonTap), for: .touchUpInside)

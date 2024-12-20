@@ -24,15 +24,20 @@ final class ImprovedUIButton: UIButton {
         }
     }
     
-    init(title: buttonName, titleColor: UIColor, backgroundColor: UIColor) {
+    init(title: buttonName,
+         titleColor: UIColor,
+         backgroundColor: UIColor = .clear,
+         cornerRadius: CGFloat,
+         fontSize: CGFloat,
+         fontWeight: UIFont.Weight) {
+        
         super.init(frame: .zero)
         setTitle(title.text, for: .normal)
         setTitleColor(titleColor, for: .normal)
-        titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        titleLabel?.font = .systemFont(ofSize: fontSize, weight: fontWeight)
         self.backgroundColor = backgroundColor
         layer.masksToBounds = true
-        layer.cornerRadius = 16
-       
+        layer.cornerRadius = cornerRadius
     }
     
     required init?(coder: NSCoder) {

@@ -21,8 +21,11 @@ final class OnboardingPageViewController: UIViewController {
 
     private lazy var buttonSkip: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .skip,
-                                titleColor: .ypWhiteDay,
-                                backgroundColor: .ypBlackDay)
+                                      titleColor: .ypWhiteDay,
+                                      backgroundColor: .ypBlackDay,
+                                      cornerRadius: 16,
+                                      fontSize: 16,
+                                      fontWeight: .medium)
         button.addTarget(self, action: #selector(skipActionButton), for: .touchUpInside)
         return button
     }()

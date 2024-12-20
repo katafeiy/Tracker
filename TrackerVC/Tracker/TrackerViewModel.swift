@@ -56,10 +56,10 @@ final class TrackerViewModel {
     
     func updateCurrentDate(_ date: Date?) {
         guard let date else { return }
-        var calendar = Calendar.current
-        calendar.timeZone = (TimeZone.init(secondsFromGMT: 0) ?? .current)
+        let calendar = Calendar.current
         let components = calendar.dateComponents([.day, .month, .year], from: date)
-        self.currentDate = calendar.date(from: components) ?? Date()
+        self.currentDate = calendar.date(from: components) ?? date
+        print(currentDate ?? Date())
         updateVisibleData()
     }
     
