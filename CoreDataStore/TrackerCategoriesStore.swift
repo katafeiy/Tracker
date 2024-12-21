@@ -26,9 +26,11 @@ final class TrackerCategoriesStore: NSObject {
                     let name = trackerCoreData.name,
                     let emoji = trackerCoreData.emoji,
                     let color = trackerCoreData.color as? UIColor,
+                    let modelColor = TrackerColors(color: color),
                     let schedule = trackerCoreData.schedule as? Set<DaysOfWeek>
                 else { return nil }
-                return Tracker(id: id, name: name, color: color, emoji: emoji, schedule: schedule)
+                let isHabit = trackerCoreData.isHabit
+                return Tracker(id: id, isHabit: isHabit, name: name, color: modelColor, emoji: emoji, schedule: schedule)
             })
             result.append(TrackerCategory(name: name, trackerArray: trackers))
         }
@@ -46,5 +48,21 @@ final class TrackerCategoriesStore: NSObject {
         let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         let categories = try context.fetch(request)
         return categories.compactMap({ $0.name })
+    }
+    
+    func deleteCategory(_ name: String) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "name == %@", name)
+        let categories = try context.fetch(request)
+        categories.forEach({ context.delete($0) })
+        try context.save()
+    }
+    
+    func editCategoryName(_ oldName: String, newName: String) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "name == %@", oldName)
+        let categories = try context.fetch(request)
+        categories.forEach({ $0.name = newName })
+        try context.save()
     }
 }

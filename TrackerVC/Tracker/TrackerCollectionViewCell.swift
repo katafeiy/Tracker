@@ -2,57 +2,43 @@ import UIKit
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
+    static let cellIdentifier: String = "trackerCell"
+    
     private var didPlusTap: (() -> Void)?
     
-    private let viewCard: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 10
-        view.layer.masksToBounds = true
-        view.backgroundColor = .ypBlue
-        return view
+    private let viewCard: ImprovedUIView = {
+        ImprovedUIView(cornerRadius: 10)
     }()
     
-    private let labelEmoji: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.text = "😂"
-        label.textColor = .ypBlackDay
-        return label
+    private let labelEmoji: ImprovedUILabel = {
+        ImprovedUILabel(fontSize: 12, weight: .medium, textColor: .ypBlackDay)
     }()
     
-    private let labelName: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = .ypWhiteDay
-        label.text = "Здесь будет ваше описание"
-        label.numberOfLines = 2
-        return label
+    private let labelName: ImprovedUILabel = {
+        ImprovedUILabel(fontSize: 12,
+                        weight: .medium,
+                        textColor: .ypWhiteDay,
+                        numberOfLines: 2,
+                        textAlignment: .left)
     }()
     
-    private let labelCountDay: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = .ypBlackDay
-        label.text = "3 дня"
-        return label
+    private let labelCountDay: ImprovedUILabel = {
+        ImprovedUILabel(fontSize: 12, weight: .medium, textColor: .ypBlackDay)
     }()
     
     private let viewEmoji: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 12
-        view.layer.masksToBounds = true
-        view.backgroundColor = UIColor.ypWhiteDay.withAlphaComponent(0.3)
-        return view
+        ImprovedUIView(backgroundColor: .ypWhiteDay.withAlphaComponent(0.3), cornerRadius: 12)
     }()
     
     private lazy var addButtonCompletion: UIButton = {
         let button = UIButton.systemButton(with: .plusTracker,
                                            target: self,
                                            action: #selector(didAddButtonTap))
-        button.backgroundColor = .colorSelection1
+        button.backgroundColor = .clear
         button.layer.cornerRadius = 17
         button.layer.masksToBounds = true
         button.tintColor = .ypWhiteDay
+        button.imageView?.image = .plusTracker
         return button
     }()
     
@@ -68,10 +54,10 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         self.didPlusTap = didPlusTap
         labelEmoji.text = tracker.emoji
         labelName.text = tracker.name
-        viewCard.backgroundColor = tracker.color
+        viewCard.backgroundColor = tracker.color.color
         labelCountDay.text =  "0 дней"
         addButtonCompletion.setImage(UIImage.plusButton, for: .normal)
-        addButtonCompletion.backgroundColor = tracker.color
+        addButtonCompletion.backgroundColor = tracker.color.color
     }
     
     func configCompletion(counter: Int, isCompleted: Bool) {
@@ -102,18 +88,11 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         layer.masksToBounds = true
         backgroundColor = .clear
         
-        [viewCard, labelCountDay, addButtonCompletion].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview($0)
-        }
-        [labelName, viewEmoji].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            viewCard.addSubview($0)
-        }
-        [labelEmoji].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            viewEmoji.addSubview($0)
-        }
+        contentView.addSubviews(viewCard, labelCountDay, addButtonCompletion)
+        
+        viewCard.addSubviews(labelName, viewEmoji)
+        
+        viewEmoji.addSubviews(labelEmoji)
         
         NSLayoutConstraint.activate([
             

@@ -35,6 +35,7 @@
 			membershipExceptions = (
 				Tracker.swift,
 				TrackerCategory.swift,
+				TrackerColors.swift,
 				TrackerRecord.swift,
 			);
 			target = 129E670D2CD0E421002D5F10 /* Tracker */;
@@ -85,6 +86,11 @@
 		126FB2602CD1737400D21700 /* TabBarVC */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TabBarVC;
+			sourceTree = "<group>";
+		};
+		1282D62E2D05B05B00245E67 /* Onboarding */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		129E67102CD0E421002D5F10 /* Tracker */ = {
@@ -140,6 +146,7 @@
 		129E67052CD0E421002D5F10 = {
 			isa = PBXGroup;
 			children = (
+				1282D62E2D05B05B00245E67 /* Onboarding */,
 				129E67102CD0E421002D5F10 /* Tracker */,
 				12195FB92CFF66BE00E8FA59 /* CoreDataStore */,
 				12F1D03A2CF3A0A200DD16F2 /* Enum */,
@@ -182,6 +189,7 @@
 				12195FB92CFF66BE00E8FA59 /* CoreDataStore */,
 				126FB2552CD1730500D21700 /* TrackerVC */,
 				126FB2602CD1737400D21700 /* TabBarVC */,
+				1282D62E2D05B05B00245E67 /* Onboarding */,
 				129E67102CD0E421002D5F10 /* Tracker */,
 				12F1D03A2CF3A0A200DD16F2 /* Enum */,
 			);

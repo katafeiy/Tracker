@@ -35,7 +35,7 @@ final class TabBarViewController: UITabBarController {
         self.viewControllers = dataSource.map {
             switch $0 {
             case .tracker:
-                let trackerViewController = UINavigationController(rootViewController: TrackerViewController())
+                let trackerViewController = UINavigationController(rootViewController: TrackerViewController(viewModel: TrackerViewModel()))
                 trackerViewController.tabBarItem = UITabBarItem(title: $0.title, image: $0.image, selectedImage: nil)
                 return trackerViewController
                 

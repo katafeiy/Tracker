@@ -2,48 +2,62 @@ import UIKit
 
 final class CreateTrackerViewController: UIViewController {
     
-    weak var delegate: ProtocolNewHabitViewControllerOutput?
+    weak var delegate: ProtocolNewTrackerEventViewControllerOutput?
     
-    private lazy var habitButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Привычка", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        button.backgroundColor = .ypBlackDay
-        button.titleLabel?.textColor = .ypWhiteDay
-        button.addTarget(self, action: #selector(didHabitButtonTap), for: .touchUpInside)
-        return button
+    private let viewModel: CreateTrackerViewModel
+    
+    private lazy var habitButton: ImprovedUIButton = {
+        let habitButton = ImprovedUIButton(title: .habit,
+                                           titleColor: .ypWhiteDay,
+                                           backgroundColor: .ypBlackDay,
+                                           cornerRadius: 16,
+                                           fontSize: 16,
+                                           fontWeight: .medium)
+        habitButton.addTarget(self, action: #selector(didHabitButtonTap), for: .touchUpInside)
+        return habitButton
     }()
     
-    private lazy var irregularEventButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Нерегулярное событие", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        button.backgroundColor = .ypBlackDay
-        button.titleLabel?.textColor = .ypWhiteDay
+    private lazy var irregularEventButton: ImprovedUIButton = {
+        let button = ImprovedUIButton(title: .irregular,
+                                      titleColor: .ypWhiteDay,
+                                      backgroundColor: .ypBlackDay,
+                                      cornerRadius: 16,
+                                      fontSize: 16,
+                                      fontWeight: .medium)
         button.addTarget(self, action: #selector(didIrregularEventButtonTap), for: .touchUpInside)
         return button
     }()
     
+    private lazy var stackView: ImprovedUIStackView = {
+        ImprovedUIStackView(arrangedSubviews: [habitButton, irregularEventButton], axis: .vertical)
+    }()
+    
+    init(viewModel: CreateTrackerViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhiteDay
         setupUI()
         configurationNavigationBar()
+        binding()
+    }
+    
+    func binding() {
+        viewModel.isOpenNewTrackerEvent = { [weak self] status in
+            self?.openNewTrackerEvent(status)
+        }
     }
     
     private func setupUI() {
         
-        let stackView = UIStackView(arrangedSubviews: [habitButton, irregularEventButton])
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = 16
-        
-        [stackView].forEach{$0.translatesAutoresizingMaskIntoConstraints = false; view.addSubview($0)}
+        view.addSubviews(stackView)
         
         NSLayoutConstraint.activate([
             
@@ -57,7 +71,7 @@ final class CreateTrackerViewController: UIViewController {
         ])
     }
     
-    func configurationNavigationBar() {        
+    func configurationNavigationBar() {
         navigationItem.title = "Создание трекера"
         navigationController?.navigationBar.tintColor = .ypBlackDay
         navigationController?.navigationBar.titleTextAttributes = [
@@ -67,13 +81,15 @@ final class CreateTrackerViewController: UIViewController {
     }
     
     @objc func didHabitButtonTap() {
-        let habitViewController = NewHabitViewController()
-        habitViewController.delegate = delegate
-        navigationController?.pushViewController(habitViewController, animated: true)
+        viewModel.didOpenNewCreateTrackerTap(true)
+    }
+    @objc func didIrregularEventButtonTap() {
+        viewModel.didOpenNewCreateTrackerTap(false)
     }
     
-    @objc func didIrregularEventButtonTap() {
-        let irregularEventViewController = NewIrregularEventViewController()
-        navigationController?.pushViewController(irregularEventViewController, animated: true)
+    func openNewTrackerEvent(_ status: Bool) {
+        let newTrackerEventViewController = NewTrackerEventViewController(viewModel: NewTrackerEventViewModel(isHabit: status))
+        newTrackerEventViewController.delegate = delegate
+        navigationController?.pushViewController(newTrackerEventViewController, animated: true)
     }
 }
