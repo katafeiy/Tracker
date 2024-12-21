@@ -154,7 +154,7 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
-        guard indexPath.row != 0 else { return nil }
+        guard indexPath.row < viewModel.categories.count else { return nil }
         
         let configContextMenu = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { action in
             
