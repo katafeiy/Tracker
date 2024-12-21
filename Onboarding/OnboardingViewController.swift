@@ -18,7 +18,6 @@ final class OnboardingViewController: UIPageViewController {
         return pageIndicator
     }()
     
-    
     lazy var pages: [UIViewController] = {
         
         return [
