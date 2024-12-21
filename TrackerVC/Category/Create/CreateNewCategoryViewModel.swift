@@ -1,5 +1,4 @@
-
-final class CreateNewCategoryViewModel  {
+final class CreateNewCategoryViewModel {
     
     private var nameCategory: String?
     
@@ -16,7 +15,7 @@ final class CreateNewCategoryViewModel  {
         nameCategory.count <= 38
     }
     
-    func getNameCategory() -> String? {
+    func getCategoryName() -> String? {
         nameCategory
     }
 }

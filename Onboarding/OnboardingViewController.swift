@@ -5,7 +5,7 @@ final class OnboardingViewController: UIPageViewController {
     var skipIndicator: Bool? {
         didSet {
             guard let skipIndicator else { return }
-            Indicator.indicatorIsSkipped = skipIndicator
+            UserDefaultsStore.indicatorIsSkipped = skipIndicator
         }
     }
     
@@ -66,14 +66,14 @@ extension OnboardingViewController: UIPageViewControllerDataSource, UIPageViewCo
         
         guard let index = pages.firstIndex(of: viewController) else { return nil }
         
-        return pages[(index - 1 + pages.count) % pages.count ]
+        return pages[(index - 1 + pages.count) % pages.count]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         
         guard let index = pages.firstIndex(of: viewController) else { return nil }
     
-        return pages[(index + 1) % pages.count ]
+        return pages[(index + 1) % pages.count]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {

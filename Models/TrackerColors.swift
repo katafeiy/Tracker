@@ -22,7 +22,7 @@ enum TrackerColors: Int, CaseIterable {
     case ufoZoneGreen
     
     var color: UIColor {
-        return TrackerColors.colorCell[self.rawValue]
+        TrackerColors.colorCell[self.rawValue]
     }
     
     init?(color: UIColor) {

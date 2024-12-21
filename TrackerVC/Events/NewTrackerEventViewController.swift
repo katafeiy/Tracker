@@ -198,6 +198,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
                                 forCategory: try viewModel.getNameCategory())
             dismiss(animated: true, completion: nil)
         } catch {
+            print(error.localizedDescription)
             return
         }
     }

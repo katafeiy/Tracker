@@ -1,6 +1,6 @@
 import UIKit
 
-class ImprovedUITextField: UITextField {
+final class ImprovedUITextField: UITextField {
     
     enum PlaceholderText {
         case tracker
@@ -33,7 +33,7 @@ class ImprovedUITextField: UITextField {
     }
 }
 
-class LimitedTextField: NSObject, UITextFieldDelegate {
+final class LimitedTextField: NSObject, UITextFieldDelegate {
     
     private var characterLimit: Int?
     private weak var subtitleLabel: UILabel?

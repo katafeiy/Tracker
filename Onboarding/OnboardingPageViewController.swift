@@ -2,24 +2,19 @@ import UIKit
 
 final class OnboardingPageViewController: UIViewController {
     
-    private let skipAction: () -> Void
+    private var skipAction: () -> Void
     
-    private var imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        return imageView
+    static var didSkipActionButtonTap: (() -> Void)?
+    
+    private lazy var imageView: ImprovedUIImageView = {
+        ImprovedUIImageView(contentMode: .scaleAspectFill)
     }()
     
-    private var messageView: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 32, weight: .bold)
-        label.textColor = .ypBlackDay
-        label.textAlignment = .center
-        return label
+    private lazy var messageView: ImprovedUILabel = {
+        ImprovedUILabel(fontSize: 32, weight: .bold, textColor: .ypBlackDay, numberOfLines: 0)
     }()
 
-    private lazy var buttonSkip: ImprovedUIButton = {
+    private lazy var skipButton: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .skip,
                                       titleColor: .ypWhiteDay,
                                       backgroundColor: .ypBlackDay,
@@ -35,10 +30,10 @@ final class OnboardingPageViewController: UIViewController {
     }
     
     init(image: UIImage, title: String, skipAction: @escaping ()->()) {
-        imageView = UIImageView(image: image)
-        self.messageView.text = title
         self.skipAction = skipAction
         super.init(nibName: nil, bundle: nil)
+        self.imageView = ImprovedUIImageView(image: image)
+        self.messageView.text = title
     }
     
     override func viewDidLoad() {
@@ -46,10 +41,10 @@ final class OnboardingPageViewController: UIViewController {
         setupUI()
     }
     
-    func setupUI() {
+    private func setupUI() {
         
         view.backgroundColor = .clear
-        view.addSubviews(imageView, messageView, buttonSkip)
+        view.addSubviews(imageView, messageView, skipButton)
         
         NSLayoutConstraint.activate([
             
@@ -62,19 +57,16 @@ final class OnboardingPageViewController: UIViewController {
             messageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             messageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
-            buttonSkip.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttonSkip.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            buttonSkip.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            buttonSkip.heightAnchor.constraint(equalToConstant: 60),
-            buttonSkip.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -84)
+            skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            skipButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            skipButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            skipButton.heightAnchor.constraint(equalToConstant: 60),
+            skipButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -84)
             
         ])
     }
     
     @objc func skipActionButton() {
-        let tabBarController = TabBarViewController()
-        let navigationController = UINavigationController(rootViewController: tabBarController)
-        navigationController.modalPresentationStyle = .fullScreen
-        present(navigationController, animated: true, completion: nil)
+        OnboardingPageViewController.didSkipActionButtonTap?()
     }
 }
