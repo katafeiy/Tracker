@@ -29,11 +29,11 @@ final class OnboardingPageViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(image: UIImage, title: String, skipAction: @escaping ()->()) {
+    init(page: OnboardingPage, skipAction: @escaping ()->()) {
         self.skipAction = skipAction
         super.init(nibName: nil, bundle: nil)
-        self.imageView = ImprovedUIImageView(image: image)
-        self.messageView.text = title
+        self.imageView.image = page.image
+        self.messageView.text = page.title
     }
     
     override func viewDidLoad() {

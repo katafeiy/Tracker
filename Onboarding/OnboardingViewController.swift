@@ -23,13 +23,13 @@ final class OnboardingViewController: UIPageViewController {
         
         return [
             
-            OnboardingPageViewController(image: UIImage.blueOnboarding, title: "Отслеживайте только то, что хотите", skipAction: { [weak self] in
+            OnboardingPageViewController(page: .firstPage) { [weak self] in
                 self?.skipOnboarding()
-            }),
+            },
             
-            OnboardingPageViewController(image: UIImage.redOnboarding, title: "Даже если это не литры воды и йога", skipAction: { [weak self] in
+            OnboardingPageViewController(page: .secondPage) { [weak self] in
                 self?.skipOnboarding()
-            })
+            }
         ]
     }()
     

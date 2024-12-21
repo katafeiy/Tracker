@@ -2,7 +2,15 @@ import UIKit
 
 final class ImprovedUILabel: UILabel {
     
-    init(text: String? = nil, fontSize: CGFloat, weight: UIFont.Weight, textColor: UIColor, numberOfLines: Int = 1, cornerRadius: CGFloat = 0, textAlignment: NSTextAlignment = .center) {
+    init(
+        text: String? = nil,
+        fontSize: CGFloat,
+        weight: UIFont.Weight,
+        textColor: UIColor,
+        numberOfLines: Int = 1,
+        cornerRadius: CGFloat = 0,
+        textAlignment: NSTextAlignment = .center
+    ) {
         super.init(frame: .zero)
         self.text = text
         self.font = .systemFont(ofSize: fontSize, weight: weight)
