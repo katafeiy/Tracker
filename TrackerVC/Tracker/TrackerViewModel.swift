@@ -56,13 +56,24 @@ final class TrackerViewModel {
     }
     
     func updateAttachCategories(_ tracker: Tracker)  {
+        print(tracker.id)
+        
+        attachTracker.forEach( {
+            print($0.id)
+        })
         
         if attachTracker.contains(where: { $0.id == tracker.id }) {
+            print(attachTracker.count)
             attachTracker.removeAll { $0.id == tracker.id }
+            
             try? trackerStore.updatePinnedTracker(tracker: tracker, isPinned: false)
+            print(attachTracker.count)
+            
         } else {
+            print(attachTracker.count)
             attachTracker.append(tracker)
             try? trackerStore.updatePinnedTracker(tracker: tracker, isPinned: true)
+            print(attachTracker.count)
         }
         updateArrayCategories()
     }

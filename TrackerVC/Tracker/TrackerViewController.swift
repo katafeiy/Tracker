@@ -6,13 +6,9 @@ final class TrackerViewController: UIViewController {
     
     private lazy var mainCollectionView: UICollectionView = {
         
-        let layout = UICollectionViewFlowLayout()
+        let layout = setupCollectionViewCompositionalLayout()
         let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
-        layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = 9
-        layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
-        layout.sectionHeadersPinToVisibleBounds = true
+        
         collectionView.backgroundColor = .clear
         collectionView.register(
             TrackerCollectionViewCell.self,
@@ -146,11 +142,17 @@ final class TrackerViewController: UIViewController {
 extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        viewModel.visibleCategories.count
+        
+        let count = viewModel.visibleCategories.count + 1
+        
+        print(viewModel.visibleCategories.count, viewModel.attachTracker.count)
+        return count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.visibleCategories[section].trackerArray.count
+        
+        return section == 0 ? viewModel.attachTracker.count :
+        viewModel.visibleCategories[section - 1].trackerArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -164,23 +166,26 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             for: indexPath
         ) as?  TrackerCategoryNameCell else { return UICollectionReusableView() }
         
-        let title = viewModel.visibleCategories[indexPath.section].name
+        let fixed = viewModel.attachTracker.isEmpty ? "" : "Закрепленные"
+        let title = indexPath.section == 0 ? fixed : viewModel.visibleCategories[indexPath.section - 1].name
         headerView.configure(with: title)
         return headerView
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        .init(width: collectionView.frame.width, height: 30)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        .init(width: collectionView.frame.width, height: 30)
+//    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let section = indexPath.section - 1
+        
+        let tracker = indexPath.section == 0  ? viewModel.attachTracker[indexPath.row] : viewModel.visibleCategories[section].trackerArray[indexPath.row]
         
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: TrackerCollectionViewCell.cellIdentifier,
             for: indexPath
         ) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
-        
-        let tracker = viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
         
         cell.blockTap(isEnabled: viewModel.isEnabledDate())
         
@@ -204,43 +209,50 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
         
-        guard indexPaths.count > 0 else { return nil }
-        let indexPaths = IndexPath(item: indexPaths[0].item, section: indexPaths[0].section)
-        let tracker = viewModel.visibleCategories[indexPaths.section].trackerArray[indexPaths.row]
+        guard indexPaths.count > 0, let indexPath = indexPaths.first else { return nil }
         
         return UIContextMenuConfiguration(actionProvider: { actions in
             
             return UIMenu(children: [
-                UIAction(title: self.viewModel.isPinned(tracker) ? "Открепить" : "Закрепить", image: .pin.withTintColor(.ypBlackDay)) { [weak self] _ in
+                UIAction(title: indexPath.section == 0 ? "Открепить" : "Закрепить", image: .pin.withTintColor(.ypBlackDay)) { [weak self] _ in
                     guard let self else { return }
-                    self.attachTracker(indexPath: indexPaths)
+                    self.attachTracker(indexPath: indexPath)
                 },
                 
                 UIAction(title: "Редактировать", image: .pencilAndListClipboard.withTintColor(.ypBlackDay)) { [weak self] _ in
                     guard let self else { return }
-                    self.editTracker(indexPath: indexPaths)
+                    self.editTracker(indexPath: indexPath)
                 },
                 
                 UIAction(title: "Удалить", image: .trash.withTintColor(.ypRed), attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
-                    self.deleteTracker(indexPath: indexPaths)
+                    self.deleteTracker(indexPath: indexPath)
                 }
             ])
         })
     }
     
     func attachTracker(indexPath: IndexPath) {
-        let tracker = viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
-        viewModel.updateAttachCategories(tracker)
+        
+        if indexPath.section == 0 {
+            let tracker = viewModel.attachTracker[indexPath.row]
+            viewModel.updateAttachCategories(tracker)
+        } else {
+            let section = indexPath.section - 1
+            let tracker = viewModel.visibleCategories[section].trackerArray[indexPath.row]
+            viewModel.updateAttachCategories(tracker)
+        }
     }
     
     func deleteTracker(indexPath: IndexPath) {
-        let tracker = viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
+        let section = indexPath.section == 0 ? 0 : indexPath.section - 1
+        let tracker = viewModel.visibleCategories[section].trackerArray[indexPath.row]
         viewModel.updateDeleteTracker(tracker)
     }
     
     func editTracker(indexPath: IndexPath) {
-        let tracker = viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
+        let section = indexPath.section == 0 ? 0 : indexPath.section - 1
+        let tracker = viewModel.visibleCategories[section].trackerArray[indexPath.row]
         viewModel.updateEditTracker(tracker)
     }
 }
@@ -261,4 +273,58 @@ extension TrackerViewController: ProtocolNewTrackerEventViewControllerOutput {
     func didCreate(newTracker: Tracker, forCategory: String) {
         viewModel.didCreateTracker(newTracker: newTracker, forCategory: forCategory)
     }
+}
+
+
+
+extension TrackerViewController {
+    private func setupCollectionViewCompositionalLayout() -> UICollectionViewCompositionalLayout {
+        return UICollectionViewCompositionalLayout { sectionIndex, _ in
+            
+            let section: NSCollectionLayoutSection
+            
+            switch sectionIndex {
+            case 0: // horizontal
+                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(167),
+                                                      heightDimension: .absolute(148))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
+                
+                
+                let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(167),
+                                                       heightDimension: .absolute(148))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                
+                section = NSCollectionLayoutSection(group: group)
+                section.orthogonalScrollingBehavior = .continuous
+                
+            default: // vertical
+                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(167),
+                                                      heightDimension: .absolute(148))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
+                
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                       heightDimension: .absolute(148))
+                
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
+                
+                group.contentInsets = .init(top: 5, leading: 8, bottom: 5, trailing: 8)
+                
+                section = NSCollectionLayoutSection(group: group)
+            }
+            
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                    heightDimension: .absolute(30))
+            
+            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
+                                                                     elementKind: UICollectionView.elementKindSectionHeader,
+                                                                     alignment: .topLeading)
+            section.boundarySupplementaryItems = [header]
+            
+            
+            return section
+        }
+    }
+    
 }
