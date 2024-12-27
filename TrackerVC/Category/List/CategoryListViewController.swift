@@ -190,7 +190,7 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
     private func deleteCategory(indexPath: IndexPath) {
         
         let category = self.viewModel.categories[indexPath.row]
-        let alert = UIAlertController(title: "Эта категория точне не нужна?", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Эта категория точно не нужна?", message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Удалить",
                                       style: .destructive,
                                       handler: { [weak self] _ in
@@ -208,6 +208,6 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        75
     }
 }

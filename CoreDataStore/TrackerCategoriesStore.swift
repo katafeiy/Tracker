@@ -21,16 +21,7 @@ final class TrackerCategoriesStore: NSObject {
             guard let name = category.name, let trackersCoreData = category.trackers as? Set<TrackerCoreData> else { continue }
             
             let trackers = trackersCoreData.compactMap({ (trackerCoreData: TrackerCoreData) -> Tracker? in
-                guard
-                    let id = trackerCoreData.id,
-                    let name = trackerCoreData.name,
-                    let emoji = trackerCoreData.emoji,
-                    let color = trackerCoreData.color as? UIColor,
-                    let modelColor = TrackerColors(color: color),
-                    let schedule = trackerCoreData.schedule as? Set<DaysOfWeek>
-                else { return nil }
-                let isHabit = trackerCoreData.isHabit
-                return Tracker(id: id, isHabit: isHabit, name: name, color: modelColor, emoji: emoji, schedule: schedule)
+                TrackerStore.mapToTracker(trackerCoreData: trackerCoreData)
             })
             result.append(TrackerCategory(name: name, trackerArray: trackers))
         }

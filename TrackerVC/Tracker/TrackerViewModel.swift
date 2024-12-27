@@ -8,7 +8,7 @@ final class TrackerViewModel {
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private(set) var visibleCategories: [TrackerCategory] = []
-    
+    private(set) var attachTracker: [Tracker] = []
     private let trackerStore = TrackerStore()
     private let trackerCategoriesStore = TrackerCategoriesStore()
     private let trackerRecordStore = TrackerRecordStore()
@@ -18,6 +18,7 @@ final class TrackerViewModel {
     init() {
         trackerStore.delegate = self
         updateCurrentDate(Date())
+        updateAttachCategories()
     }
     
     private func updateVisibleData() {
@@ -52,6 +53,39 @@ final class TrackerViewModel {
             }
         }
         didUpdateVisibleData?()
+    }
+    
+    func updateAttachCategories(_ tracker: Tracker)  {
+        
+        if attachTracker.contains(where: { $0.id == tracker.id }) {
+            attachTracker.removeAll { $0.id == tracker.id }
+            try? trackerStore.updatePinnedTracker(tracker: tracker, isPinned: false)
+        } else {
+            attachTracker.append(tracker)
+            try? trackerStore.updatePinnedTracker(tracker: tracker, isPinned: true)
+        }
+        updateArrayCategories()
+    }
+    
+    func isPinned(_ tracker: Tracker) -> Bool {
+        attachTracker.contains(where: { $0.id == tracker.id })
+    }
+    
+    func updateAttachCategories() {
+        attachTracker = (try? trackerStore.attachTrackers()) ?? []
+    }
+    
+    func updateDeleteTracker(_ tracker: Tracker) {
+        
+        visibleCategories.removeAll{ $0.trackerArray.contains(where: { $0.id == tracker.id })}
+        try? trackerStore.deleteTracker(tracker: tracker)
+        
+        updateArrayCategories()
+    }
+    
+    func updateEditTracker(_ tracker: Tracker) {
+//        let tracker = visibleCategories[indexPath.section].trackerArray[indexPath.row]
+        
     }
     
     func updateCurrentDate(_ date: Date?) {

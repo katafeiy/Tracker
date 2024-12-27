@@ -4,11 +4,15 @@ final class TrackerViewController: UIViewController {
     
     private let viewModel: TrackerViewModel
     
-    private lazy var collectionView: UICollectionView = {
+    private lazy var mainCollectionView: UICollectionView = {
         
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
         layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 9
+        layout.minimumLineSpacing = 10
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
+        layout.sectionHeadersPinToVisibleBounds = true
         collectionView.backgroundColor = .clear
         collectionView.register(
             TrackerCollectionViewCell.self,
@@ -19,9 +23,6 @@ final class TrackerViewController: UIViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader ,
             withReuseIdentifier: TrackerCategoryNameCell.headerIdentifier
         )
-        layout.minimumInteritemSpacing = 9
-        layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
         return collectionView
     }()
     
@@ -69,11 +70,12 @@ final class TrackerViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         configurationView()
         configurationNavigationBar()
-        collectionView.dataSource = self
-        collectionView.delegate = self
+        mainCollectionView.dataSource = self
+        mainCollectionView.delegate = self
         bindingViewModel()
         viewModel.viewDidLoad()
     }
@@ -83,7 +85,7 @@ final class TrackerViewController: UIViewController {
             guard let self else { return }
             starImage.isHidden = !viewModel.visibleCategories.isEmpty
             whatSearch.isHidden = !viewModel.visibleCategories.isEmpty
-            collectionView.reloadData()
+            mainCollectionView.reloadData()
         }
     }
     
@@ -107,7 +109,7 @@ final class TrackerViewController: UIViewController {
         view.backgroundColor = .ypWhiteDay
         datePicker.center = view.center
         
-        view.addSubviews(starImage, whatSearch, collectionView)
+        view.addSubviews(starImage, whatSearch, mainCollectionView)
         
         NSLayoutConstraint.activate([
             starImage.heightAnchor.constraint(equalToConstant: 80),
@@ -120,10 +122,10 @@ final class TrackerViewController: UIViewController {
             whatSearch.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             whatSearch.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            mainCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mainCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            mainCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            mainCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
@@ -198,6 +200,48 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: 167, height: 148)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        guard indexPaths.count > 0 else { return nil }
+        let indexPaths = IndexPath(item: indexPaths[0].item, section: indexPaths[0].section)
+        let tracker = viewModel.visibleCategories[indexPaths.section].trackerArray[indexPaths.row]
+        
+        return UIContextMenuConfiguration(actionProvider: { actions in
+            
+            return UIMenu(children: [
+                UIAction(title: self.viewModel.isPinned(tracker) ? "Открепить" : "Закрепить", image: .pin.withTintColor(.ypBlackDay)) { [weak self] _ in
+                    guard let self else { return }
+                    self.attachTracker(indexPath: indexPaths)
+                },
+                
+                UIAction(title: "Редактировать", image: .pencilAndListClipboard.withTintColor(.ypBlackDay)) { [weak self] _ in
+                    guard let self else { return }
+                    self.editTracker(indexPath: indexPaths)
+                },
+                
+                UIAction(title: "Удалить", image: .trash.withTintColor(.ypRed), attributes: .destructive) { [weak self] _ in
+                    guard let self else { return }
+                    self.deleteTracker(indexPath: indexPaths)
+                }
+            ])
+        })
+    }
+    
+    func attachTracker(indexPath: IndexPath) {
+        let tracker = viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
+        viewModel.updateAttachCategories(tracker)
+    }
+    
+    func deleteTracker(indexPath: IndexPath) {
+        let tracker = viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
+        viewModel.updateDeleteTracker(tracker)
+    }
+    
+    func editTracker(indexPath: IndexPath) {
+        let tracker = viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
+        viewModel.updateEditTracker(tracker)
     }
 }
 

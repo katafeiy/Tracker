@@ -23,11 +23,13 @@ final class OnboardingViewController: UIPageViewController {
         return [
             
             OnboardingPageViewController(page: .firstPage) { [weak self] in
-                self?.skipOnboarding()
+                guard let self else { return }
+                self.skipOnboarding()
             },
             
             OnboardingPageViewController(page: .secondPage) { [weak self] in
-                self?.skipOnboarding()
+                guard let self else { return }
+                self.skipOnboarding()
             }
         ]
     }()
