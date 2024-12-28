@@ -42,9 +42,7 @@ final class TrackerViewModel {
                     notCompleted = true
                     completedInCurrentDay = false
                 }
-                
                 let showIfIsIrregularEven = !isHabit && (completedInCurrentDay || notCompleted)
-                
                 return showIfIsHabit || showIfIsIrregularEven
             })
             
@@ -85,7 +83,6 @@ final class TrackerViewModel {
     
     func updateEditTracker(_ tracker: Tracker) {
 //        let tracker = visibleCategories[indexPath.section].trackerArray[indexPath.row]
-        
     }
     
     func updateCurrentDate(_ date: Date?) {
