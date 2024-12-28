@@ -275,8 +275,6 @@ extension TrackerViewController: ProtocolNewTrackerEventViewControllerOutput {
     }
 }
 
-
-
 extension TrackerViewController {
     private func setupCollectionViewCompositionalLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { sectionIndex, _ in
@@ -321,7 +319,6 @@ extension TrackerViewController {
                                                                      elementKind: UICollectionView.elementKindSectionHeader,
                                                                      alignment: .topLeading)
             section.boundarySupplementaryItems = [header]
-            
             
             return section
         }
