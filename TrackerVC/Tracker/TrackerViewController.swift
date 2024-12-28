@@ -7,6 +7,7 @@ final class TrackerViewController: UIViewController {
     private lazy var mainCollectionView: UICollectionView = {
         
         let layout = setupCollectionViewCompositionalLayout()
+        
         let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
         
         collectionView.backgroundColor = .clear
@@ -287,7 +288,6 @@ extension TrackerViewController {
                                                       heightDimension: .absolute(148))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
-                
                 
                 let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(167),
                                                        heightDimension: .absolute(148))
