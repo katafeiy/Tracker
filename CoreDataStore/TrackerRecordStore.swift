@@ -19,7 +19,6 @@ final class TrackerRecordStore: NSObject {
             guard let id = $0.id, let date = $0.date else { return nil }
             
             return TrackerRecord(id: id, date: date)
-            
         })
     }
     

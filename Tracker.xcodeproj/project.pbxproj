@@ -88,11 +88,6 @@
 			path = TabBarVC;
 			sourceTree = "<group>";
 		};
-		1282D62E2D05B05B00245E67 /* Onboarding */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Onboarding;
-			sourceTree = "<group>";
-		};
 		129E67102CD0E421002D5F10 /* Tracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -109,6 +104,11 @@
 		129E67312CD0E423002D5F10 /* TrackerUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrackerUITests;
+			sourceTree = "<group>";
+		};
+		12C07A742D26943B00079228 /* Onboarding */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		12F1D03A2CF3A0A200DD16F2 /* Enum */ = {
@@ -146,7 +146,7 @@
 		129E67052CD0E421002D5F10 = {
 			isa = PBXGroup;
 			children = (
-				1282D62E2D05B05B00245E67 /* Onboarding */,
+				12C07A742D26943B00079228 /* Onboarding */,
 				129E67102CD0E421002D5F10 /* Tracker */,
 				12195FB92CFF66BE00E8FA59 /* CoreDataStore */,
 				12F1D03A2CF3A0A200DD16F2 /* Enum */,
@@ -189,8 +189,8 @@
 				12195FB92CFF66BE00E8FA59 /* CoreDataStore */,
 				126FB2552CD1730500D21700 /* TrackerVC */,
 				126FB2602CD1737400D21700 /* TabBarVC */,
-				1282D62E2D05B05B00245E67 /* Onboarding */,
 				129E67102CD0E421002D5F10 /* Tracker */,
+				12C07A742D26943B00079228 /* Onboarding */,
 				12F1D03A2CF3A0A200DD16F2 /* Enum */,
 			);
 			name = Tracker;
@@ -277,6 +277,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 129E67052CD0E421002D5F10;
 			minimizedProjectReferenceProxies = 1;
@@ -425,6 +426,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -488,6 +490,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
