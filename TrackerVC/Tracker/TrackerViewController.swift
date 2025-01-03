@@ -4,6 +4,8 @@ final class TrackerViewController: UIViewController {
     
     private let viewModel: TrackerViewModel
     
+    private lazy var pinnedView = PinnedView()
+    
     private lazy var mainCollectionView: UICollectionView = {
         
         let layout = UICollectionViewFlowLayout()
@@ -109,9 +111,15 @@ final class TrackerViewController: UIViewController {
         view.backgroundColor = .ypWhiteDay
         datePicker.center = view.center
         
-        view.addSubviews(starImage, whatSearch, mainCollectionView)
+        view.addSubviews(starImage, whatSearch, mainCollectionView, pinnedView)
         
         NSLayoutConstraint.activate([
+            
+            pinnedView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            pinnedView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            pinnedView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            pinnedView.heightAnchor.constraint(equalToConstant: 178),
+            
             starImage.heightAnchor.constraint(equalToConstant: 80),
             starImage.widthAnchor.constraint(equalToConstant: 80),
             starImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -20),
@@ -122,7 +130,7 @@ final class TrackerViewController: UIViewController {
             whatSearch.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             whatSearch.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
-            mainCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mainCollectionView.topAnchor.constraint(equalTo: pinnedView.bottomAnchor),
             mainCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             mainCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             mainCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
