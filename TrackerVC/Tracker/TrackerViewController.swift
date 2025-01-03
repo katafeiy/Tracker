@@ -42,7 +42,7 @@ final class TrackerViewController: UIViewController {
     }()
     
     private lazy var whatSearch: ImprovedUILabel = {
-        ImprovedUILabel(text: "Что будем отслеживать?",
+        ImprovedUILabel(text: emptyStateText,
                         fontSize: 12,
                         weight: .medium,
                         textColor: .ypBlackDay)
@@ -50,7 +50,7 @@ final class TrackerViewController: UIViewController {
     
     private lazy var searchViewController: UISearchController = {
         let searchViewController = UISearchController()
-        searchViewController.searchBar.placeholder = "Поиск"
+        searchViewController.searchBar.placeholder = placeholderForSearch
         searchViewController.searchResultsUpdater = self
         searchViewController.obscuresBackgroundDuringPresentation = false
         searchViewController.hidesNavigationBarDuringPresentation = false
@@ -99,7 +99,7 @@ final class TrackerViewController: UIViewController {
         rightButton.customView = datePicker
         self.navigationItem.rightBarButtonItem = rightButton
         
-        navigationItem.title = "Трекеры"
+        navigationItem.title = navigationItemTitleTVC
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchViewController
     }
@@ -211,17 +211,17 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         return UIContextMenuConfiguration(actionProvider: { actions in
             
             return UIMenu(children: [
-                UIAction(title: self.viewModel.isPinned(tracker) ? "Открепить" : "Закрепить", image: .pin.withTintColor(.ypBlackDay)) { [weak self] _ in
+                UIAction(title: self.viewModel.isPinned(tracker) ? menuTitleUnPinnedTVC : menuTitleIsPinnetTVC, image: .pin.withTintColor(.ypBlackDay)) { [weak self] _ in
                     guard let self else { return }
                     self.attachTracker(indexPath: indexPaths)
                 },
                 
-                UIAction(title: "Редактировать", image: .pencilAndListClipboard.withTintColor(.ypBlackDay)) { [weak self] _ in
+                UIAction(title: menuTitleEditedTVC, image: .pencilAndListClipboard.withTintColor(.ypBlackDay)) { [weak self] _ in
                     guard let self else { return }
                     self.editTracker(indexPath: indexPaths)
                 },
                 
-                UIAction(title: "Удалить", image: .trash.withTintColor(.ypRed), attributes: .destructive) { [weak self] _ in
+                UIAction(title: menuTitleDeleteTVC, image: .trash.withTintColor(.ypRed), attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
                     self.deleteTracker(indexPath: indexPaths)
                 }

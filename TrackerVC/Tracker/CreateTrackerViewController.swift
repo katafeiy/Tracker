@@ -72,7 +72,7 @@ final class CreateTrackerViewController: UIViewController {
     }
     
     func configurationNavigationBar() {
-        navigationItem.title = "Создание трекера"
+        navigationItem.title = navigationItemTitleCTVC
         navigationController?.navigationBar.tintColor = .ypBlackDay
         navigationController?.navigationBar.titleTextAttributes = [
             .font: UIFont.systemFont(ofSize: 16, weight: .medium),

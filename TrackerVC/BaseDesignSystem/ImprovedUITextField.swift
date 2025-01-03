@@ -8,8 +8,8 @@ final class ImprovedUITextField: UITextField {
         
         var text: String {
             return switch self {
-            case .tracker: "Введите название трекера"
-            case .category: "Введите название категории"
+            case .tracker: enterNameTracker
+            case .category: enterNameCategory
             }
         }
     }
@@ -55,7 +55,7 @@ final class LimitedTextField: NSObject, UITextFieldDelegate {
         let count = min(newText.count, characterLimit)
         let remainingCharacters = characterLimit - count
         
-        subtitleLabel.text = count < characterLimit ? ("Осталось \(remainingCharacters) символов") : ("Ограничение \(count) символов")
+        subtitleLabel.text = count < characterLimit ? updateCharactersLeft(characters: remainingCharacters) : updateCharactersLimit(limit: count)
         subtitleLabel.textColor = count < characterLimit ? .ypLightGray : .ypRed
         
         return newText.count <= characterLimit

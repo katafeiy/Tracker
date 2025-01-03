@@ -23,7 +23,10 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }()
     
     private let labelCountDay: ImprovedUILabel = {
-        ImprovedUILabel(fontSize: 12, weight: .medium, textColor: .ypBlackDay)
+        ImprovedUILabel(fontSize: 12,
+                        weight: .medium,
+                        textColor: .ypBlackDay,
+                        textAlignment: .left)
     }()
     
     private let viewEmoji: UIView = {
@@ -55,7 +58,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         labelEmoji.text = tracker.emoji
         labelName.text = tracker.name
         viewCard.backgroundColor = tracker.color.color
-        labelCountDay.text =  "0 дней"
+        labelCountDay.text =  ""
         addButtonCompletion.setImage(UIImage.plusButton, for: .normal)
         addButtonCompletion.backgroundColor = tracker.color.color
     }

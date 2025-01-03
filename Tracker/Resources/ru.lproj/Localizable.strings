@@ -1,0 +1,74 @@
+// TrackerViewController
+
+"emptyState.title" = "Что будем отслеживать?";
+"placeholderForSearch" = "Поиск";
+"navigationItem.title.tvc" = "Трекеры";
+"menuTitleUnPinned.tvc" = "Открепить";
+"menuTitleIsPinnet.tvc" = "Закрепить";
+"menuTitleEdited.tvc" = "Редактировать";
+"menuTitleDelete.tvc" = "Удалить";
+
+// TrackerCollectionViewCell
+
+
+// CreateTrackerViewController
+
+"navigationItem.title.ctvc" = "Создание трекера";
+
+// ScheduleViewController
+
+"navigationItem.title.svc" = "Расписание";
+
+// NewTrackerEventViewController
+
+"category" = "Категория";
+"name.category" = "Название категории";
+"schedule" = "Расписание";
+"weekdays" = "Дни недели";
+
+"new.habit" = "Новая привычка";
+"new.irregular.event" = "Новое нерегулярное событие";
+
+"emoji" = "Эмоджи";
+"color" = "Цвет";
+"every.day" = "Каждый день";
+
+// CategoryListViewController
+
+"emptyStateCategoryList.title" = "Привычки и события можно объединить по смыслу";
+"navigationItem.title.clvc" = "Категория";
+"menuTitleEdited.clvc" = "Редактировать";
+"menuTitleDelete.clvc" = "Удалить";
+"alert.clvc" = "Эта категория точно не нужна?";
+"alertMenuDelete.clvc" = "Удалить";
+"alertMenuCancel.clvc" = "Отменить";
+
+// EditCategoryViewController
+
+"navigationItem.title.ecvc" = "Редактирование категории";
+
+// CreateNewCategoryViewController
+
+"navigationItem.title.cncvc" = "Новая категория";
+
+// ImprovedUITextField
+
+"enterNameTracker" = "Введите название трекера";
+"enterNameCategory" = "Введите название категории";
+"charactersLeft" = "Осталось %d символов";
+"charactersLimit" = "Ограничение %d символов";
+
+// ImprovedUIButton
+
+"habit" = "Привычка";
+"anIrregularEvent" = "Нерегулярное событие";
+"toCreate" = "Создать";
+"ready" = "Готово";
+"cancel" = "Отменить";
+"addCategory" = "Добавить категорию";
+"technologies" = "Вот это технологии";
+
+
+
+
+

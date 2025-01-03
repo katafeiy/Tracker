@@ -13,13 +13,13 @@ final class ImprovedUIButton: UIButton {
         
         var text: String {
             return switch self {
-            case .habit: "Привычка"
-            case .irregular: "Нерегулярное событие"
-            case .create: "Создать"
-            case .ready: "Готово"
-            case .cancel: "Отменить"
-            case .add: "Добавить категорию"
-            case .skip: "Вот это технологии"
+            case .habit: itsHabit
+            case .irregular: anIrregularEvent
+            case .create: toCreate
+            case .ready: itsReady
+            case .cancel: itsCancel
+            case .add: addCategory
+            case .skip: skipToNextVC
             }
         }
     }

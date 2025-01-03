@@ -62,7 +62,7 @@ final class EditCategoryViewController: UIViewController {
     }
     
     func setupNavigationBar() {
-        navigationItem.title = "Редактирование категории"
+        navigationItem.title = navigationItemTitleECVC
         navigationItem.hidesBackButton = true
     }
     

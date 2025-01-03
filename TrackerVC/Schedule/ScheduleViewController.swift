@@ -62,7 +62,7 @@ final class ScheduleViewController: UIViewController {
     }
     
     private  func setupNavigationBar() {
-        navigationItem.title = "Расписание"
+        navigationItem.title = navigationItemTitleSVC
         navigationItem.hidesBackButton = true
     }
     

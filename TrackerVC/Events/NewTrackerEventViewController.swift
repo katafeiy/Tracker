@@ -10,7 +10,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     
     weak var delegate: ProtocolNewTrackerEventViewControllerOutput?
     
-    lazy var nameCell = viewModel.isHabit ? [("Категория", "Название категории"), ("Расписание", "Дни недели")] : [("Категория", "Название категории")]
+    lazy var nameCell = viewModel.isHabit ? [(category, nameCategory), (schedule, weekdays)] : [(category, nameCategory)]
     
     private lazy var nameTracker: ImprovedUITextField = {
         var nameTracker = ImprovedUITextField(placeholder: .tracker)
@@ -182,7 +182,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }
     
     func setupNavigationBar() {
-        navigationItem.title = viewModel.isHabit ? "Новая привычка" : "Новое нерегулярное событие"
+        navigationItem.title = viewModel.isHabit ? newHabit : newIrregularEvent
         navigationItem.hidesBackButton = true
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -284,7 +284,7 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
                 for: indexPath
             ) as? EmojiHeaderCollectionViewCell else { return UICollectionReusableView()}
             
-            headerView.emojiHeaderLabel.text = "Emoji"
+            headerView.emojiHeaderLabel.text = emoji
             return headerView
         case colorCollectionView:
             
@@ -294,7 +294,7 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
                 for: indexPath
             ) as? ColorHeaderCollectionViewCell else { return UICollectionReusableView() }
             
-            headerView.colorHeaderLabel.text = "Цвет"
+            headerView.colorHeaderLabel.text = color
             return headerView
         default: return UICollectionReusableView()
         }
@@ -350,7 +350,7 @@ extension NewTrackerEventViewController: UITableViewDataSource, UITableViewDeleg
                 
                 if schedule == Set(DaysOfWeek.allCases) {
                     if let cell = tableView.cellForRow(at: indexPath) {
-                        cell.detailTextLabel?.text = "Каждый день"
+                        cell.detailTextLabel?.text = everyDay
                     }
                 } else {
                     if let cell = tableView.cellForRow(at: indexPath) {

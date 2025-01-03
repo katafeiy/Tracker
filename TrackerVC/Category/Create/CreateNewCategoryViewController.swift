@@ -60,7 +60,7 @@ final class CreateNewCategoryViewController: UIViewController {
     }
     
     func setupNavigationBar() {
-        navigationItem.title = "Новая категория"
+        navigationItem.title = navigationItemTitleCNCVC
         navigationItem.hidesBackButton = true
     }
     
