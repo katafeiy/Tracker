@@ -6,14 +6,17 @@ let emptyStateText = NSLocalizedString("emptyState.title", comment: "Заглу�
 let placeholderForSearch = NSLocalizedString("placeholderForSearch", comment: "Плейсхолдер для поиска")
 let navigationItemTitleTVC = NSLocalizedString("navigationItem.title.tvc", comment: "Название навигационного пункта")
 let menuTitleUnPinnedTVC = NSLocalizedString("menuTitleUnPinned.tvc", comment: "Название меню при открепелении")
-let menuTitleIsPinnetTVC = NSLocalizedString("menuTitleIsPinnet.tvc", comment: "Название меню при прикреплении")
+let menuTitleIsPinnedTVC = NSLocalizedString("menuTitleIsPinnet.tvc", comment: "Название меню при прикреплении")
 let menuTitleEditedTVC = NSLocalizedString("menuTitleEdited.tvc", comment: "Название меню при изменении")
 let menuTitleDeleteTVC = NSLocalizedString("menuTitleDelete.tvc", comment: "Название меню при удалении")
 
 // TrackerCollectionViewCell
 
-//let correctLabelCountDay = String.localizedStringWithFormat(
-//    NSLocalizedString("countDay.correct", comment: "крректное отображение количества дней"), countDay)
+func correctLabelCountDay(countDay: Int) -> String {
+    let correctLabelCountDay = String.localizedStringWithFormat(
+        NSLocalizedString("correctDay", comment: "крректное отображение количества дней"), countDay)
+    return correctLabelCountDay
+}
 
 // CreateTrackerViewController
 
@@ -80,5 +83,30 @@ let itsCancel = NSLocalizedString("cancel", comment: "Название кноп�
 let addCategory = NSLocalizedString("addCategory", comment: "Название кнопки для добавления категории")
 let skipToNextVC = NSLocalizedString("technologies", comment: "Название кнопки для перехода на следующий экран")
 
+// TabBarViewController
 
+let trackersTBVC = NSLocalizedString("trackers", comment: "Название вкладки со списком трекеров")
+let statisticsTBVC = NSLocalizedString("statistics", comment: "Название вкладки со статистикой")
 
+// DaysOfWeek
+
+let mondayDOW = NSLocalizedString("monday", comment: "Понедельник")
+let tuesdayDOW = NSLocalizedString("tuesday", comment: "Вторник")
+let wednesdayDOW = NSLocalizedString("wednesday", comment: "Среда")
+let thursdayDOW = NSLocalizedString("thursday", comment: "Четверг")
+let fridayDOW = NSLocalizedString("friday", comment: "Пятница")
+let saturdayDOW = NSLocalizedString("saturday", comment: "Суббота")
+let sundayDOW = NSLocalizedString("sunday", comment: "Воскресенье")
+
+let monDOW = NSLocalizedString("mon", comment: "Пн")
+let tueDOW = NSLocalizedString("tue", comment: "Вт")
+let wedDOW = NSLocalizedString("wed", comment: "Ср")
+let thuDOW = NSLocalizedString("thu", comment: "Чт")
+let friDOW = NSLocalizedString("fri", comment: "Пт")
+let satDOW = NSLocalizedString("sat", comment: "Сб")
+let sunDOW = NSLocalizedString("sun", comment: "Вс")
+
+// OnboardingPage
+
+let firstPageText = NSLocalizedString("firstPageText", comment: "Текст первой страницы")
+let secondPageText = NSLocalizedString("secondPageText", comment: "Текст второй страницы")

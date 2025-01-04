@@ -4,11 +4,13 @@ import Foundation
 final class TrackerViewModel {
     
     var didUpdateVisibleData: (() -> Void)?
+    var didUpdateTrackerStatus: (() -> Void)?
     
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private(set) var visibleCategories: [TrackerCategory] = []
-    private(set) var attachTracker: [Tracker] = []
+    private var attachTracker: [Tracker] = []
+    private(set) var attachVisibleTracker: [Tracker] = []
     private let trackerStore = TrackerStore()
     private let trackerCategoriesStore = TrackerCategoriesStore()
     private let trackerRecordStore = TrackerRecordStore()
@@ -18,7 +20,7 @@ final class TrackerViewModel {
     init() {
         trackerStore.delegate = self
         updateCurrentDate(Date())
-        updateAttachCategories()
+        loadAttachCategories()
     }
     
     private func updateVisibleData() {
@@ -50,6 +52,22 @@ final class TrackerViewModel {
                 visibleCategories.append(.init(name: $0.name, trackerArray: trackers))
             }
         }
+        
+        attachVisibleTracker = []
+        
+        visibleCategories.forEach {
+            
+            let trackers = $0.trackerArray.compactMap({ tracker in
+                
+                if attachTracker.contains(where: { $0.id == tracker.id }) {
+                    return tracker
+                } else {
+                    return nil
+                }
+            })
+            attachVisibleTracker.append(contentsOf: trackers)
+        }
+        
         didUpdateVisibleData?()
     }
     
@@ -69,13 +87,15 @@ final class TrackerViewModel {
         attachTracker.contains(where: { $0.id == tracker.id })
     }
     
-    func updateAttachCategories() {
+    private func loadAttachCategories() {
         attachTracker = (try? trackerStore.attachTrackers()) ?? []
     }
     
     func updateDeleteTracker(_ tracker: Tracker) {
         
-        visibleCategories.removeAll{ $0.trackerArray.contains(where: { $0.id == tracker.id })}
+        categories.removeAll{ $0.trackerArray.contains(where: { $0.id == tracker.id })}
+        attachTracker.removeAll { $0.id == tracker.id }
+        
         try? trackerStore.deleteTracker(tracker: tracker)
         
         updateArrayCategories()
@@ -113,7 +133,7 @@ final class TrackerViewModel {
     }
     
     func toggleTracker(_ tracker: Tracker) -> Bool {
-        
+        defer { didUpdateTrackerStatus?() }
         if
             let record = completedTrackers.first(where:{ $0.id == tracker.id && $0.date == self.currentDate }) {
             completedTrackers.removeAll(where:{ $0.id == tracker.id && $0.date == self.currentDate })

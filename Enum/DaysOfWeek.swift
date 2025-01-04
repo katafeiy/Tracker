@@ -4,7 +4,7 @@ enum DaysOfWeek: Int, CaseIterable, Codable {
     
     case mon
     case tue
-    case wen
+    case wed
     case thu
     case fri
     case sat
@@ -18,7 +18,7 @@ enum DaysOfWeek: Int, CaseIterable, Codable {
         switch calendar.component(.weekday, from: date) {
         case 2: self = .mon
         case 3: self = .tue
-        case 4: self = .wen
+        case 4: self = .wed
         case 5: self = .thu
         case 6: self = .fri
         case 7: self = .sat
@@ -30,26 +30,26 @@ enum DaysOfWeek: Int, CaseIterable, Codable {
     var fullName: String {
         
         return switch self {
-        case .mon: "Понедельник"
-        case .tue: "Вторник"
-        case .wen: "Среда"
-        case .thu: "Четверг"
-        case .fri: "Пятница"
-        case .sat: "Суббота"
-        case .sun: "Воскресенье"
+        case .mon: mondayDOW
+        case .tue: tuesdayDOW
+        case .wed: wednesdayDOW
+        case .thu: thursdayDOW
+        case .fri: fridayDOW
+        case .sat: saturdayDOW
+        case .sun: sundayDOW
         }
     }
     
     var shortName: String {
         
         return switch self {
-        case .mon: "Пн"
-        case .tue: "Вт"
-        case .wen: "Ср"
-        case .thu: "Чт"
-        case .fri: "Пт"
-        case .sat: "Сб"
-        case .sun: "Вс"
+        case .mon: monDOW
+        case .tue: tueDOW
+        case .wed: wedDOW
+        case .thu: thuDOW
+        case .fri: friDOW
+        case .sat: satDOW
+        case .sun: sunDOW
         }
     }
 }

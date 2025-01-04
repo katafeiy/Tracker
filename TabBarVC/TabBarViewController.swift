@@ -10,8 +10,8 @@ final class TabBarViewController: UITabBarController {
         var title: String? {
             
             return switch self {
-            case .tracker: "Трекеры"
-            case .statistics: "Статистика"
+            case .tracker: trackersTBVC
+            case .statistics: statisticsTBVC
             }
         }
         var image: UIImage? {

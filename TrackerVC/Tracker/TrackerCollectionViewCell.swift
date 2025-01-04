@@ -83,7 +83,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         default: "\(number) дней"
         }
     }
-    
+ 
     override init (frame: CGRect) {
         super.init(frame: frame)
         

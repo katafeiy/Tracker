@@ -4,7 +4,12 @@ final class TrackerViewController: UIViewController {
     
     private let viewModel: TrackerViewModel
     
-    private lazy var pinnedView = PinnedView()
+    private lazy var pinnedView: PinnedView = {
+        let pinnedView = PinnedView()
+        pinnedView.delegate = self
+        pinnedView.dataSource = self
+        return pinnedView
+    }()
     
     private lazy var mainCollectionView: UICollectionView = {
         
@@ -14,7 +19,6 @@ final class TrackerViewController: UIViewController {
         layout.minimumInteritemSpacing = 9
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
-        layout.sectionHeadersPinToVisibleBounds = true
         collectionView.backgroundColor = .clear
         collectionView.register(
             TrackerCollectionViewCell.self,
@@ -88,6 +92,12 @@ final class TrackerViewController: UIViewController {
             starImage.isHidden = !viewModel.visibleCategories.isEmpty
             whatSearch.isHidden = !viewModel.visibleCategories.isEmpty
             mainCollectionView.reloadData()
+            pinnedView.reloadData()
+        }
+        viewModel.didUpdateTrackerStatus = { [weak self] in
+            guard let self else { return }
+            mainCollectionView.reloadData()
+            pinnedView.reloadData()
         }
     }
     
@@ -154,11 +164,11 @@ final class TrackerViewController: UIViewController {
 extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        viewModel.visibleCategories.count
+        collectionView === pinnedView ? 1 : viewModel.visibleCategories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.visibleCategories[section].trackerArray.count
+        collectionView === pinnedView ? viewModel.attachVisibleTracker.count : viewModel.visibleCategories[section].trackerArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -172,7 +182,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             for: indexPath
         ) as?  TrackerCategoryNameCell else { return UICollectionReusableView() }
         
-        let title = viewModel.visibleCategories[indexPath.section].name
+        let title = collectionView === pinnedView ? "Закрепленные" : viewModel.visibleCategories[indexPath.section].name
         headerView.configure(with: title)
         return headerView
     }
@@ -188,7 +198,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             for: indexPath
         ) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
         
-        let tracker = viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
+        let tracker = collectionView === pinnedView ? viewModel.attachVisibleTracker[indexPath.row] : viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
         
         cell.blockTap(isEnabled: viewModel.isEnabledDate())
         
@@ -214,12 +224,12 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         guard indexPaths.count > 0 else { return nil }
         let indexPaths = IndexPath(item: indexPaths[0].item, section: indexPaths[0].section)
-        let tracker = viewModel.visibleCategories[indexPaths.section].trackerArray[indexPaths.row]
+        let tracker = collectionView === pinnedView ? viewModel.attachVisibleTracker[indexPaths.row] : viewModel.visibleCategories[indexPaths.section].trackerArray[indexPaths.row]
         
         return UIContextMenuConfiguration(actionProvider: { actions in
             
             return UIMenu(children: [
-                UIAction(title: self.viewModel.isPinned(tracker) ? menuTitleUnPinnedTVC : menuTitleIsPinnetTVC, image: .pin.withTintColor(.ypBlackDay)) { [weak self] _ in
+                UIAction(title: self.viewModel.isPinned(tracker) ? menuTitleUnPinnedTVC : menuTitleIsPinnedTVC, image: .pin.withTintColor(.ypBlackDay)) { [weak self] _ in
                     guard let self else { return }
                     self.attachTracker(indexPath: indexPaths)
                 },

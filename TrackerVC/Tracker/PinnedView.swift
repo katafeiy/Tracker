@@ -1,42 +1,49 @@
 import UIKit
 
 final class PinnedView: UICollectionView {
-
+    
     init() {
         let layout = UICollectionViewCompositionalLayout { _, _ in
-         
-            let item = NSCollectionLayoutItem(
-                      layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .absolute(167),
-                        heightDimension: .absolute(148)
-                      )
-                    )
-                    item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 8)
-                            
-                    // group
-                                                                 
-                    let group = NSCollectionLayoutGroup.horizontal(
-                      layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(148)
-                      ),
-                      subitem: item,
-                      count: 2
-                    )
-                    group.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 0)
-                            
-                    // section
-                    let section = NSCollectionLayoutSection(group: group)
-                    section.orthogonalScrollingBehavior = .continuous
-                    section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
-                        
-                    // return
-                    return section
             
+            let item = NSCollectionLayoutItem(
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .absolute(167),
+                    heightDimension: .absolute(148)
+                )
+            )
+            item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 9)
+            
+            // group
+            
+            let group = NSCollectionLayoutGroup.horizontal(
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(148)
+                ),
+                subitem: item,
+                count: 2
+            )
+            group.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 0)
+            
+            // section
+            let section = NSCollectionLayoutSection(group: group)
+            section.orthogonalScrollingBehavior = .continuous
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
+            
+            // header
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                    heightDimension: .absolute(30))
+            
+            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
+                                                                     elementKind: UICollectionView.elementKindSectionHeader,
+                                                                     alignment: .topLeading)
+            section.boundarySupplementaryItems = [header]
+            
+            // return
+            return section
         }
         super.init(frame: .zero, collectionViewLayout: layout)
-        dataSource = self
-        delegate = self
+        
         
         register(
             TrackerCollectionViewCell.self,
