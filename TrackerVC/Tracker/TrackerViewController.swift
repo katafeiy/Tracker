@@ -6,6 +6,7 @@ final class TrackerViewController: UIViewController {
     
     private lazy var pinnedView: PinnedView = {
         let pinnedView = PinnedView()
+        pinnedView.backgroundColor = .clear
         pinnedView.delegate = self
         pinnedView.dataSource = self
         return pinnedView
@@ -36,7 +37,7 @@ final class TrackerViewController: UIViewController {
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
-        datePicker.tintColor = .ypBlackDay
+        datePicker.tintColor = .ypBlack
         let localeID = Locale.preferredLanguages.first ?? "ru_RU"
         datePicker.locale = Locale(identifier: localeID)
         datePicker.addTarget(self, action: #selector(setDatePickerValueChanged(_:)), for: .valueChanged)
@@ -51,7 +52,7 @@ final class TrackerViewController: UIViewController {
         ImprovedUILabel(text: emptyStateText,
                         fontSize: 12,
                         weight: .medium,
-                        textColor: .ypBlackDay)
+                        textColor: .ypBlack)
     }()
     
     private lazy var searchViewController: UISearchController = {
@@ -60,7 +61,7 @@ final class TrackerViewController: UIViewController {
         searchViewController.searchResultsUpdater = self
         searchViewController.obscuresBackgroundDuringPresentation = false
         searchViewController.hidesNavigationBarDuringPresentation = false
-        searchViewController.searchBar.tintColor = .ypBlackDay
+        searchViewController.searchBar.tintColor = .ypBlack
         searchViewController.searchBar.delegate = self
         searchViewController.delegate = self
         return searchViewController
@@ -104,7 +105,7 @@ final class TrackerViewController: UIViewController {
     private func configurationNavigationBar() {
         
         let leftButton = UIBarButtonItem(image: UIImage.plusButton, style: .done, target: self, action: #selector(setNewTracker))
-        leftButton.tintColor = .ypBlackDay
+        leftButton.tintColor = .ypBlack
         self.navigationItem.leftBarButtonItem = leftButton
         
         let rightButton = UIBarButtonItem()
@@ -118,7 +119,7 @@ final class TrackerViewController: UIViewController {
     
     private func configurationView() {
         
-        view.backgroundColor = .ypWhiteDay
+        view.backgroundColor = .ypWhite
         datePicker.center = view.center
         
         view.addSubviews(starImage, whatSearch, mainCollectionView, pinnedView)
@@ -229,12 +230,12 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         return UIContextMenuConfiguration(actionProvider: { actions in
             
             return UIMenu(children: [
-                UIAction(title: self.viewModel.isPinned(tracker) ? menuTitleUnPinnedTVC : menuTitleIsPinnedTVC, image: .pin.withTintColor(.ypBlackDay)) { [weak self] _ in
+                UIAction(title: self.viewModel.isPinned(tracker) ? menuTitleUnPinnedTVC : menuTitleIsPinnedTVC, image: .pin.withTintColor(.ypBlack)) { [weak self] _ in
                     guard let self else { return }
                     self.attachTracker(indexPath: indexPaths)
                 },
                 
-                UIAction(title: menuTitleEditedTVC, image: .pencilAndListClipboard.withTintColor(.ypBlackDay)) { [weak self] _ in
+                UIAction(title: menuTitleEditedTVC, image: .pencilAndListClipboard.withTintColor(.ypBlack)) { [weak self] _ in
                     guard let self else { return }
                     self.editTracker(indexPath: indexPaths)
                 },

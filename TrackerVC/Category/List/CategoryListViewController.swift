@@ -15,14 +15,14 @@ final class CategoryListViewController: UIViewController {
             text: emptyStateCategoryList,
             fontSize: 12,
             weight: .medium,
-            textColor: .ypBlackDay,
+            textColor: .ypBlack,
             numberOfLines: 2)
     }()
     
     private lazy var addNewCategoryButton: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .add,
-                                      titleColor: .ypWhiteDay,
-                                      backgroundColor: .ypBlackDay,
+                                      titleColor: .ypWhite,
+                                      backgroundColor: .ypBlack,
                                       cornerRadius: 16,
                                       fontSize: 16,
                                       fontWeight: .medium)
@@ -138,7 +138,7 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
         
         cell.textLabel?.text = viewModel.categories[indexPath.row]
         
-        cell.backgroundColor = .ypBackgroundDay
+        cell.backgroundColor = .ypBackground
         if viewModel.isSelectedCategory(viewModel.categories[indexPath.row]) {
             cell.accessoryType = .checkmark
         } else {
@@ -160,7 +160,7 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
             
             return UIMenu(children: [
                 UIAction(title: menuTitleEditedCLVC,
-                         image: .pencilAndListClipboard.withTintColor(.ypBlackDay)) { action in
+                         image: .pencilAndListClipboard.withTintColor(.ypBlack)) { action in
                              self.editCategory(indexPath: indexPath)
                          },
                 UIAction(title: menuTitleDeleteCLVC, image:

@@ -14,7 +14,7 @@ final class CreateNewCategoryViewController: UIViewController {
     
     private lazy var createNewCategoryButton: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .ready,
-                                      titleColor: .ypWhiteDay,
+                                      titleColor: .ypWhite,
                                       backgroundColor: .ypGray,
                                       cornerRadius: 16,
                                       fontSize: 16,
@@ -55,7 +55,7 @@ final class CreateNewCategoryViewController: UIViewController {
         viewModel.updateCreateNewCategoryStatus = { [weak self] status in
             guard let self else { return }
             createNewCategoryButton.isEnabled = status
-            createNewCategoryButton.backgroundColor = status ? .ypBlackDay : .ypGray
+            createNewCategoryButton.backgroundColor = status ? .ypBlack : .ypGray
         }
     }
     

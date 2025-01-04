@@ -24,11 +24,12 @@ final class PinnedView: UICollectionView {
                 count: 2
             )
             group.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 0)
+            group.interItemSpacing = .fixed(10)
             
             // section
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = .continuous
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
+            section.contentInsets = NSDirectionalEdgeInsets(top: -12, leading: 16, bottom: 0, trailing: 16)
             
             // header
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
@@ -54,7 +55,6 @@ final class PinnedView: UICollectionView {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader ,
             withReuseIdentifier: TrackerCategoryNameCell.headerIdentifier
         )
-        
     }
     
     required init?(coder: NSCoder) {

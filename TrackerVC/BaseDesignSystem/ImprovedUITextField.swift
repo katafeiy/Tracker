@@ -17,9 +17,9 @@ final class ImprovedUITextField: UITextField {
     init(placeholder: PlaceholderText) {
         super.init(frame: .zero)
         self.placeholder = placeholder.text
-        backgroundColor = .ypBackgroundDay
+        backgroundColor = .ypBackground
         font = .systemFont(ofSize: 17, weight: .regular)
-        textColor = .ypBlackDay
+        textColor = .ypBlack
         layer.masksToBounds = true
         layer.cornerRadius = 16
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))

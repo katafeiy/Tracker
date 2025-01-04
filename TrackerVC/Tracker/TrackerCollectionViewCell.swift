@@ -11,13 +11,13 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }()
     
     private let labelEmoji: ImprovedUILabel = {
-        ImprovedUILabel(fontSize: 12, weight: .medium, textColor: .ypBlackDay)
+        ImprovedUILabel(fontSize: 12, weight: .medium, textColor: .ypBlack)
     }()
     
     private let labelName: ImprovedUILabel = {
         ImprovedUILabel(fontSize: 12,
                         weight: .medium,
-                        textColor: .ypWhiteDay,
+                        textColor: .ypWhite,
                         numberOfLines: 2,
                         textAlignment: .left)
     }()
@@ -25,12 +25,12 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private let labelCountDay: ImprovedUILabel = {
         ImprovedUILabel(fontSize: 12,
                         weight: .medium,
-                        textColor: .ypBlackDay,
+                        textColor: .ypBlack,
                         textAlignment: .left)
     }()
     
     private let viewEmoji: UIView = {
-        ImprovedUIView(backgroundColor: .ypWhiteDay.withAlphaComponent(0.3), cornerRadius: 12)
+        ImprovedUIView(backgroundColor: .ypWhite.withAlphaComponent(0.3), cornerRadius: 12)
     }()
     
     private lazy var addButtonCompletion: UIButton = {
@@ -40,7 +40,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         button.backgroundColor = .clear
         button.layer.cornerRadius = 17
         button.layer.masksToBounds = true
-        button.tintColor = .ypWhiteDay
+        button.tintColor = .ypWhite
         button.imageView?.image = .plusTracker
         return button
     }()

@@ -6,7 +6,7 @@ final class ImprovedUITableView: UITableView {
         super.init(frame: frame, style: style)
         isScrollEnabled = false
         separatorStyle = .singleLine
-        separatorColor = .ypBlackDay
+        separatorColor = .ypBlack
         separatorInset.left = 15.95
         separatorInset.right = 15.95
         layer.masksToBounds = true

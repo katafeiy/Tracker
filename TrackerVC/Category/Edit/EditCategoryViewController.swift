@@ -26,8 +26,8 @@ final class EditCategoryViewController: UIViewController {
     
     private lazy var editedCategoryButton: ImprovedUIButton = {
         let editedCategoryButton = ImprovedUIButton(title: .ready,
-                                                    titleColor: .ypWhiteDay,
-                                                    backgroundColor: .ypBlackDay,
+                                                    titleColor: .ypWhite,
+                                                    backgroundColor: .ypBlack,
                                                     cornerRadius: 16,
                                                     fontSize: 16,
                                                     fontWeight: .medium)
@@ -57,7 +57,7 @@ final class EditCategoryViewController: UIViewController {
         viewModel.didUpdateNameCategoryStatus = { [weak self] status in
             guard let self else { return }
             editedCategoryButton.isEnabled = status
-            editedCategoryButton.backgroundColor = status ? .ypBlackDay : .ypGray
+            editedCategoryButton.backgroundColor = status ? .ypBlack : .ypGray
         }
     }
     

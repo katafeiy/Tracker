@@ -6,7 +6,7 @@ final class TrackerCategoryNameCell: UICollectionViewCell {
     static let headerIdentifier: String = "header"
     
     private let nameLabel: ImprovedUILabel = {
-        ImprovedUILabel(fontSize: 19, weight: .bold, textColor: .ypBlackDay)
+        ImprovedUILabel(fontSize: 19, weight: .bold, textColor: .ypBlack)
     }()
     
     override init (frame: CGRect) {

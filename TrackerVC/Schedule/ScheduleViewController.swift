@@ -8,8 +8,8 @@ final class ScheduleViewController: UIViewController {
     
     private lazy var readyToUse: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .ready,
-                                      titleColor: .ypWhiteDay,
-                                      backgroundColor: .ypBlackDay,
+                                      titleColor: .ypWhite,
+                                      backgroundColor: .ypBlack,
                                       cornerRadius: 16,
                                       fontSize: 16,
                                       fontWeight: .medium)
@@ -83,7 +83,7 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource  {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         cell.textLabel?.text = viewModel.daysOfWeek[indexPath.row].fullName
-        cell.backgroundColor = .ypBackgroundDay
+        cell.backgroundColor = .ypBackground
         cell.selectionStyle = .none
         
         let switchControl = UISwitch()

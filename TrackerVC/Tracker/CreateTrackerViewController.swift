@@ -8,8 +8,8 @@ final class CreateTrackerViewController: UIViewController {
     
     private lazy var habitButton: ImprovedUIButton = {
         let habitButton = ImprovedUIButton(title: .habit,
-                                           titleColor: .ypWhiteDay,
-                                           backgroundColor: .ypBlackDay,
+                                           titleColor: .ypWhite,
+                                           backgroundColor: .ypBlack,
                                            cornerRadius: 16,
                                            fontSize: 16,
                                            fontWeight: .medium)
@@ -19,8 +19,8 @@ final class CreateTrackerViewController: UIViewController {
     
     private lazy var irregularEventButton: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .irregular,
-                                      titleColor: .ypWhiteDay,
-                                      backgroundColor: .ypBlackDay,
+                                      titleColor: .ypWhite,
+                                      backgroundColor: .ypBlack,
                                       cornerRadius: 16,
                                       fontSize: 16,
                                       fontWeight: .medium)
@@ -43,7 +43,7 @@ final class CreateTrackerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .ypWhiteDay
+        view.backgroundColor = .ypWhite
         setupUI()
         configurationNavigationBar()
         binding()
@@ -73,10 +73,10 @@ final class CreateTrackerViewController: UIViewController {
     
     func configurationNavigationBar() {
         navigationItem.title = navigationItemTitleCTVC
-        navigationController?.navigationBar.tintColor = .ypBlackDay
+        navigationController?.navigationBar.tintColor = .ypBlack
         navigationController?.navigationBar.titleTextAttributes = [
             .font: UIFont.systemFont(ofSize: 16, weight: .medium),
-            .foregroundColor: UIColor.ypBlackDay
+            .foregroundColor: UIColor.ypBlack
         ]
     }
     

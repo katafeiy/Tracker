@@ -5,7 +5,7 @@ final class ColorHeaderCollectionViewCell: UICollectionViewCell {
     static let headerIdentifier: String = "colorHeader"
     
     let colorHeaderLabel: ImprovedUILabel = {
-        ImprovedUILabel(fontSize: 19, weight: .bold, textColor: .ypBlackDay)
+        ImprovedUILabel(fontSize: 19, weight: .bold, textColor: .ypBlack)
     }()
     
     override init(frame: CGRect) {

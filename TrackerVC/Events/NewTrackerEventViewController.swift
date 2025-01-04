@@ -70,7 +70,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     
     private lazy var createNewTrackerButton: ImprovedUIButton = {
         let createButton = ImprovedUIButton(title: .create,
-                                            titleColor: .ypWhiteDay,
+                                            titleColor: .ypWhite,
                                             backgroundColor: .ypGray,
                                             cornerRadius: 16,
                                             fontSize: 16,
@@ -83,7 +83,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     private lazy var cancelButton: ImprovedUIButton = {
         let cancelButton = ImprovedUIButton(title: .cancel,
                                             titleColor: .ypRed,
-                                            backgroundColor: .ypWhiteDay,
+                                            backgroundColor: .ypWhite,
                                             cornerRadius: 16,
                                             fontSize: 16,
                                             fontWeight: .medium)
@@ -113,7 +113,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
         viewModel.updatedCreatedTrackerStatus = { [weak self] status in
             guard let self else { return }
             createNewTrackerButton.isEnabled = status
-            createNewTrackerButton.backgroundColor = status ? .ypBlackDay : .ypGray
+            createNewTrackerButton.backgroundColor = status ? .ypBlack : .ypGray
         }
     }
     
@@ -262,7 +262,7 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
         switch collectionView {
         case emojiCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionViewCell
-            cell?.emojiLabel.backgroundColor = .ypWhiteDay
+            cell?.emojiLabel.backgroundColor = .ypWhite
             viewModel.updateTrackerEmoji(nil)
         case colorCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
@@ -315,7 +315,7 @@ extension NewTrackerEventViewController: UITableViewDataSource, UITableViewDeleg
         
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         
-        cell.backgroundColor = .ypBackgroundDay
+        cell.backgroundColor = .ypBackground
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 16
         cell.selectionStyle = .none
