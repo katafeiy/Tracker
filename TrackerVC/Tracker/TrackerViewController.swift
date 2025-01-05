@@ -4,8 +4,10 @@ final class TrackerViewController: UIViewController {
     
     private let viewModel: TrackerViewModel
     
-    private lazy var pinnedView: PinnedView = {
-        let pinnedView = PinnedView()
+    private var mainCollectionViewTopConstraint: NSLayoutConstraint?
+    
+    private lazy var pinnedView: PinnedCollectionView = {
+        let pinnedView = PinnedCollectionView()
         pinnedView.backgroundColor = .clear
         pinnedView.delegate = self
         pinnedView.dataSource = self
@@ -77,7 +79,6 @@ final class TrackerViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         configurationView()
         configurationNavigationBar()
@@ -92,9 +93,23 @@ final class TrackerViewController: UIViewController {
             guard let self else { return }
             starImage.isHidden = !viewModel.visibleCategories.isEmpty
             whatSearch.isHidden = !viewModel.visibleCategories.isEmpty
+            pinnedView.isHidden = viewModel.attachVisibleTracker.isEmpty
+            
+            self.mainCollectionViewTopConstraint?.isActive = false
+            self.mainCollectionViewTopConstraint = self.mainCollectionView.topAnchor.constraint(
+                equalTo: self.viewModel.attachVisibleTracker.isEmpty ?
+                self.view.safeAreaLayoutGuide.topAnchor : self.pinnedView.bottomAnchor
+            )
+            self.mainCollectionViewTopConstraint?.isActive = true
+            
+            UIView.animate(withDuration: 0.25) {
+                self.view.layoutIfNeeded()
+            }
+            
             mainCollectionView.reloadData()
             pinnedView.reloadData()
         }
+        
         viewModel.didUpdateTrackerStatus = { [weak self] in
             guard let self else { return }
             mainCollectionView.reloadData()
@@ -124,6 +139,10 @@ final class TrackerViewController: UIViewController {
         
         view.addSubviews(starImage, whatSearch, mainCollectionView, pinnedView)
         
+        mainCollectionViewTopConstraint = mainCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        
+        guard let mainCollectionViewTopConstraint else { return }
+        
         NSLayoutConstraint.activate([
             
             pinnedView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -141,7 +160,7 @@ final class TrackerViewController: UIViewController {
             whatSearch.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             whatSearch.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
-            mainCollectionView.topAnchor.constraint(equalTo: pinnedView.bottomAnchor),
+            mainCollectionViewTopConstraint,
             mainCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             mainCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             mainCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -232,34 +251,31 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             return UIMenu(children: [
                 UIAction(title: self.viewModel.isPinned(tracker) ? menuTitleUnPinnedTVC : menuTitleIsPinnedTVC, image: .pin.withTintColor(.ypBlack)) { [weak self] _ in
                     guard let self else { return }
-                    self.attachTracker(indexPath: indexPaths)
+                    self.attachTracker(tracker: tracker)
                 },
                 
                 UIAction(title: menuTitleEditedTVC, image: .pencilAndListClipboard.withTintColor(.ypBlack)) { [weak self] _ in
                     guard let self else { return }
-                    self.editTracker(indexPath: indexPaths)
+                    self.editTracker(tracker: tracker)
                 },
                 
                 UIAction(title: menuTitleDeleteTVC, image: .trash.withTintColor(.ypRed), attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
-                    self.deleteTracker(indexPath: indexPaths)
+                    self.deleteTracker(tracker: tracker)
                 }
             ])
         })
     }
     
-    func attachTracker(indexPath: IndexPath) {
-        let tracker = viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
+    func attachTracker(tracker: Tracker) {
         viewModel.updateAttachCategories(tracker)
     }
     
-    func deleteTracker(indexPath: IndexPath) {
-        let tracker = viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
+    func deleteTracker(tracker: Tracker) {
         viewModel.updateDeleteTracker(tracker)
     }
     
-    func editTracker(indexPath: IndexPath) {
-        let tracker = viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
+    func editTracker(tracker: Tracker) {
         viewModel.updateEditTracker(tracker)
     }
 }

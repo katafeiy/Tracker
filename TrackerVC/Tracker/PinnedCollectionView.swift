@@ -1,6 +1,6 @@
 import UIKit
 
-final class PinnedView: UICollectionView {
+final class PinnedCollectionView: UICollectionView {
     
     init() {
         let layout = UICollectionViewCompositionalLayout { _, _ in
@@ -62,44 +62,44 @@ final class PinnedView: UICollectionView {
     }
 }
 
-extension PinnedView: UICollectionViewDataSource, UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier:TrackerCollectionViewCell.cellIdentifier,
-                                                            for: indexPath) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
-        
-        
-        cell.configureCell(tracker: .init(id: .init(), isHabit: true, name: "hcdsjbvfj", color: .azure, emoji: "😇", schedule: []), didPlusTap: {})
-        return cell
-        
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        3
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath
-    ) -> UICollectionReusableView {
-        
-        guard let headerView = collectionView.dequeueReusableSupplementaryView(
-            ofKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: TrackerCategoryNameCell.headerIdentifier,
-            for: indexPath
-        ) as?  TrackerCategoryNameCell else { return UICollectionReusableView() }
-        
-        let title = "Закрепленные"
-        headerView.configure(with: title)
-        return headerView
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        .init(width: collectionView.frame.width, height: 30)
-    }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        1
-    }
-}
+//extension PinnedCollectionView: UICollectionViewDataSource, UICollectionViewDelegate {
+//    
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        
+//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier:TrackerCollectionViewCell.cellIdentifier,
+//                                                            for: indexPath) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
+//        
+//        
+//        cell.configureCell(tracker: .init(id: .init(), isHabit: true, name: "Всем привет", color: .azure, emoji: "😇", schedule: []), didPlusTap: {})
+//        return cell
+//        
+//    }
+//    
+//    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        3
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView,
+//                        viewForSupplementaryElementOfKind kind: String,
+//                        at indexPath: IndexPath
+//    ) -> UICollectionReusableView {
+//        
+//        guard let headerView = collectionView.dequeueReusableSupplementaryView(
+//            ofKind: UICollectionView.elementKindSectionHeader,
+//            withReuseIdentifier: TrackerCategoryNameCell.headerIdentifier,
+//            for: indexPath
+//        ) as?  TrackerCategoryNameCell else { return UICollectionReusableView() }
+//        
+//        let title = "Закрепленные"
+//        headerView.configure(with: title)
+//        return headerView
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        .init(width: collectionView.frame.width, height: 30)
+//    }
+//    
+//    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        1
+//    }
+//}
