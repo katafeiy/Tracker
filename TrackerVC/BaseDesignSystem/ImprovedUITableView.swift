@@ -2,9 +2,9 @@ import UIKit
 
 final class ImprovedUITableView: UITableView {
     
-    override init(frame: CGRect, style: UITableView.Style) {
+    init(frame: CGRect, style: UITableView.Style, isScroll: Bool = false) {
         super.init(frame: frame, style: style)
-        isScrollEnabled = false
+        isScrollEnabled = isScroll
         separatorStyle = .singleLine
         separatorColor = .ypBlack
         separatorInset.left = 15.95

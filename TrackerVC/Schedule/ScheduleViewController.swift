@@ -18,7 +18,7 @@ final class ScheduleViewController: UIViewController {
     }()
     
     private lazy var scheduleTableView: ImprovedUITableView = {
-        ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
+        ImprovedUITableView(frame: view.bounds, style: .insetGrouped, isScroll: true)
     }()
     
     init(viewModel: ScheduleViewModel) {

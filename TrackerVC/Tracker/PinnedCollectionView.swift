@@ -19,7 +19,7 @@ final class PinnedCollectionView: UICollectionView {
             
             let group = NSCollectionLayoutGroup.horizontal(
                 layoutSize: NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(0.9),
+                    widthDimension: .fractionalWidth(0.95),
                     heightDimension: .absolute(148)
                 ),
                 subitem: item,
