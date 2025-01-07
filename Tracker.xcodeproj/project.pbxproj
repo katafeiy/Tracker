@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		125E3D942D2D819000CF1679 /* Pods_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25FA528BE0EFEB94F9EC7EB1 /* Pods_Tracker.framework */; };
 		126C2D9D2D2D17E300EE9BF6 /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 126C2D9C2D2D17E300EE9BF6 /* InlineSnapshotTesting */; };
 		126C2D9F2D2D17E300EE9BF6 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 126C2D9E2D2D17E300EE9BF6 /* SnapshotTesting */; };
 		376828910DCE9E2616C3142F /* Pods_Tracker_TrackerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 017B20707398615E66AB664D /* Pods_Tracker_TrackerUITests.framework */; };
 		6EC531FAE86EE9A139121A0D /* Pods_TrackerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB29E194F76BA95282984CDA /* Pods_TrackerTests.framework */; };
-		B516D30CBBCB39A34847B401 /* Pods_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25FA528BE0EFEB94F9EC7EB1 /* Pods_Tracker.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,15 +84,11 @@
 		};
 		12195FB92CFF66BE00E8FA59 /* CoreDataStore */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = CoreDataStore;
 			sourceTree = "<group>";
 		};
 		126FB2552CD1730500D21700 /* TrackerVC */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = TrackerVC;
 			sourceTree = "<group>";
 		};
@@ -106,15 +102,11 @@
 		};
 		126FB2602CD1737400D21700 /* TabBarVC */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = TabBarVC;
 			sourceTree = "<group>";
 		};
 		1282D62E2D05B05B00245E67 /* Onboarding */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
@@ -128,22 +120,21 @@
 		};
 		129E67272CD0E423002D5F10 /* TrackerTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = TrackerTests;
 			sourceTree = "<group>";
 		};
 		129E67312CD0E423002D5F10 /* TrackerUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = TrackerUITests;
+			sourceTree = "<group>";
+		};
+		12CBB4E42D2D7104008F228C /* AnalyticsService */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AnalyticsService;
 			sourceTree = "<group>";
 		};
 		12F1D03A2CF3A0A200DD16F2 /* Enum */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Enum;
 			sourceTree = "<group>";
 		};
@@ -154,7 +145,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B516D30CBBCB39A34847B401 /* Pods_Tracker.framework in Frameworks */,
+				125E3D942D2D819000CF1679 /* Pods_Tracker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +173,7 @@
 		129E67052CD0E421002D5F10 = {
 			isa = PBXGroup;
 			children = (
+				12CBB4E42D2D7104008F228C /* AnalyticsService */,
 				1282D62E2D05B05B00245E67 /* Onboarding */,
 				129E67102CD0E421002D5F10 /* Tracker */,
 				12195FB92CFF66BE00E8FA59 /* CoreDataStore */,
@@ -218,7 +210,6 @@
 				2636CAAF636768B1ED105BFA /* Pods-TrackerTests.debug.xcconfig */,
 				0C04B251698A9DB755E273C5 /* Pods-TrackerTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -255,6 +246,7 @@
 				126FB2602CD1737400D21700 /* TabBarVC */,
 				1282D62E2D05B05B00245E67 /* Onboarding */,
 				129E67102CD0E421002D5F10 /* Tracker */,
+				12CBB4E42D2D7104008F228C /* AnalyticsService */,
 				12F1D03A2CF3A0A200DD16F2 /* Enum */,
 			);
 			name = Tracker;
@@ -634,7 +626,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -699,7 +691,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

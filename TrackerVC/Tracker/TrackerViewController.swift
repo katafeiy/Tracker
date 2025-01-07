@@ -202,7 +202,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             for: indexPath
         ) as?  TrackerCategoryNameCell else { return UICollectionReusableView() }
         
-        let title = collectionView === pinnedView ? "Закрепленные" : viewModel.visibleCategories[indexPath.section].name
+        let title = collectionView === pinnedView ? pinnedCategory : viewModel.visibleCategories[indexPath.section].name
         headerView.configure(with: title)
         return headerView
     }

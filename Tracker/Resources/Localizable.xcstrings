@@ -684,6 +684,24 @@
         }
       }
     },
+    "pinnedCategory" : {
+      "comment" : "PinnedCollectionView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinned"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрепленные"
+          }
+        }
+      }
+    },
     "placeholderForSearch" : {
       "comment" : "TrackerViewController",
       "extractionState" : "manual",

@@ -110,3 +110,7 @@ let sunDOW = NSLocalizedString("sun", comment: "Вс")
 
 let firstPageText = NSLocalizedString("firstPageText", comment: "Текст первой страницы")
 let secondPageText = NSLocalizedString("secondPageText", comment: "Текст второй страницы")
+
+// PinnedCollectionView
+
+let pinnedCategory = NSLocalizedString("pinnedCategory", comment: "Закрепленная категория")
