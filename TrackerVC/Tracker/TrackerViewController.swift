@@ -115,6 +115,11 @@ final class TrackerViewController: UIViewController {
             mainCollectionView.reloadData()
             pinnedView.reloadData()
         }
+        
+        viewModel.didUpdateFiltered = { [weak self] in
+            guard let self else { return }
+            mainCollectionView.reloadData()
+        }
     }
     
     private func configurationNavigationBar() {
@@ -184,11 +189,11 @@ final class TrackerViewController: UIViewController {
 extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        collectionView === pinnedView ? 1 : viewModel.visibleCategories.count
+        collectionView === pinnedView ? 1 : viewModel.filteredVisibleCategories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        collectionView === pinnedView ? viewModel.attachVisibleTracker.count : viewModel.visibleCategories[section].trackerArray.count
+        collectionView === pinnedView ? viewModel.attachVisibleTracker.count : viewModel.filteredVisibleCategories[section].trackerArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -202,7 +207,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             for: indexPath
         ) as?  TrackerCategoryNameCell else { return UICollectionReusableView() }
         
-        let title = collectionView === pinnedView ? pinnedCategory : viewModel.visibleCategories[indexPath.section].name
+        let title = collectionView === pinnedView ? pinnedCategory : viewModel.filteredVisibleCategories[indexPath.section].name
         headerView.configure(with: title)
         return headerView
     }
@@ -218,7 +223,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             for: indexPath
         ) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
         
-        let tracker = collectionView === pinnedView ? viewModel.attachVisibleTracker[indexPath.row] : viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
+        let tracker = collectionView === pinnedView ? viewModel.attachVisibleTracker[indexPath.row] : viewModel.filteredVisibleCategories[indexPath.section].trackerArray[indexPath.row]
         
         cell.blockTap(isEnabled: viewModel.isEnabledDate())
         
@@ -244,7 +249,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         guard indexPaths.count > 0 else { return nil }
         let indexPaths = IndexPath(item: indexPaths[0].item, section: indexPaths[0].section)
-        let tracker = collectionView === pinnedView ? viewModel.attachVisibleTracker[indexPaths.row] : viewModel.visibleCategories[indexPaths.section].trackerArray[indexPaths.row]
+        let tracker = collectionView === pinnedView ? viewModel.attachVisibleTracker[indexPaths.row] : viewModel.filteredVisibleCategories[indexPaths.section].trackerArray[indexPaths.row]
         
         return UIContextMenuConfiguration(actionProvider: { actions in
             
@@ -281,9 +286,15 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
 }
 
 extension TrackerViewController: UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
-    
+        
     func updateSearchResults(for searchController: UISearchController) {
-        // TODO: Функционал данного метода будет добавлен в 17 спринте)))
+        
+        guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
+            viewModel.resetFilter()
+            return
+        }
+        
+        viewModel.filterTracker(by: searchText)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

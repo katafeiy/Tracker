@@ -77,7 +77,13 @@ final class TrackerStore: NSObject {
     }
     
     func getAllTrackers() -> [Tracker] {
-        return []
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        let trackersCoreData = try? context.fetch(request)
+        let trackers = trackersCoreData?.compactMap({ (trackerCoreData: TrackerCoreData) -> Tracker? in
+            TrackerStore.mapToTracker(trackerCoreData: trackerCoreData)
+        })
+        guard let trackers else { return [] }
+        return trackers
     }
     
     func toAttachCategory(categoryName: String) throws -> TrackerCategoryCoreData {
