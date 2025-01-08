@@ -69,6 +69,24 @@ final class TrackerViewController: UIViewController {
         return searchViewController
     }()
     
+    private lazy var filterButton: ImprovedUIButton = {
+        let filterButton = ImprovedUIButton(title: .filter,
+                                            titleColor: .ypWhite,
+                                            backgroundColor: .ypBlue,
+                                            cornerRadius: 16, fontSize: 17,
+                                            fontWeight: .regular)
+        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        return filterButton
+    }()
+    
+    @objc func filterButtonTapped() {
+        let filterViewController = FilterViewController(viewModel: FilterViewModel())
+//        filterViewController.delegate = self
+        let navigationController = UINavigationController(rootViewController: filterViewController)
+        navigationController.modalPresentationStyle = .formSheet
+        present(navigationController, animated: true)
+    }
+    
     init(viewModel: TrackerViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -116,7 +134,7 @@ final class TrackerViewController: UIViewController {
             pinnedView.reloadData()
         }
         
-        viewModel.didUpdateFiltered = { [weak self] in
+        viewModel.didUpdateSearching = { [weak self] in
             guard let self else { return }
             mainCollectionView.reloadData()
         }
@@ -142,7 +160,7 @@ final class TrackerViewController: UIViewController {
         view.backgroundColor = .ypWhite
         datePicker.center = view.center
         
-        view.addSubviews(starImage, whatSearch, mainCollectionView, pinnedView)
+        view.addSubviews(starImage, whatSearch, mainCollectionView, pinnedView, filterButton)
         
         mainCollectionViewTopConstraint = mainCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         
@@ -168,7 +186,12 @@ final class TrackerViewController: UIViewController {
             mainCollectionViewTopConstraint,
             mainCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             mainCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            mainCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            mainCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            filterButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 130),
+            filterButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -130),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
         ])
     }
     
@@ -189,11 +212,11 @@ final class TrackerViewController: UIViewController {
 extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        collectionView === pinnedView ? 1 : viewModel.filteredVisibleCategories.count
+        collectionView === pinnedView ? 1 : viewModel.searchVisibleCategories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        collectionView === pinnedView ? viewModel.attachVisibleTracker.count : viewModel.filteredVisibleCategories[section].trackerArray.count
+        collectionView === pinnedView ? viewModel.attachVisibleTracker.count : viewModel.searchVisibleCategories[section].trackerArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -207,7 +230,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             for: indexPath
         ) as?  TrackerCategoryNameCell else { return UICollectionReusableView() }
         
-        let title = collectionView === pinnedView ? pinnedCategory : viewModel.filteredVisibleCategories[indexPath.section].name
+        let title = collectionView === pinnedView ? pinnedCategory : viewModel.searchVisibleCategories[indexPath.section].name
         headerView.configure(with: title)
         return headerView
     }
@@ -223,7 +246,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             for: indexPath
         ) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
         
-        let tracker = collectionView === pinnedView ? viewModel.attachVisibleTracker[indexPath.row] : viewModel.filteredVisibleCategories[indexPath.section].trackerArray[indexPath.row]
+        let tracker = collectionView === pinnedView ? viewModel.attachVisibleTracker[indexPath.row] : viewModel.searchVisibleCategories[indexPath.section].trackerArray[indexPath.row]
         
         cell.blockTap(isEnabled: viewModel.isEnabledDate())
         
@@ -249,7 +272,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         guard indexPaths.count > 0 else { return nil }
         let indexPaths = IndexPath(item: indexPaths[0].item, section: indexPaths[0].section)
-        let tracker = collectionView === pinnedView ? viewModel.attachVisibleTracker[indexPaths.row] : viewModel.filteredVisibleCategories[indexPaths.section].trackerArray[indexPaths.row]
+        let tracker = collectionView === pinnedView ? viewModel.attachVisibleTracker[indexPaths.row] : viewModel.searchVisibleCategories[indexPaths.section].trackerArray[indexPaths.row]
         
         return UIContextMenuConfiguration(actionProvider: { actions in
             

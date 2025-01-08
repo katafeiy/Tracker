@@ -5,7 +5,7 @@ final class TrackerViewModel {
     
     var didUpdateVisibleData: (() -> Void)?
     var didUpdateTrackerStatus: (() -> Void)?
-    var didUpdateFiltered: (() -> Void)?
+    var didUpdateSearching: (() -> Void)?
     
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
@@ -15,7 +15,7 @@ final class TrackerViewModel {
     private let trackerStore = TrackerStore()
     private let trackerCategoriesStore = TrackerCategoriesStore()
     private let trackerRecordStore = TrackerRecordStore()
-    private(set) var filteredVisibleCategories: [TrackerCategory] = []
+    private(set) var searchVisibleCategories: [TrackerCategory] = []
     
     private var currentDate: Date?
     
@@ -128,24 +128,24 @@ final class TrackerViewModel {
     func viewDidLoad() {
         updateArrayCompletedTrackers()
         updateArrayCategories()
-        filteredVisibleCategories = visibleCategories
+        searchVisibleCategories = visibleCategories
     }
     
     func filterTracker(by searchText: String) {
         
-        filteredVisibleCategories = visibleCategories.map { category in
+        searchVisibleCategories = visibleCategories.map { category in
             let filteredTracker = category.trackerArray.filter { tracker in
                 tracker.name.lowercased().contains(searchText.lowercased())
             }
             return TrackerCategory(name: category.name, trackerArray: filteredTracker)
             
         }.filter( { !$0.trackerArray.isEmpty })
-        didUpdateFiltered?()
+        didUpdateSearching?()
     }
     
     func resetFilter() {
-        filteredVisibleCategories = visibleCategories
-        didUpdateFiltered?()
+        searchVisibleCategories = visibleCategories
+        didUpdateSearching?()
     }
     
     func isEnabledDate() -> Bool {

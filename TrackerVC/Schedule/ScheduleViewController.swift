@@ -42,7 +42,7 @@ final class ScheduleViewController: UIViewController {
     
     private func setupUI() {
         
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
         
         view.addSubviews(readyToUse, scheduleTableView)
         

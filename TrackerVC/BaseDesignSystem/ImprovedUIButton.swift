@@ -10,6 +10,7 @@ final class ImprovedUIButton: UIButton {
         case cancel
         case add
         case skip
+        case filter
         
         var text: String {
             return switch self {
@@ -20,6 +21,7 @@ final class ImprovedUIButton: UIButton {
             case .cancel: itsCancel
             case .add: addCategory
             case .skip: skipToNextVC
+            case .filter: "Фильтр"
             }
         }
     }
