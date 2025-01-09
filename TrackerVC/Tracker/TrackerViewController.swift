@@ -81,7 +81,7 @@ final class TrackerViewController: UIViewController {
     
     @objc func filterButtonTapped() {
         let filterViewController = FilterViewController(viewModel: FilterViewModel())
-//        filterViewController.delegate = self
+        filterViewController.delegate = self
         let navigationController = UINavigationController(rootViewController: filterViewController)
         navigationController.modalPresentationStyle = .formSheet
         present(navigationController, animated: true)
@@ -313,11 +313,11 @@ extension TrackerViewController: UISearchControllerDelegate, UISearchResultsUpda
     func updateSearchResults(for searchController: UISearchController) {
         
         guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
-            viewModel.resetFilter()
+            viewModel.resetSearch()
             return
         }
         
-        viewModel.filterTracker(by: searchText)
+        viewModel.searchTracker(by: searchText)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -329,5 +329,21 @@ extension TrackerViewController: ProtocolNewTrackerEventViewControllerOutput {
     
     func didCreate(newTracker: Tracker, forCategory: String) {
         viewModel.didCreateTracker(newTracker: newTracker, forCategory: forCategory)
+    }
+}
+
+extension TrackerViewController: FilterViewControllerDelegate {
+    
+    func didFilterAllTrackerTap() {
+        viewModel.filterAllTracker()
+    }
+    func didFilterTrackerTodayTap() {
+        viewModel.filterTrackerToday()
+    }
+    func didFilterTrackerCompletedTap() {
+        viewModel.filterTrackerCompleted()
+    }
+    func didFilterTrackerNotCompletedTap() {
+        viewModel.filterTrackerNotCompleted()
     }
 }

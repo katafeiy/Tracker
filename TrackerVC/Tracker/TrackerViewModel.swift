@@ -1,4 +1,3 @@
-
 import Foundation
 
 final class TrackerViewModel {
@@ -104,7 +103,7 @@ final class TrackerViewModel {
     }
     
     func updateEditTracker(_ tracker: Tracker) {
-//        let tracker = visibleCategories[indexPath.section].trackerArray[indexPath.row]
+        //        let tracker = visibleCategories[indexPath.section].trackerArray[indexPath.row]
     }
     
     func updateCurrentDate(_ date: Date?) {
@@ -131,7 +130,7 @@ final class TrackerViewModel {
         searchVisibleCategories = visibleCategories
     }
     
-    func filterTracker(by searchText: String) {
+    func searchTracker(by searchText: String) {
         
         searchVisibleCategories = visibleCategories.map { category in
             let filteredTracker = category.trackerArray.filter { tracker in
@@ -143,7 +142,7 @@ final class TrackerViewModel {
         didUpdateSearching?()
     }
     
-    func resetFilter() {
+    func resetSearch() {
         searchVisibleCategories = visibleCategories
         didUpdateSearching?()
     }
@@ -181,6 +180,70 @@ final class TrackerViewModel {
     
     func didCreateTracker(newTracker: Tracker, forCategory: String) {
         try? trackerStore.newTracker(tracker: newTracker, categoryName: forCategory)
+    }
+    
+    func filterAllTracker() {
+        
+        guard let currentDate, let dayOfWeek = DaysOfWeek(date: currentDate) else {
+            searchVisibleCategories = []
+            didUpdateSearching?()
+            return
+        }
+        searchVisibleCategories = visibleCategories.map { category in
+            let filteredTracker = category.trackerArray.filter { tracker in
+                tracker.schedule.contains(dayOfWeek)
+            }
+            return TrackerCategory(name: category.name, trackerArray: filteredTracker )
+        }.filter( { !$0.trackerArray.isEmpty })
+        didUpdateSearching?()
+    }
+    
+    func filterTrackerToday() {
+        
+        guard let dayOfWeek = DaysOfWeek(date: Date()) else {
+            searchVisibleCategories = []
+            didUpdateSearching?()
+            return
+        }
+        searchVisibleCategories = visibleCategories.map { category in
+            let filteredTracker = category.trackerArray.filter { tracker in
+                tracker.schedule.contains(dayOfWeek)
+            }
+            return TrackerCategory(name: category.name, trackerArray: filteredTracker )
+        }.filter( { !$0.trackerArray.isEmpty })
+        didUpdateSearching?()
+    }
+    
+    func filterTrackerCompleted() {
+        
+        guard let currentDate else {
+            searchVisibleCategories = []
+            didUpdateSearching?()
+            return
+        }
+        searchVisibleCategories = visibleCategories.map{ category in
+            let filteredTracker = category.trackerArray.filter{ tracker in
+                completedTrackers.contains(where:{$0.id == tracker.id && $0.date == currentDate})
+            }
+            return TrackerCategory(name: category.name, trackerArray: filteredTracker)
+            
+        }.filter({ !$0.trackerArray.isEmpty })
+        didUpdateSearching?()
+    }
+    
+    func filterTrackerNotCompleted() {
+        guard let currentDate else {
+            searchVisibleCategories = []
+            didUpdateSearching?()
+            return}
+        
+        searchVisibleCategories = visibleCategories.map{ category in
+            let filteredTracker = category.trackerArray.filter{ tracker in
+                !completedTrackers.contains(where:{$0.id == tracker.id && $0.date == currentDate})
+            }
+            return TrackerCategory(name: category.name, trackerArray: filteredTracker)
+        }.filter({ !$0.trackerArray.isEmpty })
+        didUpdateSearching?()
     }
 }
 

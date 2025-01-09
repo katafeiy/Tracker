@@ -1,6 +1,15 @@
 import UIKit
 
+protocol FilterViewControllerDelegate: AnyObject {
+    func didFilterAllTrackerTap()
+    func didFilterTrackerTodayTap()
+    func didFilterTrackerCompletedTap()
+    func didFilterTrackerNotCompletedTap()
+}
+
 final class FilterViewController: UIViewController {
+    
+    weak var delegate: FilterViewControllerDelegate?
     
     private let viewModel: FilterViewModel
     
@@ -60,11 +69,29 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
         
         cell.backgroundColor = .ypBackground
         cell.textLabel?.text = nameCellFilter[indexPath.row]
+        cell.accessoryType = .none
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         75
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        switch indexPath.row {
+        case 0:
+            delegate?.didFilterAllTrackerTap()
+        case 1:
+            delegate?.didFilterTrackerTodayTap()
+        case 2:
+            delegate?.didFilterTrackerCompletedTap()
+        case 3:
+            delegate?.didFilterTrackerNotCompletedTap()
+        default:
+            break
+        }
+        dismiss(animated: true)
     }
 }
