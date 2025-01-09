@@ -73,6 +73,24 @@
         }
       }
     },
+    "allTrackers" : {
+      "comment" : "FilterViewController",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All trackers"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Все трекеры"
+          }
+        }
+      }
+    },
     "anIrregularEvent" : {
       "comment" : "ImprovedUIButton",
       "extractionState" : "manual",
@@ -306,6 +324,24 @@
         }
       }
     },
+    "filter" : {
+      "comment" : "ImprovedUIButton",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фильтр"
+          }
+        }
+      }
+    },
     "firstPageText" : {
       "comment" : "OnboardingPage",
       "extractionState" : "manual",
@@ -374,6 +410,42 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Привычка"
+          }
+        }
+      }
+    },
+    "itsCompleted" : {
+      "comment" : "FilterViewController",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completed"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершенные"
+          }
+        }
+      }
+    },
+    "itsIncompleted" : {
+      "comment" : "FilterViewController",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incompleted"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Незавершенные"
           }
         }
       }
@@ -608,6 +680,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Редактирование категории"
+          }
+        }
+      }
+    },
+    "navigationItem.title.fvc" : {
+      "comment" : "FilterViewController",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фильтр"
           }
         }
       }
@@ -950,6 +1040,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Трекеры"
+          }
+        }
+      }
+    },
+    "trackersToday" : {
+      "comment" : "FilterViewController",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackers today"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Трекеры на сегодня"
           }
         }
       }

@@ -82,6 +82,7 @@ let itsReady = NSLocalizedString("ready", comment: "Название кнопк�
 let itsCancel = NSLocalizedString("cancel", comment: "Название кнопки для отмены")
 let addCategory = NSLocalizedString("addCategory", comment: "Название кнопки для добавления категории")
 let skipToNextVC = NSLocalizedString("technologies", comment: "Название кнопки для перехода на следующий экран")
+let itsFilter = NSLocalizedString("filter", comment: "Название кнопки для фильтрации")
 
 // TabBarViewController
 
@@ -114,3 +115,11 @@ let secondPageText = NSLocalizedString("secondPageText", comment: "Текст в
 // PinnedCollectionView
 
 let pinnedCategory = NSLocalizedString("pinnedCategory", comment: "Закрепленная категория")
+
+// FilterViewController
+
+let navigationItemTitleFVC = NSLocalizedString("navigationItem.title.fvc", comment: "Название navigationItemTitleFVC")
+let allTrackers = NSLocalizedString("allTrackers", comment: "Все трекекы")
+let trackersToday = NSLocalizedString("trackersToday", comment: "Трекеры за сегодня")
+let itsCompleted = NSLocalizedString("itsCompleted", comment: "Завершенные")
+let itsIncompleted = NSLocalizedString("itsIncompleted", comment: "Незавершенные")

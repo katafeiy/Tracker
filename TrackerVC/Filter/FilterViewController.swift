@@ -13,7 +13,7 @@ final class FilterViewController: UIViewController {
     
     private let viewModel: FilterViewModel
     
-    let nameCellFilter = ["Все трекеры", "Трекеры на сегодня", "Завершенные", "Не завершенные"]
+    let nameCellFilter = [allTrackers, trackersToday, itsCompleted, itsIncompleted]
     
     private lazy var filterTableView: ImprovedUITableView = {
         ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
@@ -52,7 +52,7 @@ final class FilterViewController: UIViewController {
     }
     
     private  func setupNavigationBar() {
-        navigationItem.title = "Фильтр"
+        navigationItem.title = navigationItemTitleFVC
         navigationItem.hidesBackButton = true
     }
 }

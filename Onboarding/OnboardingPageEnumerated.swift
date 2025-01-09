@@ -13,8 +13,8 @@ enum OnboardingPage {
     }
     var title: String {
         return switch self {
-        case .firstPage: "Отслеживайте только то, что хотите"
-        case .secondPage: "Даже если это не литры воды и йога"
+        case .firstPage: firstPageText
+        case .secondPage: secondPageText
         }
     }
 }

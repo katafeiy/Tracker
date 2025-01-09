@@ -21,7 +21,7 @@ final class ImprovedUIButton: UIButton {
             case .cancel: itsCancel
             case .add: addCategory
             case .skip: skipToNextVC
-            case .filter: "Фильтр"
+            case .filter: itsFilter
             }
         }
     }
