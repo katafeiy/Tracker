@@ -432,19 +432,19 @@
         }
       }
     },
-    "itsIncompleted" : {
+    "itsUncompleted" : {
       "comment" : "FilterViewController",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incompleted"
+            "value" : "Uncompleted"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Незавершенные"
           }
         }

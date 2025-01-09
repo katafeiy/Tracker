@@ -13,7 +13,7 @@ final class FilterViewController: UIViewController {
     
     private let viewModel: FilterViewModel
     
-    let nameCellFilter = [allTrackers, trackersToday, itsCompleted, itsIncompleted]
+    let nameCellFilter = [allTrackers, trackersToday, itsCompleted, itsUncompleted ]
     
     private lazy var filterTableView: ImprovedUITableView = {
         ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
@@ -47,7 +47,6 @@ final class FilterViewController: UIViewController {
             filterTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             filterTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             filterTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-            
         ])
     }
     

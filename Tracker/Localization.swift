@@ -122,4 +122,4 @@ let navigationItemTitleFVC = NSLocalizedString("navigationItem.title.fvc", comme
 let allTrackers = NSLocalizedString("allTrackers", comment: "Все трекекы")
 let trackersToday = NSLocalizedString("trackersToday", comment: "Трекеры за сегодня")
 let itsCompleted = NSLocalizedString("itsCompleted", comment: "Завершенные")
-let itsIncompleted = NSLocalizedString("itsIncompleted", comment: "Незавершенные")
+let itsUncompleted = NSLocalizedString("itsUncompleted", comment: "Незавершенные")
