@@ -12,10 +12,14 @@ let menuTitleDeleteTVC = NSLocalizedString("menuTitleDelete.tvc", comment: "На
 
 // TrackerCollectionViewCell
 
-func correctLabelCountDay(countDay: Int) -> String {
-    let correctLabelCountDay = String.localizedStringWithFormat(
-        NSLocalizedString("correctDay", comment: "крректное отображение количества дней"), countDay)
-    return correctLabelCountDay
+let keyForLocalizableDictionary = "currenNameDays"
+
+func countDays(days: Int) -> String {
+    if #available(iOS 15.0, *) {
+        return String(localized: "\(days) day", comment: "TrackerCollectionViewCell")
+    } else {
+        return NSLocalizedString(keyForLocalizableDictionary, tableName: "LocalizableDictionary", comment: "TrackerCollectionViewCell")
+    }
 }
 
 // CreateTrackerViewController
@@ -119,7 +123,7 @@ let pinnedCategory = NSLocalizedString("pinnedCategory", comment: "Закреп�
 // FilterViewController
 
 let navigationItemTitleFVC = NSLocalizedString("navigationItem.title.fvc", comment: "Название navigationItemTitleFVC")
-let allTrackers = NSLocalizedString("allTrackers", comment: "Все трекекы")
-let trackersToday = NSLocalizedString("trackersToday", comment: "Трекеры за сегодня")
-let itsCompleted = NSLocalizedString("itsCompleted", comment: "Завершенные")
-let itsUncompleted = NSLocalizedString("itsUncompleted", comment: "Незавершенные")
+let allTrackersFVC = NSLocalizedString("allTrackers", comment: "Все трекекы")
+let trackersTodayFVC = NSLocalizedString("trackersToday", comment: "Трекеры за сегодня")
+let itsCompletedFVC = NSLocalizedString("itsCompleted", comment: "Завершенные")
+let itsUncompletedFVC = NSLocalizedString("itsUncompleted", comment: "Незавершенные")

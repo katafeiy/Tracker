@@ -80,8 +80,21 @@ final class TrackerViewController: UIViewController {
     }()
     
     @objc func filterButtonTapped() {
-        let filterViewController = FilterViewController(viewModel: FilterViewModel())
-        filterViewController.delegate = self
+        
+        let viewModel = FilterViewModel()
+        let filterViewController = FilterViewController(viewModel: viewModel)
+        
+        viewModel.didSelectFilter = { [weak self] filterType in
+            guard let self else { return }
+            switch filterType {
+            case .allTrackers: self.viewModel.filterAllTracker()
+            case .trackersToday: self.viewModel.filterTrackerToday()
+            case .itsCompleted: self.viewModel.filterTrackerCompleted()
+            case .itsUncompleted: self.viewModel.filterTrackerNotCompleted()
+            }
+        }
+        
+        
         let navigationController = UINavigationController(rootViewController: filterViewController)
         navigationController.modalPresentationStyle = .formSheet
         present(navigationController, animated: true)
@@ -309,14 +322,13 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
 }
 
 extension TrackerViewController: UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
-        
+    
     func updateSearchResults(for searchController: UISearchController) {
         
         guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
             viewModel.resetSearch()
             return
         }
-        
         viewModel.searchTracker(by: searchText)
     }
     
@@ -332,18 +344,4 @@ extension TrackerViewController: ProtocolNewTrackerEventViewControllerOutput {
     }
 }
 
-extension TrackerViewController: FilterViewControllerDelegate {
-    
-    func didFilterAllTrackerTap() {
-        viewModel.filterAllTracker()
-    }
-    func didFilterTrackerTodayTap() {
-        viewModel.filterTrackerToday()
-    }
-    func didFilterTrackerCompletedTap() {
-        viewModel.filterTrackerCompleted()
-    }
-    func didFilterTrackerNotCompletedTap() {
-        viewModel.filterTrackerNotCompleted()
-    }
-}
+

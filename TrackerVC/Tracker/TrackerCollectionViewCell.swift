@@ -65,23 +65,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     func configCompletion(counter: Int, isCompleted: Bool) {
         
-        labelCountDay.text = correctLabelCountDayText(for: counter)
+        labelCountDay.text = countDays(days: counter)
         addButtonCompletion.setImage(isCompleted ? UIImage.done : UIImage.plusButton, for: .normal)
-    }
-    
-    func correctLabelCountDayText(for number: Int) -> String {
-        
-        let lastDigit = number.remainderReportingOverflow(dividingBy: 10).partialValue
-        let lastTowDigit = number.remainderReportingOverflow(dividingBy: 100).partialValue
-        
-        if lastTowDigit >= 11 && lastTowDigit <= 19 {
-            return "\(number) дней"
-        }
-        return switch lastDigit {
-        case 1: "\(number) день"
-        case 2...4: "\(number) дня"
-        default: "\(number) дней"
-        }
     }
  
     override init (frame: CGRect) {
@@ -103,7 +88,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             viewCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             viewCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             viewCard.heightAnchor.constraint(equalToConstant: 90),
-            viewCard.widthAnchor.constraint(equalToConstant: 167),
+//            viewCard.widthAnchor.constraint(equalToConstant: 167),
             
             addButtonCompletion.topAnchor.constraint(equalTo: viewCard.bottomAnchor, constant: 8),
             addButtonCompletion.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
@@ -125,7 +110,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             
             labelEmoji.centerXAnchor.constraint(equalTo: viewEmoji.centerXAnchor),
             labelEmoji.centerYAnchor.constraint(equalTo: viewEmoji.centerYAnchor)
-            
         ])
     }
     required init?(coder: NSCoder) {

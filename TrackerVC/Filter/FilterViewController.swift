@@ -1,19 +1,8 @@
 import UIKit
 
-protocol FilterViewControllerDelegate: AnyObject {
-    func didFilterAllTrackerTap()
-    func didFilterTrackerTodayTap()
-    func didFilterTrackerCompletedTap()
-    func didFilterTrackerNotCompletedTap()
-}
-
 final class FilterViewController: UIViewController {
     
-    weak var delegate: FilterViewControllerDelegate?
-    
     private let viewModel: FilterViewModel
-    
-    let nameCellFilter = [allTrackers, trackersToday, itsCompleted, itsUncompleted ]
     
     private lazy var filterTableView: ImprovedUITableView = {
         ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
@@ -59,7 +48,7 @@ final class FilterViewController: UIViewController {
 extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        nameCellFilter.count
+        viewModel.filters.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -67,7 +56,7 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         cell.backgroundColor = .ypBackground
-        cell.textLabel?.text = nameCellFilter[indexPath.row]
+        cell.textLabel?.text = viewModel.filters[indexPath.row].title
         cell.accessoryType = .none
         
         return cell
@@ -79,18 +68,7 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        switch indexPath.row {
-        case 0:
-            delegate?.didFilterAllTrackerTap()
-        case 1:
-            delegate?.didFilterTrackerTodayTap()
-        case 2:
-            delegate?.didFilterTrackerCompletedTap()
-        case 3:
-            delegate?.didFilterTrackerNotCompletedTap()
-        default:
-            break
-        }
+        viewModel.selectFilter(at: indexPath.row)
         dismiss(animated: true)
     }
 }

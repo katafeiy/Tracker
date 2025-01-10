@@ -2,11 +2,11 @@ import UIKit
 
 final class ImprovedUIStackView: UIStackView {
     
-    init(arrangedSubviews: [UIView], axis: NSLayoutConstraint.Axis) {
+    init(arrangedSubviews: [UIView], axis: NSLayoutConstraint.Axis, spacing: CGFloat = 16) {
         super.init(frame: .zero)
         self.axis = axis
         distribution = .fillEqually
-        spacing = 16
+        self.spacing = spacing
         arrangedSubviews.forEach { self.addArrangedSubview($0) }
     }
     

@@ -60,6 +60,7 @@
 		126FB25F2CD1734E00D21700 /* Exceptions for "StatisticVC" folder in "Tracker" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				StatisticEnum.swift,
 				StatisticsViewController.swift,
 			);
 			target = 129E670D2CD0E421002D5F10 /* Tracker */;

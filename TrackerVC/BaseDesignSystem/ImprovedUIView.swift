@@ -2,11 +2,17 @@ import UIKit
 
 class ImprovedUIView: UIView {
     
-    init(backgroundColor: UIColor? = .clear, cornerRadius: CGFloat = 0) {
+    init(backgroundColor: UIColor? = .clear,
+         cornerRadius: CGFloat = 0,
+         borderWidth: CGFloat = 0,
+         borderColor: UIColor? = .none)
+    {
         super.init(frame: .zero)
         layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
         self.backgroundColor = backgroundColor
+        layer.borderWidth = borderWidth
+        layer.borderColor = borderColor?.cgColor
     }
     
     required init?(coder: NSCoder) {
