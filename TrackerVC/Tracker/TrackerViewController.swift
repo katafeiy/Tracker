@@ -115,11 +115,16 @@ final class TrackerViewController: UIViewController {
     func bindingViewModel() {
         viewModel.didUpdateVisibleData = { [weak self] in
             guard let self else { return }
-            starImage.isHidden = !viewModel.visibleCategories.isEmpty
-            whatSearchLabel.isHidden = !viewModel.visibleCategories.isEmpty
+            
+            starImage.isHidden = !viewModel.showStartImage
+            whatSearchLabel.isHidden = starImage.isHidden
+            
+            searchImage.isHidden = !viewModel.showSearchImage
+            nothingSearchLabel.isHidden = searchImage.isHidden
+
             pinnedView.isHidden = viewModel.attachVisibleTracker.isEmpty
             filterButton.isHidden = viewModel.visibleCategories.isEmpty
-            
+                        
             self.mainCollectionViewTopConstraint?.isActive = false
             self.mainCollectionViewTopConstraint = self.mainCollectionView.topAnchor.constraint(
                 equalTo: self.viewModel.attachVisibleTracker.isEmpty ?
@@ -130,7 +135,6 @@ final class TrackerViewController: UIViewController {
             UIView.animate(withDuration: 0.25) {
                 self.view.layoutIfNeeded()
             }
-            
             mainCollectionView.reloadData()
             pinnedView.reloadData()
         }
@@ -143,6 +147,10 @@ final class TrackerViewController: UIViewController {
         
         viewModel.didUpdateSearching = { [weak self] in
             guard let self else { return }
+            searchImage.isHidden = !viewModel.showSearchImage
+            nothingSearchLabel.isHidden = searchImage.isHidden
+            searchImage.isHidden = !(searchViewController.searchBar.text?.isEmpty == false && viewModel.searchVisibleCategories.isEmpty)
+            nothingSearchLabel.isHidden = searchImage.isHidden
             mainCollectionView.reloadData()
         }
     }
@@ -167,7 +175,7 @@ final class TrackerViewController: UIViewController {
         view.backgroundColor = .ypWhite
         datePicker.center = view.center
         
-        view.addSubviews(starImage, whatSearchLabel, mainCollectionView, pinnedView, filterButton)
+        view.addSubviews(starImage, searchImage, whatSearchLabel, nothingSearchLabel, mainCollectionView, pinnedView, filterButton)
         
         mainCollectionViewTopConstraint = mainCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         
@@ -185,10 +193,20 @@ final class TrackerViewController: UIViewController {
             starImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -20),
             starImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             
+            searchImage.heightAnchor.constraint(equalToConstant: 80),
+            searchImage.widthAnchor.constraint(equalToConstant: 80),
+            searchImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -20),
+            searchImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            
             whatSearchLabel.heightAnchor.constraint(equalToConstant: 18),
             whatSearchLabel.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
             whatSearchLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             whatSearchLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            
+            nothingSearchLabel.heightAnchor.constraint(equalToConstant: 18),
+            nothingSearchLabel.topAnchor.constraint(equalTo: searchImage.bottomAnchor, constant: 8),
+            nothingSearchLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            nothingSearchLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
             mainCollectionViewTopConstraint,
             mainCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),

@@ -88,7 +88,6 @@ final class StatisticsViewController: UIViewController {
         
         guard let userInfo = notification.userInfo,
               let key = userInfo["key"] as? String else { return }
-        
         switch key {
         case "bestPeriodCount":
             statisticViewModels[0] = BestPeriodViewModel()

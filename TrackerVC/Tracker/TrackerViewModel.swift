@@ -16,15 +16,24 @@ final class TrackerViewModel {
         }
     }
     private(set) var visibleCategories: [TrackerCategory] = []
+    private(set) var searchVisibleCategories: [TrackerCategory] = []
     private var attachTracker: [Tracker] = []
     private(set) var attachVisibleTracker: [Tracker] = []
     private let trackerStore = TrackerStore()
     private let trackerCategoriesStore = TrackerCategoriesStore()
     private let trackerRecordStore = TrackerRecordStore()
-    private(set) var searchVisibleCategories: [TrackerCategory] = []
     private(set) var filterType: FilterType = .allTrackers
     
     private var currentDate: Date?
+    
+    var showStartImage: Bool {
+        return visibleCategories.isEmpty || searchVisibleCategories.isEmpty
+    }
+    
+    var showSearchImage: Bool {
+        let isSearchEmpty = searchVisibleCategories.allSatisfy { $0.trackerArray.isEmpty }
+        return isSearchEmpty && (filterType != .allTrackers || !searchVisibleCategories.isEmpty)
+    }
     
     init() {
         trackerStore.delegate = self
@@ -116,7 +125,6 @@ final class TrackerViewModel {
         attachTracker.removeAll { $0.id == tracker.id }
         
         try? trackerStore.deleteTracker(tracker: tracker)
-        
         updateArrayCategories()
     }
     
@@ -147,12 +155,12 @@ final class TrackerViewModel {
     func searchTracker(by searchText: String) {
         
         searchVisibleCategories = visibleCategories.map { category in
+            
             let filteredTracker = category.trackerArray.filter { tracker in
                 tracker.name.lowercased().contains(searchText.lowercased())
             }
             return TrackerCategory(name: category.name, trackerArray: filteredTracker)
-            
-        }.filter( { !$0.trackerArray.isEmpty })
+        }.filter{!$0.trackerArray.isEmpty}
         didUpdateSearching?()
     }
     
@@ -201,7 +209,6 @@ final class TrackerViewModel {
     }
     
     func filterAllTracker() {
-        
         guard let currentDate, let dayOfWeek = DaysOfWeek(date: currentDate) else {
             searchVisibleCategories = []
             return
@@ -211,11 +218,10 @@ final class TrackerViewModel {
                 tracker.schedule.contains(dayOfWeek)
             }
             return TrackerCategory(name: category.name, trackerArray: filteredTracker )
-        }.filter( { !$0.trackerArray.isEmpty })
+        }.filter{ !$0.trackerArray.isEmpty }
     }
     
     func filterTrackerToday() {
-        
         guard let dayOfWeek = DaysOfWeek(date: Date()) else {
             searchVisibleCategories = []
             return
@@ -225,11 +231,10 @@ final class TrackerViewModel {
                 tracker.schedule.contains(dayOfWeek)
             }
             return TrackerCategory(name: category.name, trackerArray: filteredTracker )
-        }.filter( { !$0.trackerArray.isEmpty })
+        }.filter{ !$0.trackerArray.isEmpty }
     }
     
     func filterTrackerCompleted() {
-        
         guard let currentDate else {
             searchVisibleCategories = []
             return
@@ -239,8 +244,7 @@ final class TrackerViewModel {
                 completedTrackers.contains(where:{$0.id == tracker.id && $0.date == currentDate})
             }
             return TrackerCategory(name: category.name, trackerArray: filteredTracker)
-            
-        }.filter({ !$0.trackerArray.isEmpty })
+        }.filter{ !$0.trackerArray.isEmpty }
     }
     
     func filterTrackerNotCompleted() {
@@ -253,7 +257,7 @@ final class TrackerViewModel {
                 !completedTrackers.contains(where:{$0.id == tracker.id && $0.date == currentDate})
             }
             return TrackerCategory(name: category.name, trackerArray: filteredTracker)
-        }.filter({ !$0.trackerArray.isEmpty })
+        }.filter{ !$0.trackerArray.isEmpty }
     }
     
     func calculateAverageValue() -> Int {
