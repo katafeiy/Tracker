@@ -1,10 +1,12 @@
 import UIKit
+import YandexMobileMetrica
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
     static let cellIdentifier: String = "trackerCell"
     
     private var didPlusTap: (() -> Void)?
+    private var analyticsService = AnalyticsService()
     
     private let viewCard: ImprovedUIView = {
         ImprovedUIView(cornerRadius: 10)
@@ -50,6 +52,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func didAddButtonTap() {
+        analyticsService.sendEvent(event: .click, screen: .click, item: .track)
         didPlusTap?()
     }
     

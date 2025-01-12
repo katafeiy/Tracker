@@ -1,6 +1,6 @@
 import Foundation
 
-enum StatisticEnum: Int, CaseIterable {
+enum StatisticEnum: String, CaseIterable {
     
     case bestPeriod
     case idealDays

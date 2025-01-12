@@ -8,8 +8,8 @@ protocol ProtocolNewTrackerEventViewControllerOutput: AnyObject {
 final class NewTrackerEventViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private let viewModel: NewTrackerEventViewModel
-    
     weak var delegate: ProtocolNewTrackerEventViewControllerOutput?
+    private var analyticsService = AnalyticsService()
     
     lazy var nameCell = viewModel.isHabit ? [(category, viewModel.nameCategory ?? nameCategory), (schedule, daysOfWeekToString(viewModel.selectedDays))] : [(category, viewModel.nameCategory ?? nameCategory)]
     
@@ -128,7 +128,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     
     func setupUI() {
         
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
         nameTracker.delegate = limitedTextField
         emojiCollectionView.dataSource = self
         emojiCollectionView.delegate = self
@@ -212,6 +212,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
                 delegate?.didUpdate( newTracker: try viewModel.getEvent(),
                                      forCategory: try viewModel.getNameCategory())
             } else {
+                analyticsService.sendEvent(event: .click, screen: .click, item: .addTrack)
                 delegate?.didCreate(newTracker: try viewModel.getEvent(),
                                     forCategory: try viewModel.getNameCategory())
             }
@@ -223,6 +224,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }
     
     @objc func didCancelButtonTap() {
+        analyticsService.sendEvent(event: .close, screen: .click)
         if viewModel.isEditing {
             dismiss(animated: true)
         } else {

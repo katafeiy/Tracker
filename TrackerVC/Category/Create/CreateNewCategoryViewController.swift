@@ -44,7 +44,7 @@ final class CreateNewCategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
         nameCategory.delegate = limitedTextField
         binding()
         setupUI()

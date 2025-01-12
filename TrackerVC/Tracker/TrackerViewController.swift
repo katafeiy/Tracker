@@ -1,9 +1,11 @@
 import UIKit
+import YandexMobileMetrica
 
 final class TrackerViewController: UIViewController {
     
     private let viewModel: TrackerViewModel
     
+    private var analyticsService = AnalyticsService()
     private var mainCollectionViewTopConstraint: NSLayoutConstraint?
     
     private lazy var pinnedView: PinnedCollectionView = {
@@ -90,21 +92,6 @@ final class TrackerViewController: UIViewController {
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         return filterButton
     }()
-    
-    @objc func filterButtonTapped() {
-        
-        let viewModel = FilterViewModel(initialFilterType: self.viewModel.filterType)
-        let filterViewController = FilterViewController(viewModel: viewModel)
-        
-        viewModel.didSelectFilter = { [weak self] filterType in
-            guard let self else { return }
-            self.viewModel.updateFilterType(filterType)
-        }
-        
-        let navigationController = UINavigationController(rootViewController: filterViewController)
-        navigationController.modalPresentationStyle = .formSheet
-        present(navigationController, animated: true)
-    }
     
     init(viewModel: TrackerViewModel) {
         self.viewModel = viewModel
@@ -217,12 +204,32 @@ final class TrackerViewController: UIViewController {
         ])
     }
     
+    @objc func filterButtonTapped() {
+        
+        analyticsService.sendEvent(event: .click, screen: .click, item: .filter)
+        
+        let viewModel = FilterViewModel(initialFilterType: self.viewModel.filterType)
+        let filterViewController = FilterViewController(viewModel: viewModel)
+        
+        viewModel.didSelectFilter = { [weak self] filterType in
+            guard let self else { return }
+            self.viewModel.updateFilterType(filterType)
+        }
+        
+        let navigationController = UINavigationController(rootViewController: filterViewController)
+        navigationController.modalPresentationStyle = .formSheet
+        present(navigationController, animated: true)
+    }
+    
     @objc private func setDatePickerValueChanged(_ sender: UIDatePicker) {
         viewModel.updateCurrentDate(sender.date)
         view.endEditing(true)
     }
     
     @objc private func setNewTracker() {
+        
+        analyticsService.sendEvent(event: .open, screen: .open)
+        
         let createTracker = CreateTrackerViewController(viewModel: CreateTrackerViewModel())
         createTracker.delegate = self
         let navigationController = UINavigationController(rootViewController: createTracker)
@@ -306,11 +313,13 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
                 
                 UIAction(title: menuTitleEditedTVC, image: .pencilAndListClipboard.withTintColor(.ypBlack)) { [weak self] _ in
                     guard let self else { return }
+                    analyticsService.sendEvent(event: .click, screen: .click, item: .edit)
                     self.editTracker(tracker: tracker)
                 },
                 
                 UIAction(title: menuTitleDeleteTVC, image: .trash.withTintColor(.ypRed), attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
+                    analyticsService.sendEvent(event: .click, screen: .click, item: .delete)
                     self.deleteTracker(tracker: tracker)
                 }
             ])

@@ -56,6 +56,9 @@ final class UserDefaultsStore {
             UserDefaults.standard.set(newValue, forKey: Keys.averageValueCount.rawValue)
         }
     }
+    static func value(forKey key: String) -> Int? {
+        return UserDefaults.standard.integer(forKey: key)
+    }
 }
 
 extension Notification.Name {

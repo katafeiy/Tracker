@@ -12,10 +12,6 @@ final class BestPeriodViewModel: StatisticViewModel {
         {
             UserDefaultsStore.bestPeriodCount
         }
-        set
-        {
-            UserDefaultsStore.bestPeriodCount = newValue
-        }
     }
 }
 
@@ -25,10 +21,6 @@ final class IdealDaysViewModel: StatisticViewModel {
         get
         {
             UserDefaultsStore.idealDaysCount
-        }
-        set
-        {
-            UserDefaultsStore.idealDaysCount = newValue
         }
     }
 }
@@ -40,9 +32,6 @@ final class TrackersCompletedViewModel: StatisticViewModel {
         {
             UserDefaultsStore.trackerCompletedCount
         }
-        set {
-            UserDefaultsStore.trackerCompletedCount = newValue
-        }
     }
 }
 
@@ -51,9 +40,6 @@ final class AverageValueViewModel: StatisticViewModel {
     var value: Int {
         get {
             UserDefaultsStore.averageValueCount
-        }
-        set {
-            UserDefaultsStore.averageValueCount = newValue
         }
     }
 }
@@ -214,4 +200,3 @@ final class StatisticsViewController: UIViewController {
         return gradientBorderView
     }
 }
-
