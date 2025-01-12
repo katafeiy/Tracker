@@ -137,10 +137,8 @@ final class TrackerViewController: UIViewController {
         
         viewModel.didUpdateTrackerStatus = { [weak self] in
             guard let self else { return }
-            DispatchQueue.main.async {
-                self.mainCollectionView.reloadData()
-                self.pinnedView.reloadData()
-            }
+            self.mainCollectionView.reloadData()
+            self.pinnedView.reloadData()
         }
         
         viewModel.didUpdateSearching = { [weak self] in

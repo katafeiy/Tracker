@@ -9,7 +9,10 @@ final class TrackerViewModel {
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = [] {
         didSet {
+            UserDefaultsStore.bestPeriodCount = calculateBestPeriod()
+            UserDefaultsStore.idealDaysCount = calculateIdealsDays()
             UserDefaultsStore.trackerCompletedCount = completedTrackers.count
+            UserDefaultsStore.averageValueCount = calculateAverageValue()
         }
     }
     private(set) var visibleCategories: [TrackerCategory] = []
@@ -201,7 +204,6 @@ final class TrackerViewModel {
         
         guard let currentDate, let dayOfWeek = DaysOfWeek(date: currentDate) else {
             searchVisibleCategories = []
-//            didUpdateSearching?()
             return
         }
         searchVisibleCategories = visibleCategories.map { category in
@@ -210,14 +212,12 @@ final class TrackerViewModel {
             }
             return TrackerCategory(name: category.name, trackerArray: filteredTracker )
         }.filter( { !$0.trackerArray.isEmpty })
-//        didUpdateSearching?()
     }
     
     func filterTrackerToday() {
         
         guard let dayOfWeek = DaysOfWeek(date: Date()) else {
             searchVisibleCategories = []
-//            didUpdateSearching?()
             return
         }
         searchVisibleCategories = visibleCategories.map { category in
@@ -226,14 +226,12 @@ final class TrackerViewModel {
             }
             return TrackerCategory(name: category.name, trackerArray: filteredTracker )
         }.filter( { !$0.trackerArray.isEmpty })
-//        didUpdateSearching?()
     }
     
     func filterTrackerCompleted() {
         
         guard let currentDate else {
             searchVisibleCategories = []
-//            didUpdateSearching?()
             return
         }
         searchVisibleCategories = visibleCategories.map{ category in
@@ -243,13 +241,11 @@ final class TrackerViewModel {
             return TrackerCategory(name: category.name, trackerArray: filteredTracker)
             
         }.filter({ !$0.trackerArray.isEmpty })
-//        didUpdateSearching?()
     }
     
     func filterTrackerNotCompleted() {
         guard let currentDate else {
             searchVisibleCategories = []
-//            didUpdateSearching?()
             return}
         
         searchVisibleCategories = visibleCategories.map{ category in
@@ -258,7 +254,69 @@ final class TrackerViewModel {
             }
             return TrackerCategory(name: category.name, trackerArray: filteredTracker)
         }.filter({ !$0.trackerArray.isEmpty })
-//        didUpdateSearching?()
+    }
+    
+    func calculateAverageValue() -> Int {
+        let dates = completedTrackers.map{ $0.date }
+        let uniqueDates = Set(dates)
+        guard !uniqueDates.isEmpty else { return 0 }
+        return completedTrackers.count / uniqueDates.count
+    }
+    
+    func calculateBestPeriod() -> Int {
+        
+        let completedDates = Set(completedTrackers.map { $0.date }).sorted()
+        
+        guard !completedDates.isEmpty else { return 0 }
+        
+        var maxStreak = 0
+        var currentStreak = 1
+        let calendar = Calendar.current
+        
+        for i in 1..<completedDates.count {
+            let previousDate = completedDates[i - 1]
+            let currentDate = completedDates[i]
+            
+            if let difference = calendar.dateComponents([.day], from: previousDate, to: currentDate).day {
+                if difference == 1 {
+                    currentStreak += 1
+                    maxStreak = max(maxStreak, currentStreak)
+                } else if difference > 1 {
+                    currentStreak = 1
+                }
+            }
+        }
+        return max(maxStreak, currentStreak)
+    }
+    
+    func calculateIdealsDays() -> Int {
+        
+        let calendar = Calendar.current
+        var completedDays: [Date: Set<UUID>] = [:]
+
+        for record in completedTrackers {
+            let date = calendar.startOfDay(for: record.date)
+            if completedDays[date] == nil {
+                completedDays[date] = []
+            }
+            completedDays[date]?.insert(record.id)
+        }
+        
+        var daysWithAllCompleted = 0
+        
+        for (date, completedTrackerIds) in completedDays {
+            let trackersForDate = categories.flatMap { $0.trackerArray }.filter { tracker in
+                if tracker.isHabit, let dayOfWeek = DaysOfWeek(date: date) {
+                    return tracker.schedule.contains(dayOfWeek)
+                }
+                return !tracker.isHabit
+            }
+            let trackerIdsForDate = Set(trackersForDate.map { $0.id })
+            if trackerIdsForDate.isSubset(of: completedTrackerIds) {
+                daysWithAllCompleted += 1
+            }
+        }
+        return daysWithAllCompleted
     }
 }
 
