@@ -77,7 +77,7 @@ final class StatisticsViewController: UIViewController {
     
     private lazy var statisticsStackView: ImprovedUIStackView = {
         let views = statisticViewModels.map({ createStatisticsView(for: $0) })
-        return ImprovedUIStackView(arrangedSubviews: views, axis: .vertical, spacing: 12, distribution: .fill)
+        return ImprovedUIStackView(arrangedSubviews: views, axis: .vertical, spacing: 12, distribution: .fill, radius: 16)
     }()
     
     override func viewDidLoad() {
@@ -171,12 +171,13 @@ final class StatisticsViewController: UIViewController {
     
     private func createStatisticsView(for statistics: StatisticViewModel) -> UIView {
         
-        let view = ImprovedUIView(
-            backgroundColor: .ypWhite,
-            cornerRadius: 16,
-            borderWidth: 1,
-            borderColor: .ypRed
-        )
+        let gradientBorderView = GradientBorderView(
+                frame: .zero,
+                cornerRadius: 16,
+                borderWidth: 1,
+                colors: [.ypRedPlanet, .ypGreenWood, .ypBlueSky]
+            )
+        
         let countLabel = ImprovedUILabel(text: "\(statistics.value)",
                                          fontSize: 34,
                                          weight: .bold,
@@ -193,14 +194,16 @@ final class StatisticsViewController: UIViewController {
         let stackView = ImprovedUIStackView(arrangedSubviews: [countLabel, titleLabel],
                                             axis: .vertical,
                                             spacing: 7,
-                                            distribution: .fill)
-        view.addSubviews(stackView)
+                                            distribution: .fill,
+                                            radius: 16)
+        
+        gradientBorderView.addSubviews(stackView)
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 12),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12)
+            stackView.topAnchor.constraint(equalTo: gradientBorderView.topAnchor, constant: 12),
+            stackView.bottomAnchor.constraint(equalTo: gradientBorderView.bottomAnchor, constant: -12),
+            stackView.leadingAnchor.constraint(equalTo: gradientBorderView.leadingAnchor, constant: 12),
+            stackView.trailingAnchor.constraint(equalTo: gradientBorderView.trailingAnchor, constant: -12)
         ])
         
         NSLayoutConstraint.activate([
@@ -208,7 +211,7 @@ final class StatisticsViewController: UIViewController {
             titleLabel.heightAnchor.constraint(equalToConstant: 18)
         ])
         
-        return view
+        return gradientBorderView
     }
 }
 

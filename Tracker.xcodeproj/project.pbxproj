@@ -60,6 +60,7 @@
 		126FB25F2CD1734E00D21700 /* Exceptions for "StatisticVC" folder in "Tracker" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				GradientBorderView.swift,
 				StatisticEnum.swift,
 				StatisticsViewController.swift,
 			);
