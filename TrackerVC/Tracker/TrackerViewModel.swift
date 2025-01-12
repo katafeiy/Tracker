@@ -7,7 +7,11 @@ final class TrackerViewModel {
     var didUpdateSearching: (() -> Void)?
     
     private var categories: [TrackerCategory] = []
-    private var completedTrackers: [TrackerRecord] = []
+    private var completedTrackers: [TrackerRecord] = [] {
+        didSet {
+            UserDefaultsStore.trackerCompletedCount = completedTrackers.count
+        }
+    }
     private(set) var visibleCategories: [TrackerCategory] = []
     private var attachTracker: [Tracker] = []
     private(set) var attachVisibleTracker: [Tracker] = []
@@ -15,6 +19,7 @@ final class TrackerViewModel {
     private let trackerCategoriesStore = TrackerCategoriesStore()
     private let trackerRecordStore = TrackerRecordStore()
     private(set) var searchVisibleCategories: [TrackerCategory] = []
+    private(set) var filterType: FilterType = .allTrackers
     
     private var currentDate: Date?
     
@@ -68,8 +73,18 @@ final class TrackerViewModel {
             })
             attachVisibleTracker.append(contentsOf: trackers)
         }
-        
+        switch filterType {
+        case .allTrackers: filterAllTracker()
+        case .trackersToday: filterTrackerToday()
+        case .itsCompleted: filterTrackerCompleted()
+        case .itsUncompleted: filterTrackerNotCompleted()
+        }
         didUpdateVisibleData?()
+    }
+    
+    func updateFilterType(_ type: FilterType) {
+        filterType = type
+        updateVisibleData()
     }
     
     func updateAttachCategories(_ tracker: Tracker)  {
@@ -186,7 +201,7 @@ final class TrackerViewModel {
         
         guard let currentDate, let dayOfWeek = DaysOfWeek(date: currentDate) else {
             searchVisibleCategories = []
-            didUpdateSearching?()
+//            didUpdateSearching?()
             return
         }
         searchVisibleCategories = visibleCategories.map { category in
@@ -195,14 +210,14 @@ final class TrackerViewModel {
             }
             return TrackerCategory(name: category.name, trackerArray: filteredTracker )
         }.filter( { !$0.trackerArray.isEmpty })
-        didUpdateSearching?()
+//        didUpdateSearching?()
     }
     
     func filterTrackerToday() {
         
         guard let dayOfWeek = DaysOfWeek(date: Date()) else {
             searchVisibleCategories = []
-            didUpdateSearching?()
+//            didUpdateSearching?()
             return
         }
         searchVisibleCategories = visibleCategories.map { category in
@@ -211,14 +226,14 @@ final class TrackerViewModel {
             }
             return TrackerCategory(name: category.name, trackerArray: filteredTracker )
         }.filter( { !$0.trackerArray.isEmpty })
-        didUpdateSearching?()
+//        didUpdateSearching?()
     }
     
     func filterTrackerCompleted() {
         
         guard let currentDate else {
             searchVisibleCategories = []
-            didUpdateSearching?()
+//            didUpdateSearching?()
             return
         }
         searchVisibleCategories = visibleCategories.map{ category in
@@ -228,13 +243,13 @@ final class TrackerViewModel {
             return TrackerCategory(name: category.name, trackerArray: filteredTracker)
             
         }.filter({ !$0.trackerArray.isEmpty })
-        didUpdateSearching?()
+//        didUpdateSearching?()
     }
     
     func filterTrackerNotCompleted() {
         guard let currentDate else {
             searchVisibleCategories = []
-            didUpdateSearching?()
+//            didUpdateSearching?()
             return}
         
         searchVisibleCategories = visibleCategories.map{ category in
@@ -243,7 +258,7 @@ final class TrackerViewModel {
             }
             return TrackerCategory(name: category.name, trackerArray: filteredTracker)
         }.filter({ !$0.trackerArray.isEmpty })
-        didUpdateSearching?()
+//        didUpdateSearching?()
     }
 }
 

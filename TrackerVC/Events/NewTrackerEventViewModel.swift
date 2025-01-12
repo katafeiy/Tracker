@@ -22,13 +22,12 @@ final class NewTrackerEventViewModel {
     init(isHabit: Bool, editedTracker: Tracker?, countDay: Int = 0) {
         self.isHabit = isHabit
         self.editedTracker = editedTracker
-        selectedDays = isHabit ? [] : Set(DaysOfWeek.allCases)
         
         self.nameCategory = editedTracker?.name
         self.nameTracker = editedTracker?.name
         self.trackerColor = editedTracker?.color
         self.trackerEmoji = editedTracker?.emoji
-        self.selectedDays = editedTracker?.schedule ?? []
+        self.selectedDays = editedTracker?.schedule ?? (isHabit ? [] : Set(DaysOfWeek.allCases))
         self.isEditing = editedTracker != nil
         self.countDay = countDay
     }

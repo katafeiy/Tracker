@@ -116,6 +116,9 @@ final class TrackerStore: NSObject {
     }
     
     func updateTracker(tracker: Tracker, category: String) throws {
+        
+        let trackerCategoryCoreData = try getOrCreateCategory(categoryName: category)
+        
         let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
         guard let trackerCoreData = try? context.fetch(request).first else { return }
@@ -123,7 +126,10 @@ final class TrackerStore: NSObject {
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.color = tracker.color.color
         trackerCoreData.schedule = tracker.schedule as NSObject
-        trackerCoreData.category?.name = category
+        
+        trackerCoreData.category = trackerCategoryCoreData
+        trackerCategoryCoreData.addToTrackers(trackerCoreData)
+        
         try context.save()
     }
 }

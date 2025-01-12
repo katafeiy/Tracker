@@ -93,17 +93,12 @@ final class TrackerViewController: UIViewController {
     
     @objc func filterButtonTapped() {
         
-        let viewModel = FilterViewModel()
+        let viewModel = FilterViewModel(initialFilterType: self.viewModel.filterType)
         let filterViewController = FilterViewController(viewModel: viewModel)
         
         viewModel.didSelectFilter = { [weak self] filterType in
             guard let self else { return }
-            switch filterType {
-            case .allTrackers: self.viewModel.filterAllTracker()
-            case .trackersToday: self.viewModel.filterTrackerToday()
-            case .itsCompleted: self.viewModel.filterTrackerCompleted()
-            case .itsUncompleted: self.viewModel.filterTrackerNotCompleted()
-            }
+            self.viewModel.updateFilterType(filterType)
         }
         
         let navigationController = UINavigationController(rootViewController: filterViewController)

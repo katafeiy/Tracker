@@ -39,7 +39,7 @@ final class ScheduleViewController: UIViewController {
         scheduleTableView.dataSource = self
         scheduleTableView.contentInset.top = -19
     }
-    
+
     private func setupUI() {
         
         view.backgroundColor = .ypWhite

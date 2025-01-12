@@ -134,9 +134,9 @@
 			path = AnalyticsService;
 			sourceTree = "<group>";
 		};
-		12F1D03A2CF3A0A200DD16F2 /* Enum */ = {
+		12F1D03A2CF3A0A200DD16F2 /* DaysOfWeekEnum */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Enum;
+			path = DaysOfWeekEnum;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -178,7 +178,7 @@
 				1282D62E2D05B05B00245E67 /* Onboarding */,
 				129E67102CD0E421002D5F10 /* Tracker */,
 				12195FB92CFF66BE00E8FA59 /* CoreDataStore */,
-				12F1D03A2CF3A0A200DD16F2 /* Enum */,
+				12F1D03A2CF3A0A200DD16F2 /* DaysOfWeekEnum */,
 				120DEFB02CE10325007B0811 /* Models */,
 				126FB2602CD1737400D21700 /* TabBarVC */,
 				126FB2552CD1730500D21700 /* TrackerVC */,
@@ -248,7 +248,7 @@
 				1282D62E2D05B05B00245E67 /* Onboarding */,
 				129E67102CD0E421002D5F10 /* Tracker */,
 				12CBB4E42D2D7104008F228C /* AnalyticsService */,
-				12F1D03A2CF3A0A200DD16F2 /* Enum */,
+				12F1D03A2CF3A0A200DD16F2 /* DaysOfWeekEnum */,
 			);
 			name = Tracker;
 			productName = Tracker;

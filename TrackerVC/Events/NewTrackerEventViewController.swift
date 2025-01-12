@@ -275,10 +275,12 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
         
         switch collectionView {
         case emojiCollectionView:
+            collectionView.visibleCells.forEach { ($0 as? EmojiCollectionViewCell)?.emojiLabel.backgroundColor = .ypWhite }
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionViewCell
             cell?.emojiLabel.backgroundColor = .ypLightGray
             viewModel.updateTrackerEmoji(EmojiCollectionViewCell.emojiCell[indexPath.row])
         case colorCollectionView:
+            collectionView.visibleCells.forEach { ($0 as? ColorCollectionViewCell)?.layer.borderColor = UIColor.clear.cgColor }
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
             cell?.layer.borderWidth = 3
             cell?.layer.borderColor = TrackerColors.allCases[indexPath.row].color.withAlphaComponent(0.3).cgColor

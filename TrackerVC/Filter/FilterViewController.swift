@@ -57,7 +57,7 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
         
         cell.backgroundColor = .ypBackground
         cell.textLabel?.text = viewModel.filters[indexPath.row].title
-        cell.accessoryType = .none
+        cell.accessoryType = viewModel.initialFilterType == viewModel.filters[indexPath.row] ? .checkmark : .none
         
         return cell
     }
