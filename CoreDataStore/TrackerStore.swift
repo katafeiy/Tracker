@@ -114,6 +114,18 @@ final class TrackerStore: NSObject {
         let trackerCoreData = try context.fetch(request)
         return trackerCoreData.compactMap( { TrackerStore.mapToTracker(trackerCoreData: $0) } )
     }
+    
+    func updateTracker(tracker: Tracker, category: String) throws {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        guard let trackerCoreData = try? context.fetch(request).first else { return }
+        trackerCoreData.name = tracker.name
+        trackerCoreData.emoji = tracker.emoji
+        trackerCoreData.color = tracker.color.color
+        trackerCoreData.schedule = tracker.schedule as NSObject
+        trackerCoreData.category?.name = category
+        try context.save()
+    }
 }
 
 extension TrackerStore: NSFetchedResultsControllerDelegate {

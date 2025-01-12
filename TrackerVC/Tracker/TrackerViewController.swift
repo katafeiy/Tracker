@@ -23,6 +23,7 @@ final class TrackerViewController: UIViewController {
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
         collectionView.backgroundColor = .clear
+        collectionView.contentInset.bottom = 50
         collectionView.register(
             TrackerCollectionViewCell.self,
             forCellWithReuseIdentifier: TrackerCollectionViewCell.cellIdentifier
@@ -50,8 +51,19 @@ final class TrackerViewController: UIViewController {
         ImprovedUIImageView(image: .star)
     }()
     
-    private lazy var whatSearch: ImprovedUILabel = {
+    private lazy var searchImage: ImprovedUIImageView = {
+        ImprovedUIImageView(image: .searchingFace)
+    }()
+    
+    private lazy var whatSearchLabel: ImprovedUILabel = {
         ImprovedUILabel(text: emptyStateText,
+                        fontSize: 12,
+                        weight: .medium,
+                        textColor: .ypBlack)
+    }()
+    
+    private lazy var nothingSearchLabel: ImprovedUILabel = {
+        ImprovedUILabel(text: "Ничего не найдено",
                         fontSize: 12,
                         weight: .medium,
                         textColor: .ypBlack)
@@ -94,7 +106,6 @@ final class TrackerViewController: UIViewController {
             }
         }
         
-        
         let navigationController = UINavigationController(rootViewController: filterViewController)
         navigationController.modalPresentationStyle = .formSheet
         present(navigationController, animated: true)
@@ -123,8 +134,9 @@ final class TrackerViewController: UIViewController {
         viewModel.didUpdateVisibleData = { [weak self] in
             guard let self else { return }
             starImage.isHidden = !viewModel.visibleCategories.isEmpty
-            whatSearch.isHidden = !viewModel.visibleCategories.isEmpty
+            whatSearchLabel.isHidden = !viewModel.visibleCategories.isEmpty
             pinnedView.isHidden = viewModel.attachVisibleTracker.isEmpty
+            filterButton.isHidden = viewModel.visibleCategories.isEmpty
             
             self.mainCollectionViewTopConstraint?.isActive = false
             self.mainCollectionViewTopConstraint = self.mainCollectionView.topAnchor.constraint(
@@ -143,8 +155,10 @@ final class TrackerViewController: UIViewController {
         
         viewModel.didUpdateTrackerStatus = { [weak self] in
             guard let self else { return }
-            mainCollectionView.reloadData()
-            pinnedView.reloadData()
+            DispatchQueue.main.async {
+                self.mainCollectionView.reloadData()
+                self.pinnedView.reloadData()
+            }
         }
         
         viewModel.didUpdateSearching = { [weak self] in
@@ -173,7 +187,7 @@ final class TrackerViewController: UIViewController {
         view.backgroundColor = .ypWhite
         datePicker.center = view.center
         
-        view.addSubviews(starImage, whatSearch, mainCollectionView, pinnedView, filterButton)
+        view.addSubviews(starImage, whatSearchLabel, mainCollectionView, pinnedView, filterButton)
         
         mainCollectionViewTopConstraint = mainCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         
@@ -191,10 +205,10 @@ final class TrackerViewController: UIViewController {
             starImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -20),
             starImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             
-            whatSearch.heightAnchor.constraint(equalToConstant: 18),
-            whatSearch.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
-            whatSearch.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            whatSearch.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            whatSearchLabel.heightAnchor.constraint(equalToConstant: 18),
+            whatSearchLabel.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
+            whatSearchLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            whatSearchLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
             mainCollectionViewTopConstraint,
             mainCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -317,7 +331,17 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func editTracker(tracker: Tracker) {
-        viewModel.updateEditTracker(tracker)
+        let viewModel = NewTrackerEventViewModel(isHabit: tracker.isHabit, editedTracker: tracker, countDay: viewModel.countTrackerExecution(tracker))
+        let editedVC = NewTrackerEventViewController(viewModel: viewModel)
+        editedVC.delegate = self
+        let navigationController = UINavigationController(rootViewController: editedVC)
+        navigationController.modalPresentationStyle = .formSheet
+        navigationController.navigationBar.tintColor = .ypBlack
+        navigationController.navigationBar.titleTextAttributes = [
+            .font: UIFont.systemFont(ofSize: 16, weight: .medium),
+            .foregroundColor: UIColor.ypBlack
+        ]
+        present(navigationController, animated: true)
     }
 }
 
@@ -341,6 +365,10 @@ extension TrackerViewController: ProtocolNewTrackerEventViewControllerOutput {
     
     func didCreate(newTracker: Tracker, forCategory: String) {
         viewModel.didCreateTracker(newTracker: newTracker, forCategory: forCategory)
+    }
+    
+    func didUpdate(newTracker tracker: Tracker, forCategory: String) {
+        viewModel.didUpdateTracker(updatedTracker: tracker, forCategory: forCategory)
     }
 }
 

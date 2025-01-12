@@ -102,10 +102,6 @@ final class TrackerViewModel {
         updateArrayCategories()
     }
     
-    func updateEditTracker(_ tracker: Tracker) {
-        //        let tracker = visibleCategories[indexPath.section].trackerArray[indexPath.row]
-    }
-    
     func updateCurrentDate(_ date: Date?) {
         guard let date else { return }
         let calendar = Calendar.current
@@ -180,6 +176,10 @@ final class TrackerViewModel {
     
     func didCreateTracker(newTracker: Tracker, forCategory: String) {
         try? trackerStore.newTracker(tracker: newTracker, categoryName: forCategory)
+    }
+    
+    func didUpdateTracker(updatedTracker: Tracker, forCategory: String) {
+        try? trackerStore.updateTracker(tracker: updatedTracker, category: forCategory)
     }
     
     func filterAllTracker() {

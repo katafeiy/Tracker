@@ -88,7 +88,7 @@ final class CreateTrackerViewController: UIViewController {
     }
     
     func openNewTrackerEvent(_ status: Bool) {
-        let newTrackerEventViewController = NewTrackerEventViewController(viewModel: NewTrackerEventViewModel(isHabit: status))
+        let newTrackerEventViewController = NewTrackerEventViewController(viewModel: NewTrackerEventViewModel(isHabit: status, editedTracker: nil))
         newTrackerEventViewController.delegate = delegate
         navigationController?.pushViewController(newTrackerEventViewController, animated: true)
     }
