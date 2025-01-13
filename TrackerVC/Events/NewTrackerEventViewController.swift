@@ -196,7 +196,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }
     
     func setupNavigationBar() {
-        navigationItem.title = viewModel.isEditing ? "Редактирование \(viewModel.isHabit ? "привычки" : "нерегулярного события")" : (viewModel.isHabit ? newHabit : newIrregularEvent)
+        navigationItem.title = viewModel.isEditing ? editing + " " + (viewModel.isHabit ? aHabit : anIrregularEvent) : (viewModel.isHabit ? newHabit : newIrregularEvent)
         navigationItem.hidesBackButton = true
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = self

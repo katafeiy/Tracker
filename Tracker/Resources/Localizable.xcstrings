@@ -66,6 +66,24 @@
         }
       }
     },
+    "a.habit.ntevc" : {
+      "comment" : "NewTrackerEventViewController",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "a habit"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "привычки"
+          }
+        }
+      }
+    },
     "addCategory" : {
       "comment" : "ImprovedUIButton",
       "extractionState" : "manual",
@@ -152,6 +170,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Все трекеры"
+          }
+        }
+      }
+    },
+    "an.irregular.event.ntevc" : {
+      "comment" : "NewTrackerEventViewController",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "an irregular event"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "нерегулярного события"
           }
         }
       }
@@ -300,6 +336,24 @@
         }
       }
     },
+    "edited.ntevc" : {
+      "comment" : "NewTrackerEventViewController",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editing"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Редактирование"
+          }
+        }
+      }
+    },
     "emoji" : {
       "comment" : "NewTrackerEventViewController",
       "extractionState" : "manual",
@@ -314,6 +368,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Эмоджи"
+          }
+        }
+      }
+    },
+    "emptySearch.title" : {
+      "comment" : "TrackerViewController",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not found"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ничего не найдено"
           }
         }
       }

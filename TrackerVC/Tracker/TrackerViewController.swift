@@ -65,7 +65,7 @@ final class TrackerViewController: UIViewController {
     }()
     
     private lazy var nothingSearchLabel: ImprovedUILabel = {
-        ImprovedUILabel(text: "Ничего не найдено",
+        ImprovedUILabel(text: emptySearchText,
                         fontSize: 12,
                         weight: .medium,
                         textColor: .ypBlack)

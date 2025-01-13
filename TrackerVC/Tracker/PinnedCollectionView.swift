@@ -6,8 +6,6 @@ final class PinnedCollectionView: UICollectionView {
         
         let layout = UICollectionViewCompositionalLayout { _, _ in
             
-//            let itemWidth = (UIScreen.main.bounds.width - 16 * 2 - 9) / 2
-            
             let item = NSCollectionLayoutItem(
                 layoutSize: NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),

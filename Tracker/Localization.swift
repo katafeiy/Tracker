@@ -3,6 +3,7 @@ import Foundation
 // TrackerViewController
 
 let emptyStateText = NSLocalizedString("emptyState.title", comment: "Заглушка на главный экран")
+let emptySearchText = NSLocalizedString("emptySearch.title", comment: "Заглушка на главный экран при неудачном поиске")
 let placeholderForSearch = NSLocalizedString("placeholderForSearch", comment: "Плейсхолдер для поиска")
 let navigationItemTitleTVC = NSLocalizedString("navigationItem.title.tvc", comment: "Название навигационного пункта")
 let menuTitleUnPinnedTVC = NSLocalizedString("menuTitleUnPinned.tvc", comment: "Название меню при открепелении")
@@ -41,6 +42,10 @@ let newIrregularEvent = NSLocalizedString("new.irregular.event", comment: "Но�
 let emoji = NSLocalizedString("emoji", comment: "Эмоджи")
 let color = NSLocalizedString("color", comment: "Цвет")
 let everyDay = NSLocalizedString("every.day", comment: "Каждый день")
+let editing = NSLocalizedString("edited.ntevc", comment: "Редактирование")
+let aHabit = NSLocalizedString("a.habit.ntevc", comment: "Привычка")
+let anIrregularEvent = NSLocalizedString("an.irregular.event.ntevc", comment: "Нерегулярное событие")
+
 
 // CategoryListViewController
 
@@ -80,7 +85,7 @@ func updateCharactersLimit(limit: Int) -> String {
 // ImprovedUIButton
 
 let itsHabit = NSLocalizedString("habit", comment: "Привычка")
-let anIrregularEvent = NSLocalizedString("anIrregularEvent", comment: "Нерегулярное событие")
+let aIrregularEvent = NSLocalizedString("anIrregularEvent", comment: "Нерегулярное событие")
 let toCreate = NSLocalizedString("toCreate", comment: "Название кнопки для создания")
 let itsReady = NSLocalizedString("ready", comment: "Название кнопки для подтверждения")
 let itsCancel = NSLocalizedString("cancel", comment: "Название кнопки для отмены")
