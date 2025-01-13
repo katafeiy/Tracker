@@ -1,43 +1,29 @@
 import UIKit
 
-protocol StatisticViewModel: AnyObject {
+protocol StatisticViewControllerProtocol: AnyObject {
     var name: StatisticEnum { get }
     var value: Int { get }
 }
 
-final class BestPeriodViewModel: StatisticViewModel {
-    let name: StatisticEnum = .bestPeriod
-    var value: Int {
-        get { UserDefaultsStore.bestPeriodCount }
+final class UniversalStatisticViewControllerModel: StatisticViewControllerProtocol {
+    let name: StatisticEnum
+    private let valueProvider: () -> Int
+    
+    init(name: StatisticEnum, valueProvider: @escaping () -> Int) {
+        self.name = name
+        self.valueProvider = valueProvider
     }
-}
-
-final class IdealDaysViewModel: StatisticViewModel {
-    let name: StatisticEnum = .idealDays
+    
     var value: Int {
-        get { UserDefaultsStore.idealDaysCount }
-    }
-}
-
-final class TrackersCompletedViewModel: StatisticViewModel {
-    let name: StatisticEnum = .trackersCompleted
-    var value: Int {
-        get { UserDefaultsStore.trackerCompletedCount }
-    }
-}
-
-final class AverageValueViewModel: StatisticViewModel {
-    let name: StatisticEnum = .averageValue
-    var value: Int {
-        get { UserDefaultsStore.averageValueCount }
+        return valueProvider()
     }
 }
 
 final class StatisticsViewController: UIViewController {
     
-    private var statisticsStackViewHeightConstraint: NSLayoutConstraint?
+    private var viewModel = StatisticViewModel()
     
-    private var statisticViewModels: [StatisticViewModel] = [BestPeriodViewModel(), IdealDaysViewModel(), TrackersCompletedViewModel(), AverageValueViewModel()]
+    private var statisticsStackViewHeightConstraint: NSLayoutConstraint?
     
     private lazy var emptyStatUIImageView: ImprovedUIImageView = {
         ImprovedUIImageView(image: .cryingFace)
@@ -51,19 +37,27 @@ final class StatisticsViewController: UIViewController {
     }()
     
     private lazy var statisticsStackView: ImprovedUIStackView = {
-        let views = statisticViewModels.map({ createStatisticsView(for: $0) })
-        return ImprovedUIStackView(arrangedSubviews: views, axis: .vertical, spacing: 12, distribution: .fill, radius: 16)
+        return ImprovedUIStackView(arrangedSubviews: [], axis: .vertical, spacing: 12, distribution: .fill, radius: 16)
     }()
+    
+    init(viewModel: StatisticViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
         setupIU()
-        updateUI()
+        binding()
         configurationNavigationBar()
         
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleUserDefaultsChange(_:)),
+                                               selector: #selector(userDefaultsDidChange(_:)),
                                                name: .userDefaultsDidChange,
                                                object: nil)
         
@@ -73,27 +67,21 @@ final class StatisticsViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .userDefaultsDidChange, object: nil)
     }
     
-    @objc private func handleUserDefaultsChange(_ notification: Notification) {
-        
-        guard let userInfo = notification.userInfo,
-              let key = userInfo["key"] as? String else { return }
-        switch key {
-        case "bestPeriodCount":
-            statisticViewModels[0] = BestPeriodViewModel()
-        case "idealDaysCount":
-            statisticViewModels[1] = IdealDaysViewModel()
-        case "trackerCompletedCount":
-            statisticViewModels[2] = TrackersCompletedViewModel()
-        case "averageValueCount":
-            statisticViewModels[3] = AverageValueViewModel()
-        default:
-            break
+    private func binding() {
+        viewModel.updateStatistics = { [weak self] in
+            guard let self else { return }
+            self.updateUI()
         }
         updateUI()
     }
     
+    @objc private func userDefaultsDidChange(_ notification: Notification) {
+        guard let key = notification.userInfo?["key"] as? String else { return }
+        viewModel.handleUserDefaultsChange(key: key)
+    }
+
     private func updateUI() {
-        let hasStatistic = statisticViewModels.contains(where: { $0.value != 0 })
+        let hasStatistic = viewModel.isStatisticsValue()
         emptyStatUIImageView.isHidden = hasStatistic
         nothingAnalyzeUILabel.isHidden = hasStatistic
         statisticsStackView.isHidden = !hasStatistic
@@ -101,9 +89,9 @@ final class StatisticsViewController: UIViewController {
         statisticsStackView.arrangedSubviews.forEach {$0.removeFromSuperview()}
         
         var visibleViewCount: Int = 0
-        for viewModel in statisticViewModels {
-            let view = createStatisticsView(for: viewModel)
-            if viewModel.value != 0 {
+        for model in viewModel.statistics {
+            let view = createStatisticsView(for: model)
+            if model.value != 0 {
                 visibleViewCount += 1
                 view.isHidden = false
                 statisticsStackView.addArrangedSubview(view)
@@ -143,7 +131,7 @@ final class StatisticsViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
-    private func createStatisticsView(for statistics: StatisticViewModel) -> UIView {
+    private func createStatisticsView(for statistics: StatisticViewControllerProtocol) -> UIView {
         
         let gradientBorderView = GradientBorderView(
                 frame: .zero,

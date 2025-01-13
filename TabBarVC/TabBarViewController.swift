@@ -40,7 +40,7 @@ final class TabBarViewController: UITabBarController {
                 return trackerViewController
                 
             case .statistics:
-                let statisticsViewController = UINavigationController(rootViewController: StatisticsViewController())
+                let statisticsViewController = UINavigationController(rootViewController: StatisticsViewController(viewModel: StatisticViewModel()))
                 statisticsViewController.tabBarItem = UITabBarItem(title: $0.title, image: $0.image, selectedImage: nil)
                 return statisticsViewController
             }

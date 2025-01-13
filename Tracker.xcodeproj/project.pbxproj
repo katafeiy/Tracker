@@ -63,6 +63,7 @@
 				GradientBorderView.swift,
 				StatisticEnum.swift,
 				StatisticsViewController.swift,
+				StatisticViewModel.swift,
 			);
 			target = 129E670D2CD0E421002D5F10 /* Tracker */;
 		};
