@@ -9,10 +9,10 @@ enum StatisticEnum: String, CaseIterable {
     
     var title: String {
         return switch self {
-        case .bestPeriod: "Лучший период"
-        case .idealDays: "Идиальные дни"
-        case .trackersCompleted: "Трекеров завершено"
-        case .averageValue: "Среднее значение"
+        case .bestPeriod: bestPeriodSE
+        case .idealDays: idealsDaysSE
+        case .trackersCompleted: trackersCompletedSE
+        case .averageValue: averageValueSE
         }
     }
 }

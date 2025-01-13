@@ -8,39 +8,28 @@ protocol StatisticViewModel: AnyObject {
 final class BestPeriodViewModel: StatisticViewModel {
     let name: StatisticEnum = .bestPeriod
     var value: Int {
-        get
-        {
-            UserDefaultsStore.bestPeriodCount
-        }
+        get { UserDefaultsStore.bestPeriodCount }
     }
 }
 
 final class IdealDaysViewModel: StatisticViewModel {
     let name: StatisticEnum = .idealDays
     var value: Int {
-        get
-        {
-            UserDefaultsStore.idealDaysCount
-        }
+        get { UserDefaultsStore.idealDaysCount }
     }
 }
 
 final class TrackersCompletedViewModel: StatisticViewModel {
     let name: StatisticEnum = .trackersCompleted
     var value: Int {
-        get
-        {
-            UserDefaultsStore.trackerCompletedCount
-        }
+        get { UserDefaultsStore.trackerCompletedCount }
     }
 }
 
 final class AverageValueViewModel: StatisticViewModel {
     let name: StatisticEnum = .averageValue
     var value: Int {
-        get {
-            UserDefaultsStore.averageValueCount
-        }
+        get { UserDefaultsStore.averageValueCount }
     }
 }
 
@@ -55,7 +44,7 @@ final class StatisticsViewController: UIViewController {
     }()
     
     private lazy var nothingAnalyzeUILabel: ImprovedUILabel = {
-        ImprovedUILabel(text: "Анализировать пока нечего",
+        ImprovedUILabel(text: nothingAnalyze,
                         fontSize: 12,
                         weight: .medium,
                         textColor: .ypBlack)
@@ -150,7 +139,7 @@ final class StatisticsViewController: UIViewController {
     }
     
     private func configurationNavigationBar() {
-        navigationItem.title = "Статистика"
+        navigationItem.title = navigationItemTitleStVC
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     

@@ -174,6 +174,42 @@
         }
       }
     },
+    "averageValueSE" : {
+      "comment" : "StatisticEnum",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Average value"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Среднее значение"
+          }
+        }
+      }
+    },
+    "bestPeriodSE" : {
+      "comment" : "StatisticEnum",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Best period"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Лучший период"
+          }
+        }
+      }
+    },
     "cancel" : {
       "comment" : "ImprovedUIButton",
       "extractionState" : "manual",
@@ -458,6 +494,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Привычка"
+          }
+        }
+      }
+    },
+    "idealsDaysSE" : {
+      "comment" : "StatisticEnum",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perfect days"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Идиальные дни"
           }
         }
       }
@@ -750,6 +804,24 @@
         }
       }
     },
+    "navigationItem.title.stvc" : {
+      "comment" : "StatisticsViewController",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistic"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Статистика"
+          }
+        }
+      }
+    },
     "navigationItem.title.svc" : {
       "comment" : "ScheduleViewController",
       "extractionState" : "manual",
@@ -818,6 +890,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Новое нерегулярное событие"
+          }
+        }
+      }
+    },
+    "nothingAnalyze" : {
+      "comment" : "StatisticsViewController",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing to analyze"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Анализировать пока нечего"
           }
         }
       }
@@ -1088,6 +1178,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Трекеры"
+          }
+        }
+      }
+    },
+    "trackersCompletedSE" : {
+      "comment" : "StatisticEnum",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackers completed"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Трекеров завершено"
           }
         }
       }

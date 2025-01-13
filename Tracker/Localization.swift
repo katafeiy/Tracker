@@ -127,3 +127,16 @@ let allTrackersFVC = NSLocalizedString("allTrackers", comment: "Все трек�
 let trackersTodayFVC = NSLocalizedString("trackersToday", comment: "Трекеры за сегодня")
 let itsCompletedFVC = NSLocalizedString("itsCompleted", comment: "Завершенные")
 let itsUncompletedFVC = NSLocalizedString("itsUncompleted", comment: "Незавершенные")
+
+// StatisticsViewController
+
+let navigationItemTitleStVC = NSLocalizedString("navigationItem.title.stvc", comment: "Название navigationItemTitleStVC")
+let nothingAnalyze = NSLocalizedString("nothingAnalyze", comment: "Ничего пока анализировать")
+
+// StatisticEnum
+
+let bestPeriodSE = NSLocalizedString("bestPeriodSE", comment: "Лучший период")
+let idealsDaysSE = NSLocalizedString("idealsDaysSE", comment: "Идеальные дни")
+let trackersCompletedSE = NSLocalizedString("trackersCompletedSE", comment: "Трекеры завершенные")
+let averageValueSE = NSLocalizedString("averageValueSE", comment: "Среднее значение")
+
