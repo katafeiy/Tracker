@@ -133,7 +133,6 @@ final class TrackerViewModel {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.day, .month, .year], from: date)
         self.currentDate = calendar.date(from: components) ?? date
-        print(currentDate ?? Date())
         updateVisibleData()
     }
     
