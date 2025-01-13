@@ -22,7 +22,7 @@
               "zero" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Wurde nicht ausgeführt"
+                  "value" : "Nicht ausgeführt"
                 }
               }
             }
@@ -301,7 +301,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "unregelmäßiges Ereignis"
+            "value" : "Unregelmäßiges Ereignis"
           }
         },
         "en" : {
@@ -313,7 +313,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "événement irrégulier"
+            "value" : "Événement irrégulier"
           }
         },
         "ru" : {

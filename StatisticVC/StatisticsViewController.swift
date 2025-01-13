@@ -60,7 +60,6 @@ final class StatisticsViewController: UIViewController {
                                                selector: #selector(userDefaultsDidChange(_:)),
                                                name: .userDefaultsDidChange,
                                                object: nil)
-        
     }
     
     deinit {

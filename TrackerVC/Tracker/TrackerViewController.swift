@@ -112,14 +112,19 @@ final class TrackerViewController: UIViewController {
         viewModel.viewDidLoad()
     }
     
+    var showSearchImage: Bool {
+        let isSearchEmpty = viewModel.searchVisibleCategories.allSatisfy { $0.trackerArray.isEmpty }
+        return isSearchEmpty && (viewModel.filterType != .allTrackers || !viewModel.searchVisibleCategories.isEmpty)
+    }
+    
     func bindingViewModel() {
         viewModel.didUpdateVisibleData = { [weak self] in
             guard let self else { return }
             
-            starImage.isHidden = !viewModel.showStartImage
+            starImage.isHidden = viewModel.visibleCategories.isEmpty || viewModel.searchVisibleCategories.isEmpty && viewModel.filterType == .allTrackers
             whatSearchLabel.isHidden = starImage.isHidden
             
-            searchImage.isHidden = !viewModel.showSearchImage
+            searchImage.isHidden = viewModel.visibleCategories.isEmpty || viewModel.searchVisibleCategories.isEmpty && viewModel.filterType == .allTrackers
             nothingSearchLabel.isHidden = searchImage.isHidden
 
             pinnedView.isHidden = viewModel.attachVisibleTracker.isEmpty
@@ -147,7 +152,7 @@ final class TrackerViewController: UIViewController {
         
         viewModel.didUpdateSearching = { [weak self] in
             guard let self else { return }
-            searchImage.isHidden = !viewModel.showSearchImage
+            searchImage.isHidden = showSearchImage
             nothingSearchLabel.isHidden = searchImage.isHidden
             searchImage.isHidden = !(searchViewController.searchBar.text?.isEmpty == false && viewModel.searchVisibleCategories.isEmpty)
             nothingSearchLabel.isHidden = searchImage.isHidden

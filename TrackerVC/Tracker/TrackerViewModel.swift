@@ -26,15 +26,6 @@ final class TrackerViewModel {
     
     private var currentDate: Date?
     
-    var showStartImage: Bool {
-        return visibleCategories.isEmpty || searchVisibleCategories.isEmpty
-    }
-    
-    var showSearchImage: Bool {
-        let isSearchEmpty = searchVisibleCategories.allSatisfy { $0.trackerArray.isEmpty }
-        return isSearchEmpty && (filterType != .allTrackers || !searchVisibleCategories.isEmpty)
-    }
-    
     init() {
         trackerStore.delegate = self
         updateCurrentDate(Date())
