@@ -12,7 +12,6 @@ final class StatisticViewModel {
             UniversalStatisticViewControllerModel(name: .idealDays, valueProvider: { UserDefaultsStore.idealDaysCount }),
             UniversalStatisticViewControllerModel(name: .trackersCompleted, valueProvider: { UserDefaultsStore.trackerCompletedCount }),
             UniversalStatisticViewControllerModel(name: .averageValue, valueProvider: { UserDefaultsStore.averageValueCount })
-            
         ]
     }
     
@@ -29,5 +28,4 @@ final class StatisticViewModel {
     func isStatisticsValue() -> Bool {
         return statistics.contains { $0.value != 0 }
     }
-    
 }
