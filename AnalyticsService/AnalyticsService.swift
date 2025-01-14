@@ -33,7 +33,7 @@ enum ClickAnalyticsEvent: String, CaseIterable {
         case .addTrack: "add_track"
         case .track: "track"
         case .filter: "filter"
-        case .edit: "adit"
+        case .edit: "edit"
         case .delete: "delete"
         }
     }
