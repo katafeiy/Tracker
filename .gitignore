@@ -3,7 +3,7 @@
 
 ### Swift ###
 # Xcode
-#
+
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
 ## User settings
@@ -56,7 +56,8 @@ playground.xcworkspace
 # https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
 Pods/
 # Add this line if you want to avoid checking in source code from the Xcode workspace
-# *.xcworkspace
+*.xcworkspace
+*.lock
 
 # Carthage
 # Add this line if you want to avoid checking in source code from Carthage dependencies.
