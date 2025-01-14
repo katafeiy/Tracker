@@ -35,11 +35,14 @@ final class PinnedCollectionView: UICollectionView {
             
             // header
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                    heightDimension: .absolute(30))
+                                                    heightDimension: .absolute(38))
             
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
                                                                      elementKind: UICollectionView.elementKindSectionHeader,
                                                                      alignment: .topLeading)
+            
+            header.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: -16, bottom: 0, trailing: 0)
+            
             section.boundarySupplementaryItems = [header]
             
             // return
@@ -56,6 +59,7 @@ final class PinnedCollectionView: UICollectionView {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader ,
             withReuseIdentifier: TrackerCategoryNameCell.headerIdentifier
         )
+        isScrollEnabled = false
     }
     
     required init?(coder: NSCoder) {

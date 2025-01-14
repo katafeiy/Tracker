@@ -1,6 +1,6 @@
 import UIKit
 
-class GradientBorderView: UIView {
+final class GradientBorderView: UIView {
     private var gradientLayer: CAGradientLayer = CAGradientLayer()
     private var maskLayer: CAShapeLayer = CAShapeLayer()
     private var borderWidth: CGFloat

@@ -4,6 +4,7 @@ final class TrackerViewModel {
     
     var didUpdateVisibleData: (() -> Void)?
     var didUpdateTrackerStatus: (() -> Void)?
+    var pinnedCategoryIsHidden: ((Bool) -> Void)?
     
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = [] {
@@ -181,7 +182,7 @@ final class TrackerViewModel {
     }
     
     func searchTracker(by searchText: String) {
-        
+
         searchVisibleCategories = visibleCategories.map { category in
             
             let filteredTracker = category.trackerArray.filter { tracker in
@@ -191,6 +192,7 @@ final class TrackerViewModel {
             
         }.filter{!$0.trackerArray.isEmpty}
         didUpdateVisibleData?()
+        pinnedCategoryIsHidden?(!searchText.isEmpty)
     }
     
     func resetSearch() {

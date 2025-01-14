@@ -131,12 +131,14 @@ final class TrackerViewController: UIViewController {
             searchImage.isHidden = !showSearchImage
             nothingSearchLabel.isHidden = searchImage.isHidden
             
-            pinnedView.isHidden = viewModel.attachVisibleTracker.isEmpty
+            filterButton.backgroundColor = viewModel.filterType == .allTrackers ? .ypBlue : .ypRed
+            
+            pinnedView.isHidden = viewModel.attachVisibleTracker.isEmpty || viewModel.filterType != .allTrackers
             filterButton.isHidden = viewModel.visibleCategories.isEmpty
             
             self.mainCollectionViewTopConstraint?.isActive = false
             self.mainCollectionViewTopConstraint = self.mainCollectionView.topAnchor.constraint(
-                equalTo: self.viewModel.attachVisibleTracker.isEmpty ?
+                equalTo: self.viewModel.attachVisibleTracker.isEmpty || viewModel.filterType != .allTrackers ?
                 self.view.safeAreaLayoutGuide.topAnchor : self.pinnedView.bottomAnchor
             )
             self.mainCollectionViewTopConstraint?.isActive = true
@@ -152,6 +154,10 @@ final class TrackerViewController: UIViewController {
             guard let self else { return }
             self.mainCollectionView.reloadData()
             self.pinnedView.reloadData()
+        }
+        viewModel.pinnedCategoryIsHidden = { [weak self] in
+            guard let self else { return }
+            self.pinnedView.isHidden = $0
         }
     }
     
