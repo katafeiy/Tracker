@@ -112,24 +112,28 @@ final class TrackerViewController: UIViewController {
         viewModel.viewDidLoad()
     }
     
+    var showStartImage: Bool {
+        let isStartShow = viewModel.visibleCategories.isEmpty || viewModel.searchVisibleCategories.isEmpty && viewModel.filterType == .allTrackers
+        return isStartShow && searchViewController.searchBar.text?.isEmpty != false
+    }
+    
     var showSearchImage: Bool {
         let isSearchEmpty = viewModel.searchVisibleCategories.allSatisfy { $0.trackerArray.isEmpty }
-        return isSearchEmpty && (viewModel.filterType != .allTrackers || !viewModel.searchVisibleCategories.isEmpty)
+        return isSearchEmpty && (viewModel.filterType != .allTrackers || !viewModel.searchVisibleCategories.isEmpty || searchViewController.searchBar.text?.isEmpty == false)
     }
     
     func bindingViewModel() {
         viewModel.didUpdateVisibleData = { [weak self] in
             guard let self else { return }
             
-            starImage.isHidden = viewModel.visibleCategories.isEmpty || viewModel.searchVisibleCategories.isEmpty && viewModel.filterType == .allTrackers
+            starImage.isHidden = !showStartImage
             whatSearchLabel.isHidden = starImage.isHidden
-            
-            searchImage.isHidden = viewModel.visibleCategories.isEmpty || viewModel.searchVisibleCategories.isEmpty && viewModel.filterType == .allTrackers
+            searchImage.isHidden = !showSearchImage
             nothingSearchLabel.isHidden = searchImage.isHidden
-
+            
             pinnedView.isHidden = viewModel.attachVisibleTracker.isEmpty
             filterButton.isHidden = viewModel.visibleCategories.isEmpty
-                        
+            
             self.mainCollectionViewTopConstraint?.isActive = false
             self.mainCollectionViewTopConstraint = self.mainCollectionView.topAnchor.constraint(
                 equalTo: self.viewModel.attachVisibleTracker.isEmpty ?
@@ -148,15 +152,6 @@ final class TrackerViewController: UIViewController {
             guard let self else { return }
             self.mainCollectionView.reloadData()
             self.pinnedView.reloadData()
-        }
-        
-        viewModel.didUpdateSearching = { [weak self] in
-            guard let self else { return }
-            searchImage.isHidden = showSearchImage
-            nothingSearchLabel.isHidden = searchImage.isHidden
-            searchImage.isHidden = !(searchViewController.searchBar.text?.isEmpty == false && viewModel.searchVisibleCategories.isEmpty)
-            nothingSearchLabel.isHidden = searchImage.isHidden
-            mainCollectionView.reloadData()
         }
     }
     
