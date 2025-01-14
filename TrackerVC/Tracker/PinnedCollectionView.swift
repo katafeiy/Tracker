@@ -35,7 +35,7 @@ final class PinnedCollectionView: UICollectionView {
             
             // header
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                    heightDimension: .absolute(38))
+                                                    heightDimension: .absolute(32))
             
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
                                                                      elementKind: UICollectionView.elementKindSectionHeader,
