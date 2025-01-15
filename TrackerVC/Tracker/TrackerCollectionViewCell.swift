@@ -91,7 +91,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             viewCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             viewCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             viewCard.heightAnchor.constraint(equalToConstant: 90),
-//            viewCard.widthAnchor.constraint(equalToConstant: 167),
             
             addButtonCompletion.topAnchor.constraint(equalTo: viewCard.bottomAnchor, constant: 8),
             addButtonCompletion.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
