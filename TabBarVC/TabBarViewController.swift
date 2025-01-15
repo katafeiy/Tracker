@@ -10,8 +10,8 @@ final class TabBarViewController: UITabBarController {
         var title: String? {
             
             return switch self {
-            case .tracker: "Трекеры"
-            case .statistics: "Статистика"
+            case .tracker: Localization.TabBarViewController.trackersTitle
+            case .statistics: Localization.TabBarViewController.statisticsTitle
             }
         }
         var image: UIImage? {
@@ -40,7 +40,7 @@ final class TabBarViewController: UITabBarController {
                 return trackerViewController
                 
             case .statistics:
-                let statisticsViewController = UINavigationController(rootViewController: StatisticsViewController())
+                let statisticsViewController = UINavigationController(rootViewController: StatisticsViewController(viewModel: StatisticViewModel()))
                 statisticsViewController.tabBarItem = UITabBarItem(title: $0.title, image: $0.image, selectedImage: nil)
                 return statisticsViewController
             }

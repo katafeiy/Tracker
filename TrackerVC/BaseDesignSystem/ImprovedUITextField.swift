@@ -8,8 +8,8 @@ final class ImprovedUITextField: UITextField {
         
         var text: String {
             return switch self {
-            case .tracker: "Введите название трекера"
-            case .category: "Введите название категории"
+            case .tracker: Localization.ImprovedUITextField.enterNameTracker
+            case .category: Localization.ImprovedUITextField.enterNameCategory
             }
         }
     }
@@ -17,9 +17,9 @@ final class ImprovedUITextField: UITextField {
     init(placeholder: PlaceholderText) {
         super.init(frame: .zero)
         self.placeholder = placeholder.text
-        backgroundColor = .ypBackgroundDay
+        backgroundColor = .ypBackground
         font = .systemFont(ofSize: 17, weight: .regular)
-        textColor = .ypBlackDay
+        textColor = .ypBlack
         layer.masksToBounds = true
         layer.cornerRadius = 16
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
@@ -55,7 +55,9 @@ final class LimitedTextField: NSObject, UITextFieldDelegate {
         let count = min(newText.count, characterLimit)
         let remainingCharacters = characterLimit - count
         
-        subtitleLabel.text = count < characterLimit ? ("Осталось \(remainingCharacters) символов") : ("Ограничение \(count) символов")
+        subtitleLabel.text = count < characterLimit ?
+        Localization.ImprovedUITextField.updateCharactersLeft(characters: remainingCharacters) :
+        Localization.ImprovedUITextField.updateCharactersLimit(limit: count)
         subtitleLabel.textColor = count < characterLimit ? .ypLightGray : .ypRed
         
         return newText.count <= characterLimit

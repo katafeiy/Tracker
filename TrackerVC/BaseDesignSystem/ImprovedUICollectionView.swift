@@ -21,19 +21,3 @@ final class ImprovedUICollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-// Уважаемый ревьювер!!! Этот закомментированный код здесь был оставлен специально)))
-// Не ругайтесь он мне нужен в учебных целях)))
-
-//    func madeCollectionView() -> UICollectionView {
-//        let layout = UICollectionViewFlowLayout()
-//        layout.scrollDirection = .vertical
-//        layout.itemSize = CGSize(width: 52, height: 52)
-//        layout.minimumLineSpacing = 0
-//        layout.minimumInteritemSpacing = 5
-//        layout.sectionInset = UIEdgeInsets(top: 24, left: 18, bottom: 24, right: 18)
-//        let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
-//        collectionView.backgroundColor = .clear
-//        collectionView.isScrollEnabled = false
-//        return collectionView
-//    }

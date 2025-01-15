@@ -1,15 +1,31 @@
 import UIKit
+import YandexMobileMetrica
 
 final class TrackerViewController: UIViewController {
     
     private let viewModel: TrackerViewModel
     
-    private lazy var collectionView: UICollectionView = {
+    private var analyticsService = AnalyticsService()
+    private var mainCollectionViewTopConstraint: NSLayoutConstraint?
+    
+    private lazy var pinnedView: PinnedCollectionView = {
+        let pinnedView = PinnedCollectionView()
+        pinnedView.backgroundColor = .clear
+        pinnedView.delegate = self
+        pinnedView.dataSource = self
+        return pinnedView
+    }()
+    
+    private lazy var mainCollectionView: UICollectionView = {
         
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
         layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 9
+        layout.minimumLineSpacing = 10
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
         collectionView.backgroundColor = .clear
+        collectionView.contentInset.bottom = 50
         collectionView.register(
             TrackerCollectionViewCell.self,
             forCellWithReuseIdentifier: TrackerCollectionViewCell.cellIdentifier
@@ -19,9 +35,6 @@ final class TrackerViewController: UIViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader ,
             withReuseIdentifier: TrackerCategoryNameCell.headerIdentifier
         )
-        layout.minimumInteritemSpacing = 9
-        layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
         return collectionView
     }()
     
@@ -29,7 +42,7 @@ final class TrackerViewController: UIViewController {
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
-        datePicker.tintColor = .ypBlackDay
+        datePicker.tintColor = .ypBlack
         let localeID = Locale.preferredLanguages.first ?? "ru_RU"
         datePicker.locale = Locale(identifier: localeID)
         datePicker.addTarget(self, action: #selector(setDatePickerValueChanged(_:)), for: .valueChanged)
@@ -40,23 +53,44 @@ final class TrackerViewController: UIViewController {
         ImprovedUIImageView(image: .star)
     }()
     
-    private lazy var whatSearch: ImprovedUILabel = {
-        ImprovedUILabel(text: "Что будем отслеживать?",
+    private lazy var searchImage: ImprovedUIImageView = {
+        ImprovedUIImageView(image: .searchingFace)
+    }()
+    
+    private lazy var whatSearchLabel: ImprovedUILabel = {
+        ImprovedUILabel(text: Localization.TrackerViewController.emptyStateText,
                         fontSize: 12,
                         weight: .medium,
-                        textColor: .ypBlackDay)
+                        textColor: .ypBlack)
+    }()
+    
+    private lazy var nothingSearchLabel: ImprovedUILabel = {
+        ImprovedUILabel(text: Localization.TrackerViewController.emptySearchText,
+                        fontSize: 12,
+                        weight: .medium,
+                        textColor: .ypBlack)
     }()
     
     private lazy var searchViewController: UISearchController = {
         let searchViewController = UISearchController()
-        searchViewController.searchBar.placeholder = "Поиск"
+        searchViewController.searchBar.placeholder = Localization.TrackerViewController.placeholderForSearch
         searchViewController.searchResultsUpdater = self
         searchViewController.obscuresBackgroundDuringPresentation = false
         searchViewController.hidesNavigationBarDuringPresentation = false
-        searchViewController.searchBar.tintColor = .ypBlackDay
+        searchViewController.searchBar.tintColor = .ypBlack
         searchViewController.searchBar.delegate = self
         searchViewController.delegate = self
         return searchViewController
+    }()
+    
+    private lazy var filterButton: ImprovedUIButton = {
+        let filterButton = ImprovedUIButton(title: .filter,
+                                            titleColor: .ypWhite,
+                                            backgroundColor: .ypBlue,
+                                            cornerRadius: 16, fontSize: 17,
+                                            fontWeight: .regular)
+        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        return filterButton
     }()
     
     init(viewModel: TrackerViewModel) {
@@ -72,59 +106,141 @@ final class TrackerViewController: UIViewController {
         super.viewDidLoad()
         configurationView()
         configurationNavigationBar()
-        collectionView.dataSource = self
-        collectionView.delegate = self
+        mainCollectionView.dataSource = self
+        mainCollectionView.delegate = self
         bindingViewModel()
         viewModel.viewDidLoad()
+    }
+    
+    var showStartImage: Bool {
+        let isStartShow = viewModel.visibleCategories.isEmpty || viewModel.searchVisibleCategories.isEmpty && viewModel.filterType == .allTrackers
+        return isStartShow && searchViewController.searchBar.text?.isEmpty != false
+    }
+    
+    var showSearchImage: Bool {
+        let isSearchEmpty = viewModel.searchVisibleCategories.allSatisfy { $0.trackerArray.isEmpty }
+        return isSearchEmpty && (viewModel.filterType != .allTrackers || !viewModel.searchVisibleCategories.isEmpty || searchViewController.searchBar.text?.isEmpty == false)
     }
     
     func bindingViewModel() {
         viewModel.didUpdateVisibleData = { [weak self] in
             guard let self else { return }
-            starImage.isHidden = !viewModel.visibleCategories.isEmpty
-            whatSearch.isHidden = !viewModel.visibleCategories.isEmpty
-            collectionView.reloadData()
+            
+            starImage.isHidden = !showStartImage
+            whatSearchLabel.isHidden = starImage.isHidden
+            searchImage.isHidden = !showSearchImage
+            nothingSearchLabel.isHidden = searchImage.isHidden
+            
+            filterButton.backgroundColor = viewModel.filterType == .allTrackers ? .ypBlue : .ypRed
+            
+            pinnedView.isHidden = viewModel.attachVisibleTracker.isEmpty || viewModel.filterType != .allTrackers
+            filterButton.isHidden = viewModel.visibleCategories.isEmpty
+            
+            self.mainCollectionViewTopConstraint?.isActive = false
+            self.mainCollectionViewTopConstraint = self.mainCollectionView.topAnchor.constraint(
+                equalTo: self.viewModel.attachVisibleTracker.isEmpty || viewModel.filterType != .allTrackers ?
+                self.view.safeAreaLayoutGuide.topAnchor : self.pinnedView.bottomAnchor
+            )
+            self.mainCollectionViewTopConstraint?.isActive = true
+            
+            UIView.animate(withDuration: 0.25) {
+                self.view.layoutIfNeeded()
+            }
+            mainCollectionView.reloadData()
+            pinnedView.reloadData()
+        }
+        
+        viewModel.didUpdateTrackerStatus = { [weak self] in
+            guard let self else { return }
+            self.mainCollectionView.reloadData()
+            self.pinnedView.reloadData()
+        }
+        viewModel.pinnedCategoryIsHidden = { [weak self] in
+            guard let self else { return }
+            self.pinnedView.isHidden = $0
         }
     }
     
     private func configurationNavigationBar() {
         
         let leftButton = UIBarButtonItem(image: UIImage.plusButton, style: .done, target: self, action: #selector(setNewTracker))
-        leftButton.tintColor = .ypBlackDay
+        leftButton.tintColor = .ypBlack
         self.navigationItem.leftBarButtonItem = leftButton
         
         let rightButton = UIBarButtonItem()
         rightButton.customView = datePicker
         self.navigationItem.rightBarButtonItem = rightButton
         
-        navigationItem.title = "Трекеры"
+        navigationItem.title = Localization.TrackerViewController.navigationItemTitleTVC
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchViewController
     }
     
     private func configurationView() {
         
-        view.backgroundColor = .ypWhiteDay
+        view.backgroundColor = .ypWhite
         datePicker.center = view.center
         
-        view.addSubviews(starImage, whatSearch, collectionView)
+        view.addSubviews(starImage, searchImage, whatSearchLabel, nothingSearchLabel, mainCollectionView, pinnedView, filterButton)
+        
+        mainCollectionViewTopConstraint = mainCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        
+        guard let mainCollectionViewTopConstraint else { return }
         
         NSLayoutConstraint.activate([
+            
+            pinnedView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            pinnedView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            pinnedView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            pinnedView.heightAnchor.constraint(equalToConstant: 178),
+            
             starImage.heightAnchor.constraint(equalToConstant: 80),
             starImage.widthAnchor.constraint(equalToConstant: 80),
             starImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -20),
             starImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             
-            whatSearch.heightAnchor.constraint(equalToConstant: 18),
-            whatSearch.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
-            whatSearch.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            whatSearch.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            searchImage.heightAnchor.constraint(equalToConstant: 80),
+            searchImage.widthAnchor.constraint(equalToConstant: 80),
+            searchImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -20),
+            searchImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            whatSearchLabel.heightAnchor.constraint(equalToConstant: 18),
+            whatSearchLabel.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
+            whatSearchLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            whatSearchLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            
+            nothingSearchLabel.heightAnchor.constraint(equalToConstant: 18),
+            nothingSearchLabel.topAnchor.constraint(equalTo: searchImage.bottomAnchor, constant: 8),
+            nothingSearchLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            nothingSearchLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            
+            mainCollectionViewTopConstraint,
+            mainCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            mainCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            mainCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            filterButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 130),
+            filterButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -130),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
         ])
+    }
+    
+    @objc func filterButtonTapped() {
+        
+        analyticsService.sendEvent(event: .click, screen: .click, item: .filter)
+        
+        let viewModel = FilterViewModel(initialFilterType: self.viewModel.filterType)
+        let filterViewController = FilterViewController(viewModel: viewModel)
+        
+        viewModel.didSelectFilter = { [weak self] filterType in
+            guard let self else { return }
+            self.viewModel.updateFilterType(filterType)
+        }
+        
+        let navigationController = UINavigationController(rootViewController: filterViewController)
+        navigationController.modalPresentationStyle = .formSheet
+        present(navigationController, animated: true)
     }
     
     @objc private func setDatePickerValueChanged(_ sender: UIDatePicker) {
@@ -133,6 +249,9 @@ final class TrackerViewController: UIViewController {
     }
     
     @objc private func setNewTracker() {
+        
+        analyticsService.sendEvent(event: .open, screen: .open)
+        
         let createTracker = CreateTrackerViewController(viewModel: CreateTrackerViewModel())
         createTracker.delegate = self
         let navigationController = UINavigationController(rootViewController: createTracker)
@@ -144,11 +263,11 @@ final class TrackerViewController: UIViewController {
 extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        viewModel.visibleCategories.count
+        collectionView === pinnedView ? 1 : viewModel.searchVisibleCategories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.visibleCategories[section].trackerArray.count
+        collectionView === pinnedView ? viewModel.attachVisibleTracker.count : viewModel.searchVisibleCategories[section].trackerArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -162,7 +281,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             for: indexPath
         ) as?  TrackerCategoryNameCell else { return UICollectionReusableView() }
         
-        let title = viewModel.visibleCategories[indexPath.section].name
+        let title = collectionView === pinnedView ? Localization.PinnedCollectionView.pinnedCategory : viewModel.searchVisibleCategories[indexPath.section].name
         headerView.configure(with: title)
         return headerView
     }
@@ -178,7 +297,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             for: indexPath
         ) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
         
-        let tracker = viewModel.visibleCategories[indexPath.section].trackerArray[indexPath.row]
+        let tracker = collectionView === pinnedView ? viewModel.attachVisibleTracker[indexPath.row] : viewModel.searchVisibleCategories[indexPath.section].trackerArray[indexPath.row]
         
         cell.blockTap(isEnabled: viewModel.isEnabledDate())
         
@@ -197,14 +316,71 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 167, height: 148)
+        CGSize(width: (mainCollectionView.frame.width - 16 * 2 - 9) / 2  , height: 148)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        guard indexPaths.count > 0 else { return nil }
+        let indexPaths = IndexPath(item: indexPaths[0].item, section: indexPaths[0].section)
+        let tracker = collectionView === pinnedView ? viewModel.attachVisibleTracker[indexPaths.row] : viewModel.searchVisibleCategories[indexPaths.section].trackerArray[indexPaths.row]
+        
+        return UIContextMenuConfiguration(actionProvider: { actions in
+            
+            return UIMenu(children: [
+                UIAction(title: self.viewModel.isPinned(tracker) ? Localization.TrackerViewController.menuTitleUnPinnedTVC :
+                            Localization.TrackerViewController.menuTitleIsPinnedTVC, image: .pin.withTintColor(.ypBlack)) { [weak self] _ in
+                    guard let self else { return }
+                    self.attachTracker(tracker: tracker)
+                },
+                
+                UIAction(title: Localization.TrackerViewController.menuTitleEditedTVC, image: .pencilAndListClipboard.withTintColor(.ypBlack)) { [weak self] _ in
+                    guard let self else { return }
+                    analyticsService.sendEvent(event: .click, screen: .click, item: .edit)
+                    self.editTracker(tracker: tracker)
+                },
+                
+                UIAction(title: Localization.TrackerViewController.menuTitleDeleteTVC, image: .trash.withTintColor(.ypRed), attributes: .destructive) { [weak self] _ in
+                    guard let self else { return }
+                    analyticsService.sendEvent(event: .click, screen: .click, item: .delete)
+                    self.deleteTracker(tracker: tracker)
+                }
+            ])
+        })
+    }
+    
+    func attachTracker(tracker: Tracker) {
+        viewModel.updateAttachCategories(tracker)
+    }
+    
+    func deleteTracker(tracker: Tracker) {
+        viewModel.updateDeleteTracker(tracker)
+    }
+    
+    func editTracker(tracker: Tracker) {
+        let viewModel = NewTrackerEventViewModel(isHabit: tracker.isHabit, editedTracker: tracker, countDay: viewModel.countTrackerExecution(tracker))
+        let editedVC = NewTrackerEventViewController(viewModel: viewModel)
+        editedVC.delegate = self
+        let navigationController = UINavigationController(rootViewController: editedVC)
+        navigationController.modalPresentationStyle = .formSheet
+        navigationController.navigationBar.tintColor = .ypBlack
+        navigationController.navigationBar.titleTextAttributes = [
+            .font: UIFont.systemFont(ofSize: 16, weight: .medium),
+            .foregroundColor: UIColor.ypBlack
+        ]
+        present(navigationController, animated: true)
     }
 }
 
 extension TrackerViewController: UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
     
     func updateSearchResults(for searchController: UISearchController) {
-        // TODO: Функционал данного метода будет добавлен в 17 спринте)))
+        
+        guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
+            viewModel.resetSearch()
+            return
+        }
+        viewModel.searchTracker(by: searchText)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -217,4 +393,10 @@ extension TrackerViewController: ProtocolNewTrackerEventViewControllerOutput {
     func didCreate(newTracker: Tracker, forCategory: String) {
         viewModel.didCreateTracker(newTracker: newTracker, forCategory: forCategory)
     }
+    
+    func didUpdate(newTracker tracker: Tracker, forCategory: String) {
+        viewModel.didUpdateTracker(updatedTracker: tracker, forCategory: forCategory)
+    }
 }
+
+

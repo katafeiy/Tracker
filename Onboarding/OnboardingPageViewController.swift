@@ -11,13 +11,13 @@ final class OnboardingPageViewController: UIViewController {
     }()
     
     private lazy var messageView: ImprovedUILabel = {
-        ImprovedUILabel(fontSize: 32, weight: .bold, textColor: .ypBlackDay, numberOfLines: 0)
+        ImprovedUILabel(fontSize: 32, weight: .bold, textColor: .ypBlack, numberOfLines: 0)
     }()
 
     private lazy var skipButton: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .skip,
-                                      titleColor: .ypWhiteDay,
-                                      backgroundColor: .ypBlackDay,
+                                      titleColor: .ypWhite,
+                                      backgroundColor: .ypBlack,
                                       cornerRadius: 16,
                                       fontSize: 16,
                                       fontWeight: .medium)
@@ -31,6 +31,7 @@ final class OnboardingPageViewController: UIViewController {
     
     init(page: OnboardingPage, skipAction: @escaping ()->()) {
         self.skipAction = skipAction
+        
         super.init(nibName: nil, bundle: nil)
         self.imageView.image = page.image
         self.messageView.text = page.title

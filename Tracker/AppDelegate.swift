@@ -6,7 +6,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        
         DaysOfWeekTransformer.register()
+        AnalyticsService.activate()
+        
         return true
     }
 
@@ -19,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let sceneConfiguration = UISceneConfiguration(name: "Main", sessionRole: connectingSceneSession.role)
         sceneConfiguration.delegateClass = SceneDelegate.self
         return sceneConfiguration
-    
     }
 
     func application(_ application: UIApplication,

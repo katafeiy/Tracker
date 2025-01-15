@@ -1,33 +1,38 @@
 import UIKit
+import YandexMobileMetrica
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
     static let cellIdentifier: String = "trackerCell"
     
     private var didPlusTap: (() -> Void)?
+    private var analyticsService = AnalyticsService()
     
     private let viewCard: ImprovedUIView = {
         ImprovedUIView(cornerRadius: 10)
     }()
     
     private let labelEmoji: ImprovedUILabel = {
-        ImprovedUILabel(fontSize: 12, weight: .medium, textColor: .ypBlackDay)
+        ImprovedUILabel(fontSize: 12, weight: .medium, textColor: .ypBlack)
     }()
     
     private let labelName: ImprovedUILabel = {
         ImprovedUILabel(fontSize: 12,
                         weight: .medium,
-                        textColor: .ypWhiteDay,
+                        textColor: .ypWhite,
                         numberOfLines: 2,
                         textAlignment: .left)
     }()
     
     private let labelCountDay: ImprovedUILabel = {
-        ImprovedUILabel(fontSize: 12, weight: .medium, textColor: .ypBlackDay)
+        ImprovedUILabel(fontSize: 12,
+                        weight: .medium,
+                        textColor: .ypBlack,
+                        textAlignment: .left)
     }()
     
     private let viewEmoji: UIView = {
-        ImprovedUIView(backgroundColor: .ypWhiteDay.withAlphaComponent(0.3), cornerRadius: 12)
+        ImprovedUIView(backgroundColor: .ypWhite.withAlphaComponent(0.3), cornerRadius: 12)
     }()
     
     private lazy var addButtonCompletion: UIButton = {
@@ -37,7 +42,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         button.backgroundColor = .clear
         button.layer.cornerRadius = 17
         button.layer.masksToBounds = true
-        button.tintColor = .ypWhiteDay
+        button.tintColor = .ypWhite
         button.imageView?.image = .plusTracker
         return button
     }()
@@ -47,6 +52,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func didAddButtonTap() {
+        analyticsService.sendEvent(event: .click, screen: .click, item: .track)
         didPlusTap?()
     }
     
@@ -55,32 +61,17 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         labelEmoji.text = tracker.emoji
         labelName.text = tracker.name
         viewCard.backgroundColor = tracker.color.color
-        labelCountDay.text =  "0 дней"
+        labelCountDay.text =  ""
         addButtonCompletion.setImage(UIImage.plusButton, for: .normal)
         addButtonCompletion.backgroundColor = tracker.color.color
     }
     
     func configCompletion(counter: Int, isCompleted: Bool) {
         
-        labelCountDay.text = correctLabelCountDayText(for: counter)
+        labelCountDay.text = Localization.TrackerCollectionViewCell.countDays(days: counter)
         addButtonCompletion.setImage(isCompleted ? UIImage.done : UIImage.plusButton, for: .normal)
     }
-    
-    func correctLabelCountDayText(for number: Int) -> String {
-        
-        let lastDigit = number.remainderReportingOverflow(dividingBy: 10).partialValue
-        let lastTowDigit = number.remainderReportingOverflow(dividingBy: 100).partialValue
-        
-        if lastTowDigit >= 11 && lastTowDigit <= 19 {
-            return "\(number) дней"
-        }
-        return switch lastDigit {
-        case 1: "\(number) день"
-        case 2...4: "\(number) дня"
-        default: "\(number) дней"
-        }
-    }
-    
+ 
     override init (frame: CGRect) {
         super.init(frame: frame)
         
@@ -100,7 +91,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             viewCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             viewCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             viewCard.heightAnchor.constraint(equalToConstant: 90),
-            viewCard.widthAnchor.constraint(equalToConstant: 167),
             
             addButtonCompletion.topAnchor.constraint(equalTo: viewCard.bottomAnchor, constant: 8),
             addButtonCompletion.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
@@ -122,7 +112,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             
             labelEmoji.centerXAnchor.constraint(equalTo: viewEmoji.centerXAnchor),
             labelEmoji.centerYAnchor.constraint(equalTo: viewEmoji.centerYAnchor)
-            
         ])
     }
     required init?(coder: NSCoder) {
