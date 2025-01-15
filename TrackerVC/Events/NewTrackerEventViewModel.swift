@@ -8,26 +8,37 @@ final class NewTrackerEventViewModel {
     
     var updatedCreatedTrackerStatus: ((Bool) -> Void)?
     
-    private var nameCategory: String?
-    private var nameTracker: String?
-    private var trackerColor: TrackerColors?
-    private var trackerEmoji: String?
+    private(set) var nameCategory: String?
+    private(set) var nameTracker: String?
+    private(set) var trackerColor: TrackerColors?
+    private(set) var trackerEmoji: String?
+    private(set) var selectedDays: Set<DaysOfWeek> = []
+    private var editedTracker: Tracker?
+    let countDay: Int
+    let isEditing: Bool
     var isHabit: Bool
     
-    private var selectedDays: Set<DaysOfWeek> = []
     
-    init(isHabit: Bool) {
+    init(isHabit: Bool, editedTracker: Tracker?, countDay: Int = 0) {
         self.isHabit = isHabit
-        selectedDays = isHabit ? [] : Set(DaysOfWeek.allCases)
+        self.editedTracker = editedTracker
+        
+        self.nameCategory = editedTracker?.name
+        self.nameTracker = editedTracker?.name
+        self.trackerColor = editedTracker?.color
+        self.trackerEmoji = editedTracker?.emoji
+        self.selectedDays = editedTracker?.schedule ?? (isHabit ? [] : Set(DaysOfWeek.allCases))
+        self.isEditing = editedTracker != nil
+        self.countDay = countDay
     }
     
-    func createNewEvent() throws -> Tracker  {
+    func getEvent() throws -> Tracker  {
         
         guard let nameTracker, let trackerColor, let trackerEmoji else {
             throw Errors.noRequiredData
         }
         
-        return Tracker(id: UUID(),
+        return Tracker(id: editedTracker?.id ?? UUID() ,
                        isHabit: isHabit,
                        name: nameTracker,
                        color: trackerColor,
@@ -81,6 +92,10 @@ final class NewTrackerEventViewModel {
         trackerEmoji != nil &&
         nameCategory != nil &&
         !selectedDays.isEmpty
+    }
+    
+    func viewDidLoad() {
+        updatedCreatedTrackerStatus?(isCreatedTrackerValid())
     }
 }
 

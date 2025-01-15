@@ -26,8 +26,8 @@ final class EditCategoryViewController: UIViewController {
     
     private lazy var editedCategoryButton: ImprovedUIButton = {
         let editedCategoryButton = ImprovedUIButton(title: .ready,
-                                                    titleColor: .ypWhiteDay,
-                                                    backgroundColor: .ypBlackDay,
+                                                    titleColor: .ypWhite,
+                                                    backgroundColor: .ypBlack,
                                                     cornerRadius: 16,
                                                     fontSize: 16,
                                                     fontWeight: .medium)
@@ -46,7 +46,7 @@ final class EditCategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
         nameCategory.delegate = limitedTextField
         setupNavigationBar()
         setupUI()
@@ -57,12 +57,12 @@ final class EditCategoryViewController: UIViewController {
         viewModel.didUpdateNameCategoryStatus = { [weak self] status in
             guard let self else { return }
             editedCategoryButton.isEnabled = status
-            editedCategoryButton.backgroundColor = status ? .ypBlackDay : .ypGray
+            editedCategoryButton.backgroundColor = status ? .ypBlack : .ypGray
         }
     }
     
     func setupNavigationBar() {
-        navigationItem.title = "Редактирование категории"
+        navigationItem.title = Localization.EditCategoryViewController.navigationItemTitleECVC
         navigationItem.hidesBackButton = true
     }
     

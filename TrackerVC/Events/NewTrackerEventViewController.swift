@@ -2,26 +2,39 @@ import UIKit
 
 protocol ProtocolNewTrackerEventViewControllerOutput: AnyObject {
     func didCreate(newTracker: Tracker, forCategory: String)
+    func didUpdate(newTracker: Tracker, forCategory: String)
 }
 
 final class NewTrackerEventViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private let viewModel: NewTrackerEventViewModel
-    
     weak var delegate: ProtocolNewTrackerEventViewControllerOutput?
+    private var analyticsService = AnalyticsService()
     
-    lazy var nameCell = viewModel.isHabit ? [("Категория", "Название категории"), ("Расписание", "Дни недели")] : [("Категория", "Название категории")]
+    lazy var nameCell = viewModel.isHabit ?
+    [(Localization.NewTrackerEventViewController.category, viewModel.nameCategory ??
+      Localization.NewTrackerEventViewController.nameCategory),
+     (Localization.NewTrackerEventViewController.schedule, daysOfWeekToString(viewModel.selectedDays))] :
+    [(Localization.NewTrackerEventViewController.category, viewModel.nameCategory ??
+      Localization.NewTrackerEventViewController.nameCategory)]
+    
+    private lazy var countDayLabel: ImprovedUILabel = {
+        let countDay = ImprovedUILabel(text: Localization.TrackerCollectionViewCell.countDays(days: viewModel.countDay), fontSize: 32, weight: .bold, textColor: .ypBlack, textAlignment: .center)
+        countDay.isHidden = !viewModel.isEditing
+        return countDay
+    }()
     
     private lazy var nameTracker: ImprovedUITextField = {
         var nameTracker = ImprovedUITextField(placeholder: .tracker)
+        nameTracker.text = viewModel.nameTracker
         nameTracker.addTarget(self, action: #selector(didChangeName(_ :)), for: .editingChanged)
         return nameTracker
     }()
     
     private lazy var subtitleNameTracker: ImprovedUILabel = {
         ImprovedUILabel(fontSize: 17,
-                               weight: .regular,
-                               textColor: .ypLightGray)
+                        weight: .regular,
+                        textColor: .ypLightGray)
     }()
     
     private lazy var limitedTextField: LimitedTextField = {
@@ -70,7 +83,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     
     private lazy var createNewTrackerButton: ImprovedUIButton = {
         let createButton = ImprovedUIButton(title: .create,
-                                            titleColor: .ypWhiteDay,
+                                            titleColor: .ypWhite,
                                             backgroundColor: .ypGray,
                                             cornerRadius: 16,
                                             fontSize: 16,
@@ -83,7 +96,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     private lazy var cancelButton: ImprovedUIButton = {
         let cancelButton = ImprovedUIButton(title: .cancel,
                                             titleColor: .ypRed,
-                                            backgroundColor: .ypWhiteDay,
+                                            backgroundColor: .ypWhite,
                                             cornerRadius: 16,
                                             fontSize: 16,
                                             fontWeight: .medium)
@@ -107,19 +120,20 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
         setupNavigationBar()
         setupUI()
         binding()
+        viewModel.viewDidLoad()
     }
     
     func binding() {
         viewModel.updatedCreatedTrackerStatus = { [weak self] status in
             guard let self else { return }
             createNewTrackerButton.isEnabled = status
-            createNewTrackerButton.backgroundColor = status ? .ypBlackDay : .ypGray
+            createNewTrackerButton.backgroundColor = status ? .ypBlack : .ypGray
         }
     }
     
     func setupUI() {
         
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
         nameTracker.delegate = limitedTextField
         emojiCollectionView.dataSource = self
         emojiCollectionView.delegate = self
@@ -133,7 +147,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
         
         scrollView.addSubviews(contentView)
         
-        contentView.addSubviews(nameTracker, subtitleNameTracker, tableView, emojiCollectionView, colorCollectionView)
+        contentView.addSubviews(nameTracker, subtitleNameTracker, tableView, emojiCollectionView, colorCollectionView, countDayLabel)
         
         NSLayoutConstraint.activate([
             
@@ -148,7 +162,12 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
-            nameTracker.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            countDayLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 24),
+            countDayLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            countDayLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            
+            nameTracker.topAnchor.constraint(equalTo: viewModel.isEditing ? countDayLabel.bottomAnchor : contentView.topAnchor,
+                                             constant: viewModel.isEditing ? 40 : 24),
             nameTracker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             nameTracker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             nameTracker.heightAnchor.constraint(equalToConstant: 75),
@@ -182,7 +201,11 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }
     
     func setupNavigationBar() {
-        navigationItem.title = viewModel.isHabit ? "Новая привычка" : "Новое нерегулярное событие"
+        navigationItem.title = viewModel.isEditing ? Localization.NewTrackerEventViewController.editing + " "
+        + (viewModel.isHabit ? Localization.NewTrackerEventViewController.aHabit :
+            Localization.NewTrackerEventViewController.anIrregularEvent) :
+        (viewModel.isHabit ? Localization.NewTrackerEventViewController.newHabit :
+            Localization.NewTrackerEventViewController.newIrregularEvent)
         navigationItem.hidesBackButton = true
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -194,8 +217,14 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     
     @objc func didCreateNewTrackerButtonTap() {
         do {
-            delegate?.didCreate(newTracker: try viewModel.createNewEvent(),
-                                forCategory: try viewModel.getNameCategory())
+            if viewModel.isEditing {
+                delegate?.didUpdate( newTracker: try viewModel.getEvent(),
+                                     forCategory: try viewModel.getNameCategory())
+            } else {
+                analyticsService.sendEvent(event: .click, screen: .click, item: .addTrack)
+                delegate?.didCreate(newTracker: try viewModel.getEvent(),
+                                    forCategory: try viewModel.getNameCategory())
+            }
             dismiss(animated: true, completion: nil)
         } catch {
             print(error.localizedDescription)
@@ -204,14 +233,19 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }
     
     @objc func didCancelButtonTap() {
-        navigationController?.popViewController(animated: true)
+        analyticsService.sendEvent(event: .close, screen: .click)
+        if viewModel.isEditing {
+            dismiss(animated: true)
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
 }
 
 extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionView == emojiCollectionView ? EmojiCollectionViewCell.emojiCell.count : TrackerColors.allCases.count
+        return collectionView == emojiCollectionView ? ConstantsEnumerated.emojiCell.count : TrackerColors.allCases.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -224,7 +258,10 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
                 for: indexPath
             ) as? EmojiCollectionViewCell else { return UICollectionViewCell() }
             
-            cell.emojiLabel.text = "\(EmojiCollectionViewCell.emojiCell[indexPath.row])"
+            cell.emojiLabel.text = "\(ConstantsEnumerated.emojiCell[indexPath.row])"
+            if cell.emojiLabel.text == viewModel.trackerEmoji {
+                cell.emojiLabel.backgroundColor = .ypLightGray
+            }
             return cell
         case colorCollectionView:
             
@@ -236,6 +273,10 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 8
             cell.colorLabel.backgroundColor = TrackerColors.allCases[indexPath.row].color
+            if TrackerColors.allCases[indexPath.row] == viewModel.trackerColor {
+                cell.layer.borderWidth = 3
+                cell.layer.borderColor = TrackerColors.allCases[indexPath.row].color.withAlphaComponent(0.3).cgColor
+            }
             return cell
         default: return UICollectionViewCell()
         }
@@ -245,10 +286,12 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
         
         switch collectionView {
         case emojiCollectionView:
+            collectionView.visibleCells.forEach { ($0 as? EmojiCollectionViewCell)?.emojiLabel.backgroundColor = .ypWhite }
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionViewCell
             cell?.emojiLabel.backgroundColor = .ypLightGray
-            viewModel.updateTrackerEmoji(EmojiCollectionViewCell.emojiCell[indexPath.row])
+            viewModel.updateTrackerEmoji(ConstantsEnumerated.emojiCell[indexPath.row])
         case colorCollectionView:
+            collectionView.visibleCells.forEach { ($0 as? ColorCollectionViewCell)?.layer.borderColor = UIColor.clear.cgColor }
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
             cell?.layer.borderWidth = 3
             cell?.layer.borderColor = TrackerColors.allCases[indexPath.row].color.withAlphaComponent(0.3).cgColor
@@ -262,7 +305,7 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
         switch collectionView {
         case emojiCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionViewCell
-            cell?.emojiLabel.backgroundColor = .ypWhiteDay
+            cell?.emojiLabel.backgroundColor = .ypWhite
             viewModel.updateTrackerEmoji(nil)
         case colorCollectionView:
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
@@ -284,7 +327,7 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
                 for: indexPath
             ) as? EmojiHeaderCollectionViewCell else { return UICollectionReusableView()}
             
-            headerView.emojiHeaderLabel.text = "Emoji"
+            headerView.emojiHeaderLabel.text = Localization.NewTrackerEventViewController.emoji
             return headerView
         case colorCollectionView:
             
@@ -294,7 +337,7 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
                 for: indexPath
             ) as? ColorHeaderCollectionViewCell else { return UICollectionReusableView() }
             
-            headerView.colorHeaderLabel.text = "Цвет"
+            headerView.colorHeaderLabel.text = Localization.NewTrackerEventViewController.color
             return headerView
         default: return UICollectionReusableView()
         }
@@ -315,7 +358,7 @@ extension NewTrackerEventViewController: UITableViewDataSource, UITableViewDeleg
         
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         
-        cell.backgroundColor = .ypBackgroundDay
+        cell.backgroundColor = .ypBackground
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 16
         cell.selectionStyle = .none
@@ -348,23 +391,27 @@ extension NewTrackerEventViewController: UITableViewDataSource, UITableViewDeleg
             scheduleViewController.didSelectSchedule = { [weak self] schedule in
                 guard let self else { return }
                 
-                if schedule == Set(DaysOfWeek.allCases) {
-                    if let cell = tableView.cellForRow(at: indexPath) {
-                        cell.detailTextLabel?.text = "Каждый день"
-                    }
-                } else {
-                    if let cell = tableView.cellForRow(at: indexPath) {
-                        let sortedSchedule = schedule.sorted(by: {$0.rawValue < $1.rawValue})
-                        cell.detailTextLabel?.text = sortedSchedule.reduce("") { $0 + $1.shortName + ", "}
-                            .trimmingCharacters(in:.whitespacesAndNewlines)
-                            .trimmingCharacters(in: .punctuationCharacters)
-                    }
+                if let cell = tableView.cellForRow(at: indexPath) {
+                    cell.detailTextLabel?.text = daysOfWeekToString(schedule)
                 }
                 viewModel.updateSelectedDays(schedule)
             }
             navigationController?.pushViewController(scheduleViewController, animated: true)
         default:
             return
+        }
+    }
+    
+    private func daysOfWeekToString(_ daysOfWeek: Set<DaysOfWeek>) -> String {
+        guard !daysOfWeek.isEmpty else { return Localization.NewTrackerEventViewController.weekdays }
+        if daysOfWeek == Set(DaysOfWeek.allCases) {
+            return Localization.NewTrackerEventViewController.everyDay
+        } else {
+            
+            let sortedSchedule = daysOfWeek.sorted(by: {$0.rawValue < $1.rawValue})
+            return sortedSchedule.reduce("") { $0 + $1.shortName + ", "}
+                .trimmingCharacters(in:.whitespacesAndNewlines)
+                .trimmingCharacters(in: .punctuationCharacters)
         }
     }
     

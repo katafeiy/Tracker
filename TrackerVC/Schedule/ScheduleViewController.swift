@@ -8,8 +8,8 @@ final class ScheduleViewController: UIViewController {
     
     private lazy var readyToUse: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .ready,
-                                      titleColor: .ypWhiteDay,
-                                      backgroundColor: .ypBlackDay,
+                                      titleColor: .ypWhite,
+                                      backgroundColor: .ypBlack,
                                       cornerRadius: 16,
                                       fontSize: 16,
                                       fontWeight: .medium)
@@ -18,7 +18,7 @@ final class ScheduleViewController: UIViewController {
     }()
     
     private lazy var scheduleTableView: ImprovedUITableView = {
-        ImprovedUITableView(frame: view.bounds, style: .insetGrouped)
+        ImprovedUITableView(frame: view.bounds, style: .insetGrouped, isScroll: true)
     }()
     
     init(viewModel: ScheduleViewModel) {
@@ -39,10 +39,10 @@ final class ScheduleViewController: UIViewController {
         scheduleTableView.dataSource = self
         scheduleTableView.contentInset.top = -19
     }
-    
+
     private func setupUI() {
         
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
         
         view.addSubviews(readyToUse, scheduleTableView)
         
@@ -62,7 +62,7 @@ final class ScheduleViewController: UIViewController {
     }
     
     private  func setupNavigationBar() {
-        navigationItem.title = "Расписание"
+        navigationItem.title = Localization.ScheduleViewController.navigationItemTitleSVC
         navigationItem.hidesBackButton = true
     }
     
@@ -83,7 +83,7 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource  {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         cell.textLabel?.text = viewModel.daysOfWeek[indexPath.row].fullName
-        cell.backgroundColor = .ypBackgroundDay
+        cell.backgroundColor = .ypBackground
         cell.selectionStyle = .none
         
         let switchControl = UISwitch()

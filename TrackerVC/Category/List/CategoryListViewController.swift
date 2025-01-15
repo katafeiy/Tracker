@@ -12,17 +12,17 @@ final class CategoryListViewController: UIViewController {
     
     private lazy var eventLabel: ImprovedUILabel = {
        ImprovedUILabel(
-            text: "Привычки и события можно\n" + "объединить по смыслу",
+        text: Localization.CategoryListViewController.emptyStateCategoryList,
             fontSize: 12,
             weight: .medium,
-            textColor: .ypBlackDay,
+            textColor: .ypBlack,
             numberOfLines: 2)
     }()
     
     private lazy var addNewCategoryButton: ImprovedUIButton = {
         let button = ImprovedUIButton(title: .add,
-                                      titleColor: .ypWhiteDay,
-                                      backgroundColor: .ypBlackDay,
+                                      titleColor: .ypWhite,
+                                      backgroundColor: .ypBlack,
                                       cornerRadius: 16,
                                       fontSize: 16,
                                       fontWeight: .medium)
@@ -47,7 +47,7 @@ final class CategoryListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -110,7 +110,7 @@ final class CategoryListViewController: UIViewController {
     }
     
     func setupNavigationBar() {
-        navigationItem.title = "Категория"
+        navigationItem.title = Localization.CategoryListViewController.navigationItemTitleCLVC
         navigationItem.hidesBackButton = true
     }
     
@@ -138,7 +138,7 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
         
         cell.textLabel?.text = viewModel.categories[indexPath.row]
         
-        cell.backgroundColor = .ypBackgroundDay
+        cell.backgroundColor = .ypBackground
         if viewModel.isSelectedCategory(viewModel.categories[indexPath.row]) {
             cell.accessoryType = .checkmark
         } else {
@@ -159,11 +159,11 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
         let configContextMenu = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { action in
             
             return UIMenu(children: [
-                UIAction(title: "Редактировать" ,
-                         image: .pencilAndListClipboard.withTintColor(.ypBlackDay)) { action in
+                UIAction(title: Localization.CategoryListViewController.menuTitleEditedCLVC,
+                         image: .pencilAndListClipboard.withTintColor(.ypBlack)) { action in
                              self.editCategory(indexPath: indexPath)
                          },
-                UIAction(title: "Удалить", image:
+                UIAction(title: Localization.CategoryListViewController.menuTitleDeleteCLVC, image:
                         .trash.withTintColor(.ypRed),
                          attributes: .destructive) { action in
                              self.deleteCategory(indexPath: indexPath)
@@ -190,14 +190,14 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
     private func deleteCategory(indexPath: IndexPath) {
         
         let category = self.viewModel.categories[indexPath.row]
-        let alert = UIAlertController(title: "Эта категория точне не нужна?", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Удалить",
+        let alert = UIAlertController(title: Localization.CategoryListViewController.alertCLVC, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: Localization.CategoryListViewController.alertMenuDeleteCLVC,
                                       style: .destructive,
                                       handler: { [weak self] _ in
             guard let self else { return }
             self.viewModel.deleteCategory(category)
         }))
-        alert.addAction(UIAlertAction(title: "Отменить", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: Localization.CategoryListViewController.alertMenuCancelCLVC, style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -208,6 +208,6 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        75
     }
 }

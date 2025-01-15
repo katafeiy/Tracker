@@ -10,16 +10,18 @@ final class ImprovedUIButton: UIButton {
         case cancel
         case add
         case skip
+        case filter
         
         var text: String {
             return switch self {
-            case .habit: "Привычка"
-            case .irregular: "Нерегулярное событие"
-            case .create: "Создать"
-            case .ready: "Готово"
-            case .cancel: "Отменить"
-            case .add: "Добавить категорию"
-            case .skip: "Вот это технологии"
+            case .habit: Localization.ImprovedUIButton.itsHabit
+            case .irregular: Localization.ImprovedUIButton.aIrregularEvent
+            case .create: Localization.ImprovedUIButton.toCreate
+            case .ready: Localization.ImprovedUIButton.itsReady
+            case .cancel: Localization.ImprovedUIButton.itsCancel
+            case .add: Localization.ImprovedUIButton.addCategory
+            case .skip: Localization.ImprovedUIButton.skipToNextVC
+            case .filter: Localization.ImprovedUIButton.itsFilter
             }
         }
     }

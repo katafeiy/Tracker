@@ -5,7 +5,7 @@ final class ColorCollectionViewCell: UICollectionViewCell {
     static let cellIdentifier: String = "colorCell"
     
     let colorLabel: ImprovedUILabel = {
-        ImprovedUILabel(fontSize: 32, weight: .bold, textColor: .ypWhiteDay, cornerRadius: 8)
+        ImprovedUILabel(fontSize: 32, weight: .bold, textColor: .ypWhite, cornerRadius: 8)
     }()
     
     override init(frame: CGRect) {
