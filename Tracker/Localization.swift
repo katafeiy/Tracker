@@ -15,9 +15,8 @@ enum Localization {
     
     enum TrackerCollectionViewCell {
         
-        static let keyForLocalizableDictionary = "currenNameDays"
-        
         static func countDays(days: Int) -> String {
+            let keyForLocalizableDictionary = "currentNameDays"
             if #available(iOS 15.0, *) {
                 return String(localized: "\(days) day", comment: "TrackerCollectionViewCell")
             } else {
