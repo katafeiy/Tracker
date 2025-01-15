@@ -12,7 +12,7 @@ final class CategoryListViewController: UIViewController {
     
     private lazy var eventLabel: ImprovedUILabel = {
        ImprovedUILabel(
-            text: emptyStateCategoryList,
+        text: Localization.CategoryListViewController.emptyStateCategoryList,
             fontSize: 12,
             weight: .medium,
             textColor: .ypBlack,
@@ -110,7 +110,7 @@ final class CategoryListViewController: UIViewController {
     }
     
     func setupNavigationBar() {
-        navigationItem.title = navigationItemTitleCLVC
+        navigationItem.title = Localization.CategoryListViewController.navigationItemTitleCLVC
         navigationItem.hidesBackButton = true
     }
     
@@ -159,11 +159,11 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
         let configContextMenu = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { action in
             
             return UIMenu(children: [
-                UIAction(title: menuTitleEditedCLVC,
+                UIAction(title: Localization.CategoryListViewController.menuTitleEditedCLVC,
                          image: .pencilAndListClipboard.withTintColor(.ypBlack)) { action in
                              self.editCategory(indexPath: indexPath)
                          },
-                UIAction(title: menuTitleDeleteCLVC, image:
+                UIAction(title: Localization.CategoryListViewController.menuTitleDeleteCLVC, image:
                         .trash.withTintColor(.ypRed),
                          attributes: .destructive) { action in
                              self.deleteCategory(indexPath: indexPath)
@@ -190,14 +190,14 @@ extension CategoryListViewController: UITableViewDataSource, UITableViewDelegate
     private func deleteCategory(indexPath: IndexPath) {
         
         let category = self.viewModel.categories[indexPath.row]
-        let alert = UIAlertController(title: alertCLVC, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: alertMenuDeleteCLVC,
+        let alert = UIAlertController(title: Localization.CategoryListViewController.alertCLVC, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: Localization.CategoryListViewController.alertMenuDeleteCLVC,
                                       style: .destructive,
                                       handler: { [weak self] _ in
             guard let self else { return }
             self.viewModel.deleteCategory(category)
         }))
-        alert.addAction(UIAlertAction(title: alertMenuCancelCLVC, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: Localization.CategoryListViewController.alertMenuCancelCLVC, style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     

@@ -58,14 +58,14 @@ final class TrackerViewController: UIViewController {
     }()
     
     private lazy var whatSearchLabel: ImprovedUILabel = {
-        ImprovedUILabel(text: emptyStateText,
+        ImprovedUILabel(text: Localization.TrackerViewController.emptyStateText,
                         fontSize: 12,
                         weight: .medium,
                         textColor: .ypBlack)
     }()
     
     private lazy var nothingSearchLabel: ImprovedUILabel = {
-        ImprovedUILabel(text: emptySearchText,
+        ImprovedUILabel(text: Localization.TrackerViewController.emptySearchText,
                         fontSize: 12,
                         weight: .medium,
                         textColor: .ypBlack)
@@ -73,7 +73,7 @@ final class TrackerViewController: UIViewController {
     
     private lazy var searchViewController: UISearchController = {
         let searchViewController = UISearchController()
-        searchViewController.searchBar.placeholder = placeholderForSearch
+        searchViewController.searchBar.placeholder = Localization.TrackerViewController.placeholderForSearch
         searchViewController.searchResultsUpdater = self
         searchViewController.obscuresBackgroundDuringPresentation = false
         searchViewController.hidesNavigationBarDuringPresentation = false
@@ -171,7 +171,7 @@ final class TrackerViewController: UIViewController {
         rightButton.customView = datePicker
         self.navigationItem.rightBarButtonItem = rightButton
         
-        navigationItem.title = navigationItemTitleTVC
+        navigationItem.title = Localization.TrackerViewController.navigationItemTitleTVC
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchViewController
     }
@@ -281,7 +281,7 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
             for: indexPath
         ) as?  TrackerCategoryNameCell else { return UICollectionReusableView() }
         
-        let title = collectionView === pinnedView ? pinnedCategory : viewModel.searchVisibleCategories[indexPath.section].name
+        let title = collectionView === pinnedView ? Localization.PinnedCollectionView.pinnedCategory : viewModel.searchVisibleCategories[indexPath.section].name
         headerView.configure(with: title)
         return headerView
     }
@@ -328,18 +328,19 @@ extension TrackerViewController: UICollectionViewDelegate, UICollectionViewDataS
         return UIContextMenuConfiguration(actionProvider: { actions in
             
             return UIMenu(children: [
-                UIAction(title: self.viewModel.isPinned(tracker) ? menuTitleUnPinnedTVC : menuTitleIsPinnedTVC, image: .pin.withTintColor(.ypBlack)) { [weak self] _ in
+                UIAction(title: self.viewModel.isPinned(tracker) ? Localization.TrackerViewController.menuTitleUnPinnedTVC :
+                            Localization.TrackerViewController.menuTitleIsPinnedTVC, image: .pin.withTintColor(.ypBlack)) { [weak self] _ in
                     guard let self else { return }
                     self.attachTracker(tracker: tracker)
                 },
                 
-                UIAction(title: menuTitleEditedTVC, image: .pencilAndListClipboard.withTintColor(.ypBlack)) { [weak self] _ in
+                UIAction(title: Localization.TrackerViewController.menuTitleEditedTVC, image: .pencilAndListClipboard.withTintColor(.ypBlack)) { [weak self] _ in
                     guard let self else { return }
                     analyticsService.sendEvent(event: .click, screen: .click, item: .edit)
                     self.editTracker(tracker: tracker)
                 },
                 
-                UIAction(title: menuTitleDeleteTVC, image: .trash.withTintColor(.ypRed), attributes: .destructive) { [weak self] _ in
+                UIAction(title: Localization.TrackerViewController.menuTitleDeleteTVC, image: .trash.withTintColor(.ypRed), attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
                     analyticsService.sendEvent(event: .click, screen: .click, item: .delete)
                     self.deleteTracker(tracker: tracker)

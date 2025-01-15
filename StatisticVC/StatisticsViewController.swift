@@ -30,7 +30,7 @@ final class StatisticsViewController: UIViewController {
     }()
     
     private lazy var nothingAnalyzeUILabel: ImprovedUILabel = {
-        ImprovedUILabel(text: nothingAnalyze,
+        ImprovedUILabel(text: Localization.StatisticsViewController.nothingAnalyze,
                         fontSize: 12,
                         weight: .medium,
                         textColor: .ypBlack)
@@ -126,7 +126,7 @@ final class StatisticsViewController: UIViewController {
     }
     
     private func configurationNavigationBar() {
-        navigationItem.title = navigationItemTitleStVC
+        navigationItem.title = Localization.StatisticsViewController.navigationItemTitleStVC
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     

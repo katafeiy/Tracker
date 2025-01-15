@@ -14,14 +14,14 @@ final class ImprovedUIButton: UIButton {
         
         var text: String {
             return switch self {
-            case .habit: itsHabit
-            case .irregular: anIrregularEvent
-            case .create: toCreate
-            case .ready: itsReady
-            case .cancel: itsCancel
-            case .add: addCategory
-            case .skip: skipToNextVC
-            case .filter: itsFilter
+            case .habit: Localization.ImprovedUIButton.itsHabit
+            case .irregular: Localization.ImprovedUIButton.aIrregularEvent
+            case .create: Localization.ImprovedUIButton.toCreate
+            case .ready: Localization.ImprovedUIButton.itsReady
+            case .cancel: Localization.ImprovedUIButton.itsCancel
+            case .add: Localization.ImprovedUIButton.addCategory
+            case .skip: Localization.ImprovedUIButton.skipToNextVC
+            case .filter: Localization.ImprovedUIButton.itsFilter
             }
         }
     }

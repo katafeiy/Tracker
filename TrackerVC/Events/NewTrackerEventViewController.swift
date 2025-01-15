@@ -11,10 +11,15 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     weak var delegate: ProtocolNewTrackerEventViewControllerOutput?
     private var analyticsService = AnalyticsService()
     
-    lazy var nameCell = viewModel.isHabit ? [(category, viewModel.nameCategory ?? nameCategory), (schedule, daysOfWeekToString(viewModel.selectedDays))] : [(category, viewModel.nameCategory ?? nameCategory)]
+    lazy var nameCell = viewModel.isHabit ?
+    [(Localization.NewTrackerEventViewController.category, viewModel.nameCategory ??
+      Localization.NewTrackerEventViewController.nameCategory),
+     (Localization.NewTrackerEventViewController.schedule, daysOfWeekToString(viewModel.selectedDays))] :
+    [(Localization.NewTrackerEventViewController.category, viewModel.nameCategory ??
+      Localization.NewTrackerEventViewController.nameCategory)]
     
     private lazy var countDayLabel: ImprovedUILabel = {
-        let countDay = ImprovedUILabel(text: countDays(days: viewModel.countDay), fontSize: 32, weight: .bold, textColor: .ypBlack, textAlignment: .center)
+        let countDay = ImprovedUILabel(text: Localization.TrackerCollectionViewCell.countDays(days: viewModel.countDay), fontSize: 32, weight: .bold, textColor: .ypBlack, textAlignment: .center)
         countDay.isHidden = !viewModel.isEditing
         return countDay
     }()
@@ -196,7 +201,11 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
     }
     
     func setupNavigationBar() {
-        navigationItem.title = viewModel.isEditing ? editing + " " + (viewModel.isHabit ? aHabit : anIrregularEvent) : (viewModel.isHabit ? newHabit : newIrregularEvent)
+        navigationItem.title = viewModel.isEditing ? Localization.NewTrackerEventViewController.editing + " "
+        + (viewModel.isHabit ? Localization.NewTrackerEventViewController.aHabit :
+            Localization.NewTrackerEventViewController.anIrregularEvent) :
+        (viewModel.isHabit ? Localization.NewTrackerEventViewController.newHabit :
+            Localization.NewTrackerEventViewController.newIrregularEvent)
         navigationItem.hidesBackButton = true
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -318,7 +327,7 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
                 for: indexPath
             ) as? EmojiHeaderCollectionViewCell else { return UICollectionReusableView()}
             
-            headerView.emojiHeaderLabel.text = emoji
+            headerView.emojiHeaderLabel.text = Localization.NewTrackerEventViewController.emoji
             return headerView
         case colorCollectionView:
             
@@ -328,7 +337,7 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
                 for: indexPath
             ) as? ColorHeaderCollectionViewCell else { return UICollectionReusableView() }
             
-            headerView.colorHeaderLabel.text = color
+            headerView.colorHeaderLabel.text = Localization.NewTrackerEventViewController.color
             return headerView
         default: return UICollectionReusableView()
         }
@@ -394,9 +403,9 @@ extension NewTrackerEventViewController: UITableViewDataSource, UITableViewDeleg
     }
     
     private func daysOfWeekToString(_ daysOfWeek: Set<DaysOfWeek>) -> String {
-        guard !daysOfWeek.isEmpty else { return weekdays }
+        guard !daysOfWeek.isEmpty else { return Localization.NewTrackerEventViewController.weekdays }
         if daysOfWeek == Set(DaysOfWeek.allCases) {
-            return everyDay
+            return Localization.NewTrackerEventViewController.everyDay
         } else {
             
             let sortedSchedule = daysOfWeek.sorted(by: {$0.rawValue < $1.rawValue})

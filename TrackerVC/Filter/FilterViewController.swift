@@ -40,7 +40,7 @@ final class FilterViewController: UIViewController {
     }
     
     private  func setupNavigationBar() {
-        navigationItem.title = navigationItemTitleFVC
+        navigationItem.title = Localization.FilterViewController.navigationItemTitleFVC
         navigationItem.hidesBackButton = true
     }
 }

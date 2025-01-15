@@ -62,7 +62,7 @@ final class ScheduleViewController: UIViewController {
     }
     
     private  func setupNavigationBar() {
-        navigationItem.title = navigationItemTitleSVC
+        navigationItem.title = Localization.ScheduleViewController.navigationItemTitleSVC
         navigationItem.hidesBackButton = true
     }
     

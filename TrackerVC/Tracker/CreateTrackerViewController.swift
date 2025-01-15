@@ -72,7 +72,7 @@ final class CreateTrackerViewController: UIViewController {
     }
     
     func configurationNavigationBar() {
-        navigationItem.title = navigationItemTitleCTVC
+        navigationItem.title = Localization.CreateTrackerViewController.navigationItemTitleCTVC
         navigationController?.navigationBar.tintColor = .ypBlack
         navigationController?.navigationBar.titleTextAttributes = [
             .font: UIFont.systemFont(ofSize: 16, weight: .medium),

@@ -30,26 +30,26 @@ enum DaysOfWeek: Int, CaseIterable, Codable {
     var fullName: String {
         
         return switch self {
-        case .mon: mondayDOW
-        case .tue: tuesdayDOW
-        case .wed: wednesdayDOW
-        case .thu: thursdayDOW
-        case .fri: fridayDOW
-        case .sat: saturdayDOW
-        case .sun: sundayDOW
+        case .mon: Localization.DaysOfWeek.monday
+        case .tue: Localization.DaysOfWeek.tuesday
+        case .wed: Localization.DaysOfWeek.wednesday
+        case .thu: Localization.DaysOfWeek.thursday
+        case .fri: Localization.DaysOfWeek.friday
+        case .sat: Localization.DaysOfWeek.saturday
+        case .sun: Localization.DaysOfWeek.sunday
         }
     }
     
     var shortName: String {
         
         return switch self {
-        case .mon: monDOW
-        case .tue: tueDOW
-        case .wed: wedDOW
-        case .thu: thuDOW
-        case .fri: friDOW
-        case .sat: satDOW
-        case .sun: sunDOW
+        case .mon: Localization.DaysOfWeek.mon
+        case .tue: Localization.DaysOfWeek.tue
+        case .wed: Localization.DaysOfWeek.wed
+        case .thu: Localization.DaysOfWeek.thu
+        case .fri: Localization.DaysOfWeek.fri
+        case .sat: Localization.DaysOfWeek.sat
+        case .sun: Localization.DaysOfWeek.sun
         }
     }
 }

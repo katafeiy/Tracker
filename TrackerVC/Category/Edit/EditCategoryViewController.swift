@@ -62,7 +62,7 @@ final class EditCategoryViewController: UIViewController {
     }
     
     func setupNavigationBar() {
-        navigationItem.title = navigationItemTitleECVC
+        navigationItem.title = Localization.EditCategoryViewController.navigationItemTitleECVC
         navigationItem.hidesBackButton = true
     }
     

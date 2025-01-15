@@ -13,8 +13,8 @@ enum OnboardingPage {
     }
     var title: String {
         return switch self {
-        case .firstPage: firstPageText
-        case .secondPage: secondPageText
+        case .firstPage: Localization.OnboardingPage.firstPageText
+        case .secondPage: Localization.OnboardingPage.secondPageText
         }
     }
 }

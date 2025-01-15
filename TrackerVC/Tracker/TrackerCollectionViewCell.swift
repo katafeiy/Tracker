@@ -68,7 +68,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     func configCompletion(counter: Int, isCompleted: Bool) {
         
-        labelCountDay.text = countDays(days: counter)
+        labelCountDay.text = Localization.TrackerCollectionViewCell.countDays(days: counter)
         addButtonCompletion.setImage(isCompleted ? UIImage.done : UIImage.plusButton, for: .normal)
     }
  

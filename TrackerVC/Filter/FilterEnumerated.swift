@@ -9,10 +9,10 @@ enum FilterType: String, CaseIterable {
     
     var title: String {
         return switch self {
-        case .allTrackers: allTrackersFVC
-        case .trackersToday: trackersTodayFVC
-        case .itsCompleted: itsCompletedFVC
-        case .itsUncompleted: itsUncompletedFVC
+        case .allTrackers: Localization.FilterViewController.allTrackersFVC
+        case .trackersToday: Localization.FilterViewController.trackersTodayFVC
+        case .itsCompleted: Localization.FilterViewController.itsCompletedFVC
+        case .itsUncompleted: Localization.FilterViewController.itsUncompletedFVC
         }
     }
 }
