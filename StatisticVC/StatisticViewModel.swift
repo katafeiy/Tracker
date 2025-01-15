@@ -17,11 +17,11 @@ final class StatisticViewModel {
     
     func handleUserDefaultsChange(key: String) {
         statistics = statistics.map { model in
-                    if model.name.rawValue == key {
-                        return UniversalStatisticViewControllerModel(name: model.name, valueProvider: { model.value })
-                    }
-                    return model
-                }
+            if model.name.rawValue == key {
+                return UniversalStatisticViewControllerModel(name: model.name, valueProvider: { model.value })
+            }
+            return model
+        }
         updateStatistics?()
     }
     

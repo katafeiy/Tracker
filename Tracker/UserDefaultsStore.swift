@@ -8,7 +8,6 @@ final class UserDefaultsStore {
         case idealDaysCount
         case trackerCompletedCount
         case averageValueCount
-        
     }
     
     static var indicatorIsSkipped: Bool {
