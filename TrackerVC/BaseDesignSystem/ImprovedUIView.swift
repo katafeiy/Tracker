@@ -1,6 +1,6 @@
 import UIKit
 
-class ImprovedUIView: UIView {
+final class ImprovedUIView: UIView {
     
     init(backgroundColor: UIColor? = .clear,
          cornerRadius: CGFloat = 0,

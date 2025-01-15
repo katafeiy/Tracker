@@ -236,7 +236,7 @@ final class NewTrackerEventViewController: UIViewController, UIGestureRecognizer
 extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionView == emojiCollectionView ? EmojiCollectionViewCell.emojiCell.count : TrackerColors.allCases.count
+        return collectionView == emojiCollectionView ? ConstantsEnumerated.emojiCell.count : TrackerColors.allCases.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -249,7 +249,7 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
                 for: indexPath
             ) as? EmojiCollectionViewCell else { return UICollectionViewCell() }
             
-            cell.emojiLabel.text = "\(EmojiCollectionViewCell.emojiCell[indexPath.row])"
+            cell.emojiLabel.text = "\(ConstantsEnumerated.emojiCell[indexPath.row])"
             if cell.emojiLabel.text == viewModel.trackerEmoji {
                 cell.emojiLabel.backgroundColor = .ypLightGray
             }
@@ -280,7 +280,7 @@ extension NewTrackerEventViewController: UICollectionViewDataSource, UICollectio
             collectionView.visibleCells.forEach { ($0 as? EmojiCollectionViewCell)?.emojiLabel.backgroundColor = .ypWhite }
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionViewCell
             cell?.emojiLabel.backgroundColor = .ypLightGray
-            viewModel.updateTrackerEmoji(EmojiCollectionViewCell.emojiCell[indexPath.row])
+            viewModel.updateTrackerEmoji(ConstantsEnumerated.emojiCell[indexPath.row])
         case colorCollectionView:
             collectionView.visibleCells.forEach { ($0 as? ColorCollectionViewCell)?.layer.borderColor = UIColor.clear.cgColor }
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
